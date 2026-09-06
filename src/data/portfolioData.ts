@@ -90,6 +90,7 @@ export const TIMELINE_DATA: ITimelineItem[] = [
     gradient: ["#7C2D12", "#F97316"],
     githubUrl: "https://github.com/mohammedsuhail0/attendence",
     liveUrl: "https://smart-attendance-ecru-nu.vercel.app",
+    image: "/projects/smart-attendance.png",
     tech: ["TypeScript", "React", "Node.js", "SQL"],
     status: "Completed",
   },
