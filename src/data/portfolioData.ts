@@ -299,13 +299,15 @@ export const TIMELINE_DATA: ITimelineItem[] = [
   },
   {
     id: "nrchs-wordpress-theme",
-    title: "NRCHS Custom Theme",
-    category: "Side Project",
-    description: "Engineered a custom responsive CMS architecture with tailored post types and dynamic template logic.",
+    title: "New Rosary Convent High School (NRCHS)",
+    category: "Full-Stack Web",
+    description: "Engineered a custom responsive portal with tailored content sections, facilities showcase, and dynamic pages.",
     gradient: ["#312E81", "#818CF8"],
     githubUrl: "https://github.com/mohammedsuhail0/nrchs-wordpress-theme",
-    tech: ["PHP", "WordPress API", "JavaScript", "CSS"],
-    status: "Side Project",
+    liveUrl: "https://beamish-melba-c17a26.netlify.app",
+    image: "/projects/nrchs-custom-theme.png",
+    tech: ["HTML5", "CSS3", "JavaScript", "Netlify"],
+    status: "Completed",
   },
 ];
 
