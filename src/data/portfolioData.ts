@@ -136,12 +136,17 @@ export const TIMELINE_DATA: ITimelineItem[] = [
   },
   {
     id: "hackathon-sih",
-    title: "Smart India Hackathon (SIH 2024)",
-    category: "Hackathon Participant",
-    description: "Engineering an automated AI threat intelligence solution for National Level Problem Statement 26133 with Team Punk Records.",
+    title: "ArogyaMitr (Smart India Hackathon)",
+    category: "Hackathon Innovation",
+    description: "Vernacular voice & pictorial kiosk and assisted clinical risk triage platform engineered for SIH PS 26133 with Team Punk Records.",
     gradient: ["#C2410C", "#FB923C"],
-    githubUrl: "https://github.com/mohammedsuhail0/PUNK-RECORDS-SPIH168-",
-    tech: ["Python", "FastAPI", "LLMs", "Problem Statement 26133"],
+    githubUrl: "https://github.com/mohammedsuhail0/SIH-PUNK-RECORDS-",
+    liveUrl: "https://mahahealthconnect.vercel.app",
+    image: "/projects/sih-arogyamitr.png",
+    gallery: [
+      { url: "/projects/sih-arogyamitr.png", caption: "ArogyaMitr — Vernacular Voice & Pictorial Health Kiosk Dashboard" },
+    ],
+    tech: ["TypeScript", "Next.js", "Voice AI", "FHIR R4", "Offline SQLite"],
     status: "Hackathon Participant",
   },
   {
