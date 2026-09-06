@@ -126,6 +126,11 @@ export const TIMELINE_DATA: ITimelineItem[] = [
     gradient: ["#0F172A", "#334155"],
     githubUrl: "https://github.com/mohammedsuhail0/PUNK-RECORDS-SPIH168-",
     liveUrl: "https://shieldsense-security-agent.vercel.app",
+    image: "/projects/shield-sense.png",
+    gallery: [
+      { url: "/projects/shield-sense.png", caption: "ShieldSense — Autonomous AI Security Guardian Landing Page" },
+      { url: "/projects/shield-sense-mobile.png", caption: "ShieldSense — Cyber Sentinel Interactive In-App Agent" },
+    ],
     tech: ["Python", "FastAPI", "Security Analytics", "Tailwind CSS"],
     status: "Completed",
   },
