@@ -241,6 +241,7 @@ export const TIMELINE_DATA: ITimelineItem[] = [
     gradient: ["#1E293B", "#475569"],
     githubUrl: "https://github.com/mohammedsuhail0/exam",
     liveUrl: "https://secure-online-exam-portal-zt.vercel.app",
+    image: "/projects/secure-exam-portal.png",
     tech: ["HTML5", "JavaScript", "CSS3", "Vercel"],
     status: "Completed",
   },
