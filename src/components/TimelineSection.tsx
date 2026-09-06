@@ -359,7 +359,7 @@ export function TimelineSection() {
               </div>
 
               {/* Mac OS Window Screen Viewport — PURE PROJECT IMAGE */}
-              <div className="relative w-full aspect-[16/11] bg-zinc-950 flex items-center justify-center overflow-hidden group/screen select-none">
+              <div className="relative w-full aspect-[16/10] bg-zinc-950 flex items-center justify-center overflow-hidden group/screen select-none">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeItem.id}
@@ -380,12 +380,12 @@ export function TimelineSection() {
                             window.open(activeItem.githubUrl, "_blank");
                           }
                         }}
-                        className="relative w-full h-full overflow-hidden cursor-pointer flex items-center justify-center bg-zinc-950"
+                        className="relative w-full h-full overflow-hidden cursor-pointer flex items-center justify-center bg-zinc-950 p-1.5"
                       >
                         <img
                           src={activeItem.image}
                           alt={activeItem.title}
-                          className="w-full h-full object-cover object-top transition-transform duration-500 group-hover/screen:scale-[1.02]"
+                          className="max-w-full max-h-full w-auto h-auto object-contain rounded-md transition-transform duration-500 group-hover/screen:scale-[1.01]"
                         />
                         {/* Hover Overlay with Quick Action */}
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/screen:opacity-100 transition-opacity duration-200 flex items-center justify-center">
