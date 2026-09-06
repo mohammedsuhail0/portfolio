@@ -16,6 +16,11 @@ import {
   MessageSquare,
 } from "lucide-react";
 import confetti from "canvas-confetti";
+import {
+  TextRevealCard,
+  TextRevealCardTitle,
+  TextRevealCardDescription,
+} from "@/components/ui/text-reveal-card";
 
 export function ContactSection() {
   const [copiedEmail, setCopiedEmail] = useState<string | null>(null);
@@ -152,32 +157,21 @@ export function ContactSection() {
           </div>
         </div>
 
-        {/* Card 3: Interactive Hover Text Reveal Card (From Susmita's Screenshot) */}
-        <div
-          onMouseEnter={() => setHoveredText(true)}
-          onMouseLeave={() => setHoveredText(false)}
-          className="rounded-3xl border border-border/80 bg-card p-8 sm:p-12 text-center relative overflow-hidden shadow-xl cursor-pointer group transition-all duration-300 hover:border-purple-500/40"
-        >
-          <p className="text-xs uppercase tracking-widest text-muted-foreground font-mono mb-2">
-            Sometimes, you just need to see it.
-          </p>
-          <p className="text-xs text-muted-foreground mb-8">
-            Hover below to reveal; let&apos;s build something intelligent together!
-          </p>
-
-          <div className="relative py-6">
-            <h3
-              className={`text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight transition-all duration-500 ${
-                hoveredText
-                  ? "opacity-100 scale-105 text-white bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent drop-shadow-lg"
-                  : "opacity-25 blur-[1px] text-muted-foreground"
-              }`}
-            >
-              &ldquo;Engineering intelligent systems that scale.&rdquo;
-            </h3>
-          </div>
+        {/* Aceternity UI Interactive Hover Text Reveal Card (As seen in Susmita Dey / Aceternity) */}
+        <div className="flex items-center justify-center w-full">
+          <TextRevealCard
+            text="You know the business"
+            revealText="I know the chemistry"
+            className="w-full"
+          >
+            <TextRevealCardTitle>
+              Sometimes, you just need to see it.
+            </TextRevealCardTitle>
+            <TextRevealCardDescription>
+              Hover to see it; maybe you&apos;d like to connect with me for your next project!
+            </TextRevealCardDescription>
+          </TextRevealCard>
         </div>
-
       </div>
     </section>
   );
