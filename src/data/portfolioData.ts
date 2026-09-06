@@ -293,6 +293,7 @@ export const TIMELINE_DATA: ITimelineItem[] = [
     description: "Analyzed urban real estate rental patterns using multivariate regression and Power BI dashboards.",
     gradient: ["#065F46", "#34D399"],
     githubUrl: "https://github.com/mohammedsuhail0/house-rental-analytics",
+    image: "/projects/house-rental-analytics.png",
     tech: ["Python", "Pandas", "Scikit-Learn", "Power BI"],
     status: "Completed",
   },
