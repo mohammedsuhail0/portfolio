@@ -147,7 +147,7 @@ export function HeroSection() {
                   <img
                     src="/suhail-hero-portrait.png"
                     alt={PERSONAL_INFO.name}
-                    className="absolute inset-0 w-full h-full object-cover object-[62%_20%] transition-transform duration-500 group-hover:scale-105"
+                    className="absolute inset-0 w-full h-full object-cover object-[center_18%] transition-transform duration-500 group-hover:scale-105"
                   />
 
                   {/* Gradient shadow overlay for readable typography */}
