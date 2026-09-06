@@ -106,19 +106,15 @@ export function Preloader() {
               <AnimatePresence mode="wait">
                 <motion.h1
                   key={currentItem.text}
-                  initial={{ opacity: 0, y: 35, filter: "blur(8px)" }}
-                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                  exit={{ opacity: 0, y: -35, filter: "blur(8px)" }}
-                  transition={{ duration: 0.28, ease: "easeOut" }}
-                  className={`text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight ${
-                    isFinalWord
-                      ? "text-zinc-950 dark:text-white flex items-center"
-                      : "bg-gradient-to-r from-zinc-900 via-zinc-700 to-zinc-500 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-500 bg-clip-text text-transparent"
-                  }`}
+                  initial={{ opacity: 0, y: 25 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -25 }}
+                  transition={{ duration: 0.22, ease: "easeOut" }}
+                  className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-zinc-950 dark:text-white flex items-center justify-center drop-shadow-sm"
                 >
-                  <span>{currentItem.text}</span>
+                  <span className="font-extrabold">{currentItem.text}</span>
                   {isFinalWord && (
-                    <span className="text-purple-600 dark:text-purple-400 animate-pulse ml-0.5">.</span>
+                    <span className="text-purple-600 dark:text-purple-400 animate-pulse ml-1 font-black">.</span>
                   )}
                 </motion.h1>
               </AnimatePresence>
