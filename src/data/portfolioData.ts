@@ -317,20 +317,20 @@ export const WORKING_STEPS = [
     title: "Planning & Strategy",
     description:
       "We collaborate to map out project goals, data requirements, and key functionalities. We determine system architecture, user workflows, and tech stack over an aligned plan.",
-    gradient: "from-blue-600 to-indigo-600",
+    gradient: "from-teal-600 to-emerald-600",
   },
   {
     stepNumber: "Step 2",
     title: "Development & Progress Update",
     description:
       "Once aligned, I dive into engineering the AI pipelines, algorithms, and frontend interfaces. From data models to polished interactive code, I keep you updated at every milestone.",
-    gradient: "from-purple-600 to-pink-600",
+    gradient: "from-emerald-600 to-teal-600",
   },
   {
     stepNumber: "Step 3",
     title: "Testing & Production Launch",
     description:
       "This is where the magic comes alive! Rigorous testing, speed optimization, and responsive design verification ensure your application launches smoothly with exceptional performance.",
-    gradient: "from-emerald-600 to-teal-600",
+    gradient: "from-emerald-500 to-cyan-600",
   },
 ];

@@ -86,8 +86,8 @@ export function Preloader() {
           className="fixed inset-0 z-[9999] flex items-center justify-center bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white select-none overflow-hidden transition-colors duration-300 px-4"
         >
           {/* Ambient Background Glow (Adaptive for Light & Dark) */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-purple-500/10 dark:bg-purple-600/15 rounded-full blur-[120px] pointer-events-none" />
-          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-indigo-500/10 dark:bg-indigo-600/10 rounded-full blur-[90px] pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-500/10 dark:bg-emerald-600/15 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-teal-500/10 dark:bg-teal-600/10 rounded-full blur-[90px] pointer-events-none" />
 
           {/* Center Content: Animated Greeting & Language Tag */}
           <div className="flex flex-col items-center justify-center text-center z-10">
@@ -95,9 +95,9 @@ export function Preloader() {
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-[11px] font-mono font-semibold text-purple-700 dark:text-purple-300 mb-6 shadow-sm dark:shadow-md"
+              className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-[11px] font-mono font-semibold text-emerald-700 dark:text-emerald-300 mb-6 shadow-sm dark:shadow-md"
             >
-              <Sparkles className="w-3 h-3 text-purple-600 dark:text-purple-400 animate-spin" style={{ animationDuration: "4s" }} />
+              <Sparkles className="w-3 h-3 text-emerald-600 dark:text-emerald-400 animate-spin" style={{ animationDuration: "4s" }} />
               <span>{isFinalWord ? "MOHAMMED SUHAIL" : currentItem.lang}</span>
             </motion.div>
 
@@ -114,7 +114,7 @@ export function Preloader() {
                 >
                   <span className="font-extrabold">{currentItem.text}</span>
                   {isFinalWord && (
-                    <span className="text-purple-600 dark:text-purple-400 animate-pulse ml-1 font-black">.</span>
+                    <span className="text-emerald-600 dark:text-emerald-400 animate-pulse ml-1 font-black">.</span>
                   )}
                 </motion.h1>
               </AnimatePresence>

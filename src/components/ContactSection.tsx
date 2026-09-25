@@ -35,7 +35,7 @@ export function ContactSection() {
       particleCount: 50,
       spread: 60,
       origin: { y: 0.85 },
-      colors: ["#9333ea", "#6366f1", "#3b82f6"],
+      colors: ["#10b981", "#059669", "#14b8a6", "#06b6d4"],
     });
 
     setTimeout(() => {
@@ -53,19 +53,19 @@ export function ContactSection() {
   return (
     <section id="contact" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-border/50">
       <div className="flex flex-col items-center text-center mb-16">
-        <span className="text-xs uppercase font-bold tracking-widest text-purple-600 dark:text-purple-400 mb-2 block">
+        <span className="text-xs uppercase font-bold tracking-widest text-emerald-600 dark:text-emerald-400 mb-2 block">
           Get In Touch
         </span>
         <h2 className="text-3xl sm:text-5xl font-extrabold text-foreground mb-4">
-          Need a <span className="text-purple-600 dark:text-purple-400">Developer</span> or an{" "}
-          <span className="text-indigo-600 dark:text-indigo-400">AI/ML Engineer?</span>
+          Need a <span className="text-emerald-600 dark:text-emerald-400">Developer</span> or an{" "}
+          <span className="text-teal-600 dark:text-teal-400">AI/ML Engineer?</span>
         </h2>
-        <div className="w-24 h-1.5 bg-gradient-to-r from-purple-600 via-indigo-500 to-blue-500 rounded-full mb-6" />
+        <div className="w-24 h-1.5 bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-500 rounded-full mb-6" />
         <p className="text-muted-foreground max-w-xl text-sm sm:text-base">
           Whether you have an ambitious AI/ML project, an internship opportunity, or want to discuss full-stack development, feel free to connect!
         </p>
         <div className="mt-3 inline-flex items-center gap-1.5 text-xs text-muted-foreground font-mono bg-secondary/50 px-3 py-1 rounded-full border border-border/60">
-          <MapPin className="w-3.5 h-3.5 text-purple-500" />
+          <MapPin className="w-3.5 h-3.5 text-emerald-500" />
           <span>{PERSONAL_INFO.locationFull}</span>
         </div>
       </div>
@@ -76,10 +76,10 @@ export function ContactSection() {
           
           {/* Card 1: Shoot me an email with copy button */}
           <div className="rounded-3xl border border-border/80 bg-card p-8 flex flex-col justify-between shadow-xl relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
             
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-600 dark:text-purple-400 mb-5">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-5">
                 <Mail className="w-6 h-6" />
               </div>
               <h3 className="text-2xl font-bold text-foreground mb-2">
@@ -94,7 +94,7 @@ export function ContactSection() {
               {/* Primary Gmail */}
               <button
                 onClick={() => handleCopy(PERSONAL_INFO.email, "gmail")}
-                className="w-full relative inline-flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-xs sm:text-sm text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-md shadow-purple-500/20 transition-all duration-200 active:scale-95"
+                className="w-full relative inline-flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-xs sm:text-sm text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-md shadow-emerald-500/20 transition-all duration-200 active:scale-95"
               >
                 <span className="truncate">{PERSONAL_INFO.email}</span>
                 {copiedEmail === "gmail" ? (
@@ -123,10 +123,10 @@ export function ContactSection() {
 
           {/* Card 2: Connect With Me On Socials & Phone */}
           <div className="rounded-3xl border border-border/80 bg-card p-8 flex flex-col justify-between shadow-xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/10 rounded-full blur-2xl pointer-events-none" />
 
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-5">
+              <div className="w-12 h-12 rounded-2xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-600 dark:text-teal-400 mb-5">
                 <MessageSquare className="w-6 h-6" />
               </div>
               <h3 className="text-2xl font-bold text-foreground mb-2">
@@ -146,9 +146,9 @@ export function ContactSection() {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2.5 p-3 rounded-xl bg-secondary/60 hover:bg-accent border border-border/80 text-foreground text-xs sm:text-sm font-semibold transition-all hover:scale-105 active:scale-95 hover:border-purple-500/40"
+                    className="flex items-center gap-2.5 p-3 rounded-xl bg-secondary/60 hover:bg-accent border border-border/80 text-foreground text-xs sm:text-sm font-semibold transition-all hover:scale-105 active:scale-95 hover:border-emerald-500/40"
                   >
-                    <Icon className="w-4 h-4 text-purple-500" />
+                    <Icon className="w-4 h-4 text-emerald-500" />
                     <span>{social.name}</span>
                   </a>
                 );

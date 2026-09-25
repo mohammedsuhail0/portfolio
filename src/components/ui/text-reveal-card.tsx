@@ -64,7 +64,7 @@ export const TextRevealCard = ({
       onTouchMove={touchMoveHandler}
       ref={cardRef}
       className={cn(
-        "bg-[#090a0f] border border-white/[0.08] w-full rounded-2xl p-6 sm:p-8 relative overflow-hidden shadow-2xl transition-all duration-300 hover:border-purple-500/30 select-none cursor-pointer",
+        "bg-[#090a0f] border border-white/[0.08] w-full rounded-2xl p-6 sm:p-8 relative overflow-hidden shadow-2xl transition-all duration-300 hover:border-emerald-500/30 select-none cursor-pointer",
         className
       )}
     >
@@ -83,9 +83,9 @@ export const TextRevealCard = ({
         >
           <p
             style={{
-              textShadow: "0 0 20px rgba(168,85,247,0.7), 0 0 40px rgba(168,85,247,0.4)",
+              textShadow: "0 0 20px rgba(16,185,129,0.7), 0 0 40px rgba(16,185,129,0.4)",
             }}
-            className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white bg-clip-text text-transparent bg-gradient-to-r from-white via-purple-100 to-indigo-200 py-4 truncate"
+            className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white bg-clip-text text-transparent bg-gradient-to-r from-white via-emerald-100 to-teal-200 py-4 truncate"
           >
             {revealText}
           </p>
@@ -99,7 +99,7 @@ export const TextRevealCard = ({
             opacity: isMouseOver && widthPercentage > 0 ? 1 : 0,
             transition: isMouseOver ? "none" : "left 0.4s ease, opacity 0.4s ease",
           }}
-          className="h-40 w-[3px] bg-gradient-to-b from-transparent via-purple-400 to-transparent absolute z-50 will-change-transform shadow-[0_0_14px_rgba(168,85,247,0.9)] pointer-events-none"
+          className="h-40 w-[3px] bg-gradient-to-b from-transparent via-emerald-400 to-transparent absolute z-50 will-change-transform shadow-[0_0_14px_rgba(16,185,129,0.9)] pointer-events-none"
         />
 
         {/* Base dark text layer */}

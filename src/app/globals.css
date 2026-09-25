@@ -54,7 +54,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased selection:bg-purple-500 selection:text-white;
+    @apply bg-background text-foreground antialiased selection:bg-emerald-500 selection:text-white;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
@@ -89,16 +89,16 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(147, 51, 234, 0.4);
+  background: rgba(16, 185, 129, 0.4);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(147, 51, 234, 0.7);
+  background: rgba(16, 185, 129, 0.7);
 }
 
 /* Glow effects */
-.glow-purple {
-  box-shadow: 0 0 40px -10px rgba(168, 85, 247, 0.35);
+.glow-emerald {
+  box-shadow: 0 0 40px -10px rgba(16, 185, 129, 0.35);
 }
 
 .glow-cyan {

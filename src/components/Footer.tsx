@@ -17,7 +17,7 @@ export function Footer() {
         <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
           <div className="text-xl font-bold text-foreground flex items-center gap-1">
             <span>{PERSONAL_INFO.shortName}</span>
-            <span className="text-purple-500">.</span>
+            <span className="text-emerald-500">.</span>
           </div>
           <p className="text-xs text-muted-foreground mt-1">
             © {new Date().getFullYear()} {PERSONAL_INFO.name}. Made by Suhail.
@@ -59,7 +59,7 @@ export function Footer() {
           className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-secondary/60 hover:bg-accent border border-border/80 text-xs font-semibold text-foreground transition-all hover:scale-105 active:scale-95"
         >
           <span>Back to top</span>
-          <ArrowUp className="w-3.5 h-3.5 text-purple-500" />
+          <ArrowUp className="w-3.5 h-3.5 text-emerald-500" />
         </button>
 
       </div>
