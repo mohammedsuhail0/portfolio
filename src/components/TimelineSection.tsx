@@ -245,7 +245,7 @@ export function TimelineSection() {
 
                     {/* Mobile image preview if available */}
                     {item.image && (
-                      <div className="lg:hidden mt-4 rounded-xl overflow-hidden bg-zinc-950 p-2 border border-border shadow-md max-w-lg">
+                      <div className="lg:hidden mt-4 rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-950 p-2 border border-zinc-200 dark:border-border shadow-md max-w-lg">
                         <img
                           src={item.image}
                           alt={item.title}
@@ -257,7 +257,7 @@ export function TimelineSection() {
                               window.open(item.liveUrl, "_blank");
                             }
                           }}
-                          className="w-full h-48 sm:h-56 object-contain rounded-lg bg-zinc-900 cursor-zoom-in"
+                          className="w-full h-48 sm:h-56 object-contain rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-transparent cursor-zoom-in"
                         />
                       </div>
                     )}
@@ -320,10 +320,10 @@ export function TimelineSection() {
 
           {/* RIGHT COLUMN: Sticky Mac OS Browser Mockup Frame (Pure Image Viewport) */}
           <div className="lg:col-span-5 sticky top-24 z-30 hidden lg:block">
-            <div className="rounded-2xl border border-zinc-800 bg-zinc-950 text-slate-100 shadow-2xl overflow-hidden ring-1 ring-white/10">
+            <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-800 dark:text-slate-100 shadow-xl dark:shadow-2xl overflow-hidden ring-1 ring-black/5 dark:ring-white/10">
               
               {/* Mac OS Window Header */}
-              <div className="px-4 py-2.5 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between gap-3">
+              <div className="px-4 py-2.5 bg-zinc-100/90 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between gap-3">
                 {/* Window traffic light dots */}
                 <div className="flex items-center gap-1.5">
                   <span className="w-3 h-3 rounded-full bg-[#FF5F56] inline-block" />
@@ -332,13 +332,13 @@ export function TimelineSection() {
                 </div>
 
                 {/* Back / Forward Controls */}
-                <div className="flex items-center gap-2 text-zinc-500 text-xs">
+                <div className="flex items-center gap-2 text-zinc-400 dark:text-zinc-500 text-xs">
                   <span>‹</span>
                   <span>›</span>
                 </div>
 
                 {/* URL Address Bar */}
-                <div className="flex-1 max-w-xs mx-auto flex items-center justify-between px-3 py-1 rounded-md bg-zinc-800 text-[11px] font-mono text-zinc-300 truncate">
+                <div className="flex-1 max-w-xs mx-auto flex items-center justify-between px-3 py-1 rounded-md bg-white dark:bg-zinc-800 border border-zinc-200/80 dark:border-transparent text-[11px] font-mono text-zinc-600 dark:text-zinc-300 truncate shadow-sm dark:shadow-none">
                   <span className="truncate">🔒 {activeUrl.replace(/^https?:\/\//, "")}</span>
                 </div>
 
@@ -349,7 +349,7 @@ export function TimelineSection() {
                     target="_blank"
                     rel="noopener noreferrer"
                     title="Open Live Project"
-                    className="text-zinc-400 hover:text-white transition-colors"
+                    className="text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
@@ -359,7 +359,7 @@ export function TimelineSection() {
               </div>
 
               {/* Mac OS Window Screen Viewport — PURE PROJECT IMAGE */}
-              <div className="relative w-full aspect-[16/10] bg-zinc-950 flex items-center justify-center overflow-hidden group/screen select-none">
+              <div className="relative w-full aspect-[16/10] bg-zinc-50 dark:bg-zinc-950 flex items-center justify-center overflow-hidden group/screen select-none">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeItem.id}
@@ -367,7 +367,7 @@ export function TimelineSection() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.98 }}
                     transition={{ duration: 0.25, ease: "easeOut" }}
-                    className="relative w-full h-full flex items-center justify-center bg-zinc-950"
+                    className="relative w-full h-full flex items-center justify-center bg-zinc-50 dark:bg-zinc-950"
                   >
                     {activeItem.image ? (
                       <div
@@ -380,7 +380,7 @@ export function TimelineSection() {
                             window.open(activeItem.githubUrl, "_blank");
                           }
                         }}
-                        className="relative w-full h-full overflow-hidden cursor-pointer flex items-center justify-center bg-zinc-950 p-1.5"
+                        className="relative w-full h-full overflow-hidden cursor-pointer flex items-center justify-center bg-zinc-50 dark:bg-zinc-950 p-1.5"
                       >
                         <img
                           src={activeItem.image}
@@ -388,7 +388,7 @@ export function TimelineSection() {
                           className="max-w-full max-h-full w-auto h-auto object-contain rounded-md transition-transform duration-500 group-hover/screen:scale-[1.01]"
                         />
                         {/* Hover Overlay with Quick Action */}
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/screen:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                        <div className="absolute inset-0 bg-black/30 dark:bg-black/40 opacity-0 group-hover/screen:opacity-100 transition-opacity duration-200 flex items-center justify-center">
                           {activeItem.liveUrl ? (
                             <span className="px-3.5 py-2 rounded-xl bg-emerald-600/95 text-white font-semibold text-xs backdrop-blur-md shadow-2xl flex items-center gap-1.5 transition-transform duration-200 group-hover/screen:scale-105">
                               <Globe className="w-3.5 h-3.5" />
@@ -410,11 +410,11 @@ export function TimelineSection() {
                       </div>
                     ) : (
                       /* Placeholder when screenshot not uploaded yet */
-                      <div className="flex flex-col items-center justify-center h-full w-full bg-zinc-900/60 p-6 text-center">
-                        <div className="w-12 h-12 rounded-2xl bg-zinc-800 border border-zinc-700/80 flex items-center justify-center mb-3 text-emerald-400">
+                      <div className="flex flex-col items-center justify-center h-full w-full bg-zinc-100 dark:bg-zinc-900/60 p-6 text-center">
+                        <div className="w-12 h-12 rounded-2xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/80 flex items-center justify-center mb-3 text-emerald-600 dark:text-emerald-400 shadow-sm">
                           <Globe className="w-6 h-6" />
                         </div>
-                        <p className="text-sm font-semibold text-zinc-200 mb-1">{activeItem.title}</p>
+                        <p className="text-sm font-semibold text-zinc-800 dark:text-zinc-200 mb-1">{activeItem.title}</p>
                         <p className="text-xs text-zinc-500 font-mono">Screenshot preview loading...</p>
                       </div>
                     )}
@@ -423,9 +423,9 @@ export function TimelineSection() {
               </div>
 
               {/* Status bar */}
-              <div className="px-4 py-1.5 bg-zinc-900 border-t border-zinc-800 flex items-center justify-between text-[10px] font-mono text-zinc-500">
+              <div className="px-4 py-1.5 bg-zinc-100/90 dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-[10px] font-mono text-zinc-600 dark:text-zinc-500">
                 <span>Mohammed Suhail • Portfolio</span>
-                <span className="text-emerald-400">● {activeItem.status}</span>
+                <span className="text-emerald-600 dark:text-emerald-400 font-semibold">● {activeItem.status}</span>
               </div>
             </div>
           </div>
@@ -441,33 +441,33 @@ export function TimelineSection() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedGalleryProject(null)}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-3 sm:p-6 cursor-pointer"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 dark:bg-black/90 backdrop-blur-md p-3 sm:p-6 cursor-pointer"
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="relative max-w-4xl max-h-[92vh] w-full flex flex-col bg-zinc-950 border border-zinc-800 rounded-2xl overflow-hidden shadow-2xl"
+              className="relative max-w-4xl max-h-[92vh] w-full flex flex-col bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-2xl"
             >
               {/* Modal Top Bar */}
-              <div className="px-5 py-3.5 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between gap-4">
+              <div className="px-5 py-3.5 bg-zinc-100 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between gap-4">
                 <div>
-                  <span className="text-[11px] font-mono text-emerald-400 uppercase font-semibold block">
+                  <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 uppercase font-semibold block">
                     {selectedGalleryProject.category}
                   </span>
-                  <h3 className="text-base sm:text-lg font-bold text-white truncate max-w-md sm:max-w-xl">
+                  <h3 className="text-base sm:text-lg font-bold text-zinc-900 dark:text-white truncate max-w-md sm:max-w-xl">
                     {selectedGalleryProject.title}
                   </h3>
                 </div>
 
                 <div className="flex items-center gap-3">
                   {galleryList.length > 1 && (
-                    <span className="text-xs font-mono text-zinc-400 bg-zinc-800 px-2.5 py-1 rounded-full border border-zinc-700">
+                    <span className="text-xs font-mono text-zinc-600 dark:text-zinc-400 bg-white dark:bg-zinc-800 px-2.5 py-1 rounded-full border border-zinc-200 dark:border-zinc-700">
                       {activeImageIndex + 1} / {galleryList.length}
                     </span>
                   )}
                   <button
                     type="button"
                     onClick={() => setSelectedGalleryProject(null)}
-                    className="p-1.5 rounded-full bg-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-700 transition-colors border border-zinc-700"
+                    className="p-1.5 rounded-full bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors border border-zinc-200 dark:border-zinc-700"
                     aria-label="Close"
                   >
                     <X className="w-5 h-5" />
@@ -476,7 +476,7 @@ export function TimelineSection() {
               </div>
 
               {/* Main Image Display Area with Navigation Arrows */}
-              <div className="relative w-full h-[58vh] sm:h-[64vh] flex items-center justify-center p-3 bg-black/95 select-none">
+              <div className="relative w-full h-[58vh] sm:h-[64vh] flex items-center justify-center p-3 bg-zinc-950 select-none">
                 {currentGalleryItem && (
                   <img
                     key={currentGalleryItem.url}
@@ -512,8 +512,8 @@ export function TimelineSection() {
               </div>
 
               {/* Bottom Caption & Thumbnails */}
-              <div className="p-3.5 bg-zinc-900 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <p className="text-xs sm:text-sm text-zinc-200 font-medium text-center sm:text-left truncate max-w-xl">
+              <div className="p-3.5 bg-zinc-100 dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <p className="text-xs sm:text-sm text-zinc-800 dark:text-zinc-200 font-medium text-center sm:text-left truncate max-w-xl">
                   {currentGalleryItem?.caption || selectedGalleryProject.title}
                 </p>
 
@@ -528,7 +528,7 @@ export function TimelineSection() {
                         className={`relative w-12 h-9 rounded-md overflow-hidden border-2 transition-all shrink-0 ${
                           activeImageIndex === idx
                             ? "border-emerald-500 scale-105 shadow-md"
-                            : "border-zinc-700 opacity-60 hover:opacity-100"
+                            : "border-zinc-300 dark:border-zinc-700 opacity-60 hover:opacity-100"
                         }`}
                       >
                         <img src={img.url} alt="thumbnail" className="w-full h-full object-cover" />

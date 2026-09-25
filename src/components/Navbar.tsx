@@ -115,10 +115,10 @@ export function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.35, ease: "easeInOut" }}
-            className="fixed inset-0 z-40 bg-zinc-50/98 dark:bg-zinc-950/98 backdrop-blur-3xl flex flex-col justify-between p-6 sm:p-12 lg:p-16 overflow-y-auto text-zinc-900 dark:text-white transition-colors duration-300"
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="fixed inset-0 z-40 bg-white dark:bg-zinc-950 flex flex-col justify-between p-6 sm:p-12 lg:p-16 overflow-y-auto text-zinc-900 dark:text-white transition-colors duration-300"
           >
-            {/* Background decorative glow */}
+            {/* Background decorative subtle glow */}
             <div className="absolute top-1/4 -left-32 w-96 h-96 bg-emerald-500/10 dark:bg-emerald-600/15 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-teal-500/10 dark:bg-teal-600/15 rounded-full blur-3xl pointer-events-none" />
 

@@ -64,7 +64,7 @@ export const TextRevealCard = ({
       onTouchMove={touchMoveHandler}
       ref={cardRef}
       className={cn(
-        "bg-[#090a0f] border border-white/[0.08] w-full rounded-2xl p-6 sm:p-8 relative overflow-hidden shadow-2xl transition-all duration-300 hover:border-emerald-500/30 select-none cursor-pointer",
+        "bg-card border border-border/80 dark:bg-[#090a0f] dark:border-white/[0.08] w-full rounded-2xl p-6 sm:p-8 relative overflow-hidden shadow-xl dark:shadow-2xl transition-all duration-300 hover:border-emerald-500/40 select-none cursor-pointer",
         className
       )}
     >
@@ -79,13 +79,13 @@ export const TextRevealCard = ({
             opacity: isMouseOver ? (widthPercentage > 0 ? 1 : 0) : 0,
             transition: isMouseOver ? "opacity 0.1s ease" : "clip-path 0.4s ease, opacity 0.4s ease",
           }}
-          className="absolute inset-0 bg-[#090a0f] z-20 flex items-center will-change-transform"
+          className="absolute inset-0 bg-card dark:bg-[#090a0f] z-20 flex items-center will-change-transform"
         >
           <p
             style={{
-              textShadow: "0 0 20px rgba(16,185,129,0.7), 0 0 40px rgba(16,185,129,0.4)",
+              textShadow: "0 0 20px rgba(16,185,129,0.5), 0 0 40px rgba(16,185,129,0.3)",
             }}
-            className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white bg-clip-text text-transparent bg-gradient-to-r from-white via-emerald-100 to-teal-200 py-4 truncate"
+            className="text-2xl sm:text-4xl lg:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-800 dark:from-white dark:via-emerald-100 dark:to-teal-200 py-4 truncate"
           >
             {revealText}
           </p>
@@ -99,12 +99,12 @@ export const TextRevealCard = ({
             opacity: isMouseOver && widthPercentage > 0 ? 1 : 0,
             transition: isMouseOver ? "none" : "left 0.4s ease, opacity 0.4s ease",
           }}
-          className="h-40 w-[3px] bg-gradient-to-b from-transparent via-emerald-400 to-transparent absolute z-50 will-change-transform shadow-[0_0_14px_rgba(16,185,129,0.9)] pointer-events-none"
+          className="h-40 w-[3px] bg-gradient-to-b from-transparent via-emerald-500 to-transparent absolute z-50 will-change-transform shadow-[0_0_14px_rgba(16,185,129,0.9)] pointer-events-none"
         />
 
-        {/* Base dark text layer */}
+        {/* Base text layer */}
         <div className="overflow-hidden w-full relative">
-          <p className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-zinc-700 dark:text-zinc-700 py-4 truncate">
+          <p className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-zinc-300 dark:text-zinc-700 py-4 truncate select-none">
             {text}
           </p>
           {mounted && <MemoizedStars />}
@@ -122,7 +122,7 @@ export const TextRevealCardTitle = ({
   className?: string;
 }) => {
   return (
-    <h2 className={cn("text-white text-lg sm:text-xl font-bold mb-2", className)}>
+    <h2 className={cn("text-foreground text-lg sm:text-xl font-bold mb-2", className)}>
       {children}
     </h2>
   );
@@ -136,7 +136,7 @@ export const TextRevealCardDescription = ({
   className?: string;
 }) => {
   return (
-    <p className={cn("text-zinc-400 text-xs sm:text-sm max-w-lg leading-relaxed", className)}>
+    <p className={cn("text-muted-foreground text-xs sm:text-sm max-w-lg leading-relaxed", className)}>
       {children}
     </p>
   );
@@ -175,11 +175,9 @@ const Stars = () => {
             left: `${star.left}%`,
             width: `${star.size}px`,
             height: `${star.size}px`,
-            backgroundColor: "#e2e8f0",
             borderRadius: "50%",
-            boxShadow: "0 0 4px rgba(255,255,255,0.8)",
           }}
-          className="inline-block"
+          className="inline-block bg-emerald-500/40 dark:bg-slate-200 shadow-[0_0_4px_rgba(16,185,129,0.3)] dark:shadow-[0_0_4px_rgba(255,255,255,0.8)]"
         />
       ))}
     </div>

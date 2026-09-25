@@ -42,14 +42,9 @@ export function WorkingStyleSection() {
 
               {/* Animated Matrix dot pattern revealed on hover */}
               <div
-                className={`absolute inset-0 transition-opacity duration-500 pointer-events-none ${
+                className={`absolute inset-0 transition-opacity duration-500 pointer-events-none bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.15)_0%,rgba(240,253,244,0.98)_100%)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.25)_0%,rgba(15,23,42,0.98)_100%)] ${
                   isHovered ? "opacity-100" : "opacity-0"
                 }`}
-                style={{
-                  background:
-                    "radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.25) 0%, rgba(15, 23, 42, 0.95) 100%), radial-gradient(rgba(16, 185, 129, 0.3) 1px, transparent 1px)",
-                  backgroundSize: "100% 100%, 18px 18px",
-                }}
               />
 
               {/* Default State: Center Spinning Conic Button Badge */}
@@ -62,7 +57,7 @@ export function WorkingStyleSection() {
               >
                 <div className="relative inline-flex overflow-hidden rounded-full p-[2px] shadow-xl">
                   <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#A7F3D0_0%,#059669_50%,#A7F3D0_100%)]" />
-                  <span className="inline-flex h-full w-full items-center justify-center rounded-full bg-slate-950 px-7 py-3 text-lg font-bold text-emerald-100 backdrop-blur-3xl">
+                  <span className="inline-flex h-full w-full items-center justify-center rounded-full bg-white dark:bg-slate-950 px-7 py-3 text-lg font-bold text-emerald-700 dark:text-emerald-100 shadow-sm backdrop-blur-3xl">
                     {step.stepNumber}
                   </span>
                 </div>
@@ -79,13 +74,13 @@ export function WorkingStyleSection() {
                     : "opacity-0 translate-y-8 pointer-events-none"
                 }`}
               >
-                <span className="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                <span className="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/15 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 dark:border-emerald-500/40">
                   {step.stepNumber}
                 </span>
-                <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
+                <h3 className="text-2xl sm:text-3xl font-extrabold text-foreground">
                   {step.title}
                 </h3>
-                <p className="text-sm text-slate-300 leading-relaxed max-w-xs mx-auto">
+                <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto">
                   {step.description}
                 </p>
               </div>
