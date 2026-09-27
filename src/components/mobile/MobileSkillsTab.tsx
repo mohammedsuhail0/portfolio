@@ -135,11 +135,11 @@ export function MobileSkillsTab() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 8 }}
+      initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
+      exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.2 }}
-      className="h-full w-full flex flex-col justify-between py-2 select-none"
+      className="w-full flex flex-col gap-3 py-2 px-1 select-none pb-4"
     >
       {/* 1. Header (Clean text only, No revolving pill buttons) */}
       <div className="pb-1 border-b border-border/60">
