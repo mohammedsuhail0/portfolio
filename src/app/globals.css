@@ -126,6 +126,133 @@
   animation-play-state: paused;
 }
 
+/* Vertical Infinite Marquee for Mobile Skills */
+@keyframes marquee-vertical-up {
+  0% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes marquee-vertical-down {
+  0% {
+    transform: translateY(-50%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+.animate-marquee-vertical-up {
+  display: flex;
+  flex-direction: column;
+  height: max-content;
+  animation: marquee-vertical-up 24s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-vertical-down {
+  display: flex;
+  flex-direction: column;
+  height: max-content;
+  animation: marquee-vertical-down 24s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-vertical-up:hover,
+.animate-marquee-vertical-down:hover {
+  animation-play-state: paused;
+}
+
+/* Orbit Revolving Animations for Dynamic Tech Stack */
+@keyframes orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orbit-spin-reverse {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes nucleus-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.18);
+    opacity: 0.8;
+  }
+}
+
+.animate-nucleus-pulse {
+  animation: nucleus-pulse 3.5s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.animate-orbit-spin {
+  animation: orbit-spin 26s linear infinite;
+  will-change: transform;
+}
+
+.animate-orbit-spin-reverse {
+  animation: orbit-spin-reverse 38s linear infinite;
+  will-change: transform;
+}
+
+.animate-orbit-counter {
+  animation: orbit-spin-reverse 26s linear infinite;
+  will-change: transform;
+}
+
+.animate-orbit-counter-reverse {
+  animation: orbit-spin 38s linear infinite;
+  will-change: transform;
+}
+
+/* 3-Ring Planetary System Animations */
+.animate-orbit-ring1 {
+  animation: orbit-spin 22s linear infinite;
+  will-change: transform;
+}
+.animate-orbit-ring1-counter {
+  animation: orbit-spin-reverse 22s linear infinite;
+  will-change: transform;
+}
+
+.animate-orbit-ring2 {
+  animation: orbit-spin-reverse 34s linear infinite;
+  will-change: transform;
+}
+.animate-orbit-ring2-counter {
+  animation: orbit-spin 34s linear infinite;
+  will-change: transform;
+}
+
+.animate-orbit-ring3 {
+  animation: orbit-spin 46s linear infinite;
+  will-change: transform;
+}
+.animate-orbit-ring3-counter {
+  animation: orbit-spin-reverse 46s linear infinite;
+  will-change: transform;
+}
+
+.pause-orbit {
+  animation-play-state: paused !important;
+}
+
 /* 3D tilt styles */
 .perspective-1000 {
   perspective: 1000px;

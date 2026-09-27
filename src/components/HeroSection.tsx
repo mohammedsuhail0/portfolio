@@ -59,10 +59,10 @@ export function HeroSection() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-base sm:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-2xl"
             >
-              An Information Technology undergrad (Class of 2028) specializing in{" "}
-              <strong className="text-foreground font-semibold">Data Science &amp; Machine Learning</strong>, and{" "}
-              <strong className="text-foreground font-semibold">Google Virtual Intern (AI/ML)</strong>. Focused on engineering
-              efficient, intelligent systems and modern full-stack web architectures; based in{" "}
+              Information Technology undergraduate at{" "}
+              <strong className="text-foreground font-semibold">ISL Engineering College</strong> (Class of 2028).{" "}
+              <strong className="text-foreground font-semibold">Full-Stack Engineer</strong> specialising in AI-assisted development, rapid prototyping, and end-to-end application delivery. Certified in{" "}
+              <strong className="text-foreground font-semibold">Data Science by Fullstack Academy</strong>; based in{" "}
               <strong className="text-emerald-500 font-semibold">{PERSONAL_INFO.location}!</strong>
             </motion.p>
 
@@ -163,7 +163,7 @@ export function HeroSection() {
                       {PERSONAL_INFO.name}
                     </h3>
                     <p className="text-xs text-slate-300 max-w-xs leading-relaxed">
-                      Specialized in Data Science &bull; Google Virtual Intern (AI/ML)
+                      ISL Engineering College &bull; Certified by Fullstack Academy
                     </p>
                   </div>
                 </div>

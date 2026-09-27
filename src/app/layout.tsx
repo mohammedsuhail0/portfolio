@@ -10,14 +10,19 @@ import { Preloader } from "@/components/Preloader";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Mohammed Suhail | AI/ML Engineer & Full-Stack Developer",
+  title: "Mohammed Suhail | Full-Stack Engineer",
   description:
-    "IT undergrad specializing in Data Science & Google Virtual Intern (AI/ML). Focused on engineering intelligent systems and full-stack web applications.",
+    "Full-Stack Engineer specialising in AI-assisted development, rapid prototyping, and end-to-end application delivery. IT undergraduate at ISL Engineering College ('28), certified in Data Science by Fullstack Academy.",
   keywords: [
     "Mohammed Suhail",
-    "AI/ML Engineer",
+    "Full-Stack Engineer",
+    "AI-assisted development",
+    "Rapid prototyping",
+    "Application delivery",
+    "Information Technology",
+    "ISL Engineering College",
+    "Fullstack Academy",
     "Data Science",
-    "Full-Stack Developer",
     "Next.js",
     "React",
     "Python",
@@ -25,11 +30,20 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Mohammed Suhail" }],
   openGraph: {
-    title: "Mohammed Suhail | AI/ML Engineer & Full-Stack Developer",
+    title: "Mohammed Suhail | Full-Stack Engineer",
     description:
-      "IT undergrad specializing in Data Science & Google Virtual Intern (AI/ML).",
+      "Full-Stack Engineer specialising in AI-assisted development, rapid prototyping, and end-to-end application delivery.",
     type: "website",
   },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+  themeColor: "#09090b",
 };
 
 export default function RootLayout({

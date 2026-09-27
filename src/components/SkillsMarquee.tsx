@@ -19,6 +19,10 @@ import {
   SiDocker,
   SiGithub,
   SiFigma,
+  SiHuggingface,
+  SiRedis,
+  SiSupabase,
+  SiLinux,
 } from "react-icons/si";
 import { Cpu } from "lucide-react";
 
@@ -40,6 +44,10 @@ const iconMap: Record<string, React.ElementType> = {
   SiDocker,
   SiGithub,
   SiFigma,
+  SiHuggingface,
+  SiRedis,
+  SiSupabase,
+  SiLinux,
 };
 
 export function SkillsMarquee() {

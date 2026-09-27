@@ -57,12 +57,12 @@ export function ContactSection() {
           Get In Touch
         </span>
         <h2 className="text-3xl sm:text-5xl font-extrabold text-foreground mb-4">
-          Need a <span className="text-emerald-600 dark:text-emerald-400">Developer</span> or an{" "}
-          <span className="text-teal-600 dark:text-teal-400">AI/ML Engineer?</span>
+          Looking for a <span className="text-emerald-600 dark:text-emerald-400">Full-Stack Engineer</span> or an{" "}
+          <span className="text-teal-600 dark:text-teal-400">AI-Assisted Builder?</span>
         </h2>
         <div className="w-24 h-1.5 bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-500 rounded-full mb-6" />
         <p className="text-muted-foreground max-w-xl text-sm sm:text-base">
-          Whether you have an ambitious AI/ML project, an internship opportunity, or want to discuss full-stack development, feel free to connect!
+          Whether you have an ambitious web project, rapid prototyping requirements, or want to discuss full-stack engineering opportunities, feel free to connect!
         </p>
         <div className="mt-3 inline-flex items-center gap-1.5 text-xs text-muted-foreground font-mono bg-secondary/50 px-3 py-1 rounded-full border border-border/60">
           <MapPin className="w-3.5 h-3.5 text-emerald-500" />

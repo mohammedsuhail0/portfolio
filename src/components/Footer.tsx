@@ -10,7 +10,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="py-12 border-t border-border/60 bg-background/50 backdrop-blur-md">
+    <footer className="hidden md:block py-12 border-t border-border/60 bg-background/50 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
         
         {/* Left Info */}

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles } from "lucide-react";
+import { PERSONAL_INFO } from "@/data/portfolioData";
 
 const RANDOM_LANGUAGES_POOL = [
   { text: "నమస్కారం", lang: "Telugu" },
@@ -127,7 +128,7 @@ export function Preloader() {
               transition={{ delay: 0.3 }}
               className="text-xs sm:text-sm font-mono text-zinc-600 dark:text-zinc-400 mt-3 tracking-wide"
             >
-              AI/ML Engineer &bull; Full-Stack Developer
+              {PERSONAL_INFO.role} &bull; {PERSONAL_INFO.college}
             </motion.p>
           </div>
         </motion.div>
