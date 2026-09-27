@@ -116,13 +116,16 @@ export const TIMELINE_DATA: ITimelineItem[] = [
   {
     id: "nextpatient",
     title: "NextPatient",
-    category: "Healthcare Platform",
-    description: "Intelligent clinical workflow triage, patient appointment scheduling, and automated healthcare coordination.",
+    category: "Clinical AI Simulation",
+    description: "Real-time clinical OSCE simulation workstation featuring interactive AI patients, live bedside telemetry, STAT orders, and NCBI StatPearls RAG triage.",
     gradient: ["#0284C7", "#38BDF8"],
     githubUrl: "https://github.com/mohammedsuhail0",
     liveUrl: "https://nextpatient-app.vercel.app/",
-    image: "/projects/smart-attendance.png",
-    tech: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
+    image: "/projects/nextpatient.png",
+    gallery: [
+      { url: "/projects/nextpatient.png", caption: "NextPatient — Clinical OSCE Simulation Workstation & Real-Time AI Patient" },
+    ],
+    tech: ["Next.js", "React", "TypeScript", "NCBI StatPearls RAG", "Tailwind CSS"],
     status: "Completed",
   },
   {
