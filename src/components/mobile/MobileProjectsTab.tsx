@@ -1,27 +1,95 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { TIMELINE_DATA, ITimelineItem } from "@/data/portfolioData";
-import { ExternalLink, Github, ChevronLeft, ChevronRight, Globe, MoveHorizontal } from "lucide-react";
+import {
+  ExternalLink,
+  Github,
+  ChevronLeft,
+  ChevronRight,
+  Globe,
+  MoveHorizontal,
+  Layers,
+  Sparkles,
+  Award,
+  ArrowUpRight,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+type CategoryFilter = "apps" | "all" | "ai" | "web" | "hackathons";
+
 export function MobileProjectsTab() {
+  const [filter, setFilter] = useState<CategoryFilter>("apps");
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [direction, setDirection] = useState<number>(0);
-  const projects = TIMELINE_DATA.slice(0, 4); // 1. BroSync, 2. Smart Attendance, 3. NextPatient, 4. ShieldSense
-  const currentProject: ITimelineItem = projects[currentIndex];
+
+  // Filter projects by category
+  const filteredProjects: ITimelineItem[] = useMemo(() => {
+    switch (filter) {
+      case "apps":
+        // All production software applications with live demo or primary repo
+        return TIMELINE_DATA.filter((p) => p.status === "Completed" || p.liveUrl);
+      case "ai":
+        return TIMELINE_DATA.filter(
+          (p) =>
+            p.category.toLowerCase().includes("ai") ||
+            p.category.toLowerCase().includes("health") ||
+            p.category.toLowerCase().includes("data science") ||
+            p.id === "nextpatient" ||
+            p.id === "shield-sense" ||
+            p.id === "hackathon-sih"
+        );
+      case "web":
+        return TIMELINE_DATA.filter(
+          (p) =>
+            p.category.toLowerCase().includes("full-stack") ||
+            p.category.toLowerCase().includes("collaboration") ||
+            p.category.toLowerCase().includes("web")
+        );
+      case "hackathons":
+        return TIMELINE_DATA.filter(
+          (p) => p.status === "Hackathon Participant" || p.status === "Milestone"
+        );
+      case "all":
+      default:
+        return TIMELINE_DATA;
+    }
+  }, [filter]);
+
+  // Ensure index stays in bounds when switching filters
+  const safeIndex = currentIndex >= filteredProjects.length ? 0 : currentIndex;
+  const currentProject = filteredProjects[safeIndex] || TIMELINE_DATA[0];
 
   const handlePrev = () => {
     setDirection(-1);
-    setCurrentIndex((prev) => (prev === 0 ? projects.length - 1 : prev - 1));
+    setCurrentIndex((prev) =>
+      prev === 0 ? filteredProjects.length - 1 : prev - 1
+    );
   };
 
   const handleNext = () => {
     setDirection(1);
-    setCurrentIndex((prev) => (prev === projects.length - 1 ? 0 : prev + 1));
+    setCurrentIndex((prev) =>
+      prev === filteredProjects.length - 1 ? 0 : prev + 1
+    );
   };
 
-  // Touch Swipe Handlers (Universal)
+  const handleSelectFilter = (newFilter: CategoryFilter) => {
+    setFilter(newFilter);
+    setCurrentIndex(0);
+  };
+
+  const handleSelectProject = (project: ITimelineItem) => {
+    const idx = filteredProjects.findIndex((p) => p.id === project.id);
+    if (idx !== -1) {
+      setDirection(idx > safeIndex ? 1 : -1);
+      setCurrentIndex(idx);
+    }
+    // Smooth scroll to top of showcase
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // Touch Swipe Handlers (Universal fallback)
   let touchStartX = 0;
   let touchEndX = 0;
 
@@ -46,26 +114,62 @@ export function MobileProjectsTab() {
     touchEndX = 0;
   };
 
+  const filterTabs: { id: CategoryFilter; label: string; count: number }[] = [
+    {
+      id: "apps",
+      label: "Production Apps",
+      count: TIMELINE_DATA.filter((p) => p.status === "Completed" || p.liveUrl).length,
+    },
+    {
+      id: "ai",
+      label: "AI & Health",
+      count: TIMELINE_DATA.filter(
+        (p) =>
+          p.category.toLowerCase().includes("ai") ||
+          p.category.toLowerCase().includes("health") ||
+          p.category.toLowerCase().includes("data science")
+      ).length,
+    },
+    {
+      id: "web",
+      label: "Full-Stack Web",
+      count: TIMELINE_DATA.filter(
+        (p) =>
+          p.category.toLowerCase().includes("full-stack") ||
+          p.category.toLowerCase().includes("collaboration") ||
+          p.category.toLowerCase().includes("web")
+      ).length,
+    },
+    {
+      id: "hackathons",
+      label: "Hackathons & Awards",
+      count: TIMELINE_DATA.filter(
+        (p) => p.status === "Hackathon Participant" || p.status === "Milestone"
+      ).length,
+    },
+    { id: "all", label: "All Items", count: TIMELINE_DATA.length },
+  ];
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.2 }}
-      className="w-full flex flex-col gap-3 py-2 px-1 select-none pb-4"
+      className="w-full flex flex-col gap-3 py-2 px-1 select-none pb-8"
     >
-      {/* 1. Header & Navigation Controls */}
+      {/* 1. Header & Quick Controls */}
       <div className="flex items-center justify-between p-3 rounded-2xl bg-card/60 border border-border/70 backdrop-blur-sm shadow-xs">
         <div>
           <h2 className="text-sm font-black text-foreground tracking-tight flex items-center gap-1.5">
-            <span>Featured Work</span>
-            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-              0{currentIndex + 1}/0{projects.length}
+            <span>Projects &amp; Apps</span>
+            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 font-bold">
+              {safeIndex + 1} / {filteredProjects.length}
             </span>
           </h2>
           <p className="text-[11px] text-muted-foreground flex items-center gap-1 mt-0.5">
             <MoveHorizontal className="w-3 h-3 text-emerald-500 animate-pulse" />
-            <span>Swipe left or right</span>
+            <span>Swipe card or tap arrows</span>
           </p>
         </div>
 
@@ -87,7 +191,27 @@ export function MobileProjectsTab() {
         </div>
       </div>
 
-      {/* 2. Interactive Swipeable Project Card */}
+      {/* 2. Category Filter Chips (Horizontal Scrollable) */}
+      <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 px-0.5">
+        {filterTabs.map((tab) => {
+          const isActive = filter === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => handleSelectFilter(tab.id)}
+              className={`shrink-0 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all active:scale-95 ${
+                isActive
+                  ? "bg-emerald-600 text-white shadow-xs shadow-emerald-600/30"
+                  : "bg-secondary/70 hover:bg-secondary text-muted-foreground hover:text-foreground border border-border/70"
+              }`}
+            >
+              {tab.label} ({tab.count})
+            </button>
+          );
+        })}
+      </div>
+
+      {/* 3. Interactive Swipeable Featured Card */}
       <div
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
@@ -134,14 +258,14 @@ export function MobileProjectsTab() {
               </div>
 
               {/* Category Badge */}
-              <div className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md text-[10px] font-mono text-zinc-300 bg-black/70 backdrop-blur-md">
+              <div className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md text-[10px] font-mono text-zinc-300 bg-black/70 backdrop-blur-md truncate max-w-[150px]">
                 {currentProject.category}
               </div>
             </div>
 
             {/* Project Details */}
             <div className="space-y-1.5 pt-0.5">
-              <h3 className="text-base font-black text-foreground tracking-tight">
+              <h3 className="text-base font-black text-foreground tracking-tight leading-snug">
                 {currentProject.title}
               </h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
@@ -174,8 +298,8 @@ export function MobileProjectsTab() {
                   <span>Live Demo</span>
                 </a>
               ) : (
-                <div className="h-12 flex items-center justify-center px-4 rounded-xl bg-muted text-muted-foreground font-semibold text-xs opacity-50">
-                  <span>Demo Unavailable</span>
+                <div className="h-12 flex items-center justify-center px-4 rounded-xl bg-secondary/50 text-muted-foreground font-semibold text-xs border border-border/60">
+                  <span>Demo Internal</span>
                 </div>
               )}
 
@@ -190,24 +314,24 @@ export function MobileProjectsTab() {
                   <span>Source Code</span>
                 </a>
               ) : (
-                <div className="h-12 flex items-center justify-center px-4 rounded-xl bg-muted text-muted-foreground font-semibold text-xs opacity-50">
-                  <span>Private Code</span>
+                <div className="h-12 flex items-center justify-center px-4 rounded-xl bg-secondary/50 text-muted-foreground font-semibold text-xs border border-border/60">
+                  <span>Official Record</span>
                 </div>
               )}
             </div>
 
-            {/* Pagination Dots */}
+            {/* Progress Bar / Dots */}
             <div className="flex items-center justify-center gap-1.5 pt-1">
-              {projects.map((_, idx) => (
+              {filteredProjects.slice(0, 10).map((_, idx) => (
                 <button
                   key={idx}
                   onClick={() => {
-                    setDirection(idx > currentIndex ? 1 : -1);
+                    setDirection(idx > safeIndex ? 1 : -1);
                     setCurrentIndex(idx);
                   }}
                   aria-label={`Go to project ${idx + 1}`}
                   className={`h-1.5 rounded-full transition-all duration-300 ${
-                    currentIndex === idx
+                    safeIndex === idx
                       ? "w-7 bg-emerald-500"
                       : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/60"
                   }`}
@@ -216,6 +340,90 @@ export function MobileProjectsTab() {
             </div>
           </motion.div>
         </AnimatePresence>
+      </div>
+
+      {/* 4. Complete Application Directory / Feed */}
+      <div className="mt-2 space-y-2">
+        <div className="flex items-center justify-between px-1 pt-1">
+          <span className="text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+            <Layers className="w-3.5 h-3.5 text-emerald-500" />
+            <span>Complete Apps Catalog ({filteredProjects.length})</span>
+          </span>
+          <span className="text-[10px] font-mono text-muted-foreground">
+            Tap to view in deck
+          </span>
+        </div>
+
+        <div className="space-y-2">
+          {filteredProjects.map((project, idx) => {
+            const isSelected = project.id === currentProject.id;
+            return (
+              <div
+                key={project.id}
+                onClick={() => handleSelectProject(project)}
+                className={`flex items-center justify-between p-3 rounded-2xl border transition-all active:scale-[0.99] cursor-pointer ${
+                  isSelected
+                    ? "bg-card border-emerald-500/50 shadow-md ring-1 ring-emerald-500/30"
+                    : "bg-card/60 hover:bg-card border-border/70 shadow-xs"
+                }`}
+              >
+                <div className="flex items-center gap-3 min-w-0 flex-1 pr-2">
+                  <div className="w-12 h-12 rounded-xl bg-zinc-950 overflow-hidden border border-border/60 shrink-0 flex items-center justify-center relative">
+                    {project.image ? (
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-full object-contain p-1"
+                      />
+                    ) : (
+                      <Globe className="w-5 h-5 text-emerald-500" />
+                    )}
+                  </div>
+
+                  <div className="flex flex-col min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs font-black text-foreground truncate">
+                        {project.title}
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 truncate">
+                      {project.category}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground truncate">
+                      {project.tech.slice(0, 3).join(" • ")}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Direct Action Link */}
+                <div className="flex items-center gap-1.5 shrink-0" onClick={(e) => e.stopPropagation()}>
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 active:scale-95 transition-transform"
+                      aria-label="Open Live Demo"
+                    >
+                      <ArrowUpRight className="w-4 h-4" />
+                    </a>
+                  )}
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2.5 rounded-xl bg-secondary hover:bg-accent text-foreground border border-border active:scale-95 transition-transform"
+                      aria-label="View Source Code"
+                    >
+                      <Github className="w-4 h-4" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </motion.div>
   );
