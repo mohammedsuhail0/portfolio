@@ -165,7 +165,7 @@ export function MobileSkillsTab() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.2 }}
-      className="w-full flex flex-col gap-3.5 py-2 px-1 select-none pb-8"
+      className="h-full w-full flex flex-col justify-center gap-2.5 px-1 py-1 select-none"
     >
       {/* 1. Header with Mode Toggle */}
       <div className="flex items-center justify-between p-3 rounded-2xl bg-card/60 border border-border/70 backdrop-blur-sm shadow-xs">
