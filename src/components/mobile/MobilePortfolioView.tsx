@@ -36,11 +36,16 @@ export function MobilePortfolioView() {
 
   return (
     <div className="fixed inset-0 h-[100dvh] max-h-[100dvh] w-full flex flex-col justify-between overflow-hidden bg-background text-foreground select-none z-30">
+      {/* Atmospheric Ambient Glows */}
+      <div className="absolute top-0 -left-20 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-20 -right-20 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
+
       {/* 1. Header with Fullscreen Toggle & IT '28 Tag */}
       <MobileHeader />
 
       {/* 2. Main Content Stage */}
-      <main className="flex-1 w-full max-w-md mx-auto overflow-y-auto no-scrollbar px-3 py-1 flex flex-col relative">
+      <main className="flex-1 w-full max-w-md mx-auto overflow-y-auto no-scrollbar px-3 py-1 flex flex-col relative z-10">
         <AnimatePresence mode="wait">
           {activeTab === "home" && (
             <MobileHomeTab
@@ -63,7 +68,7 @@ export function MobilePortfolioView() {
         </AnimatePresence>
       </main>
 
-      {/* 3. Bottom Menu (Always Visible) */}
+      {/* 3. Bottom Menu (Always Visible with Logo Icons) */}
       <MobileBottomNav
         activeTab={activeTab}
         onSelectTab={(tab) => setActiveTab(tab)}
