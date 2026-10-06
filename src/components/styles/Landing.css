@@ -1,0 +1,335 @@
+/* ========================================================
+   OG LANDING SECTION STYLING (MATCHES INSPIRATION REPO)
+   Centered Layout:
+   - Symmetrically Centered Composition
+   - Left: "Hello! I'm MOHAMMED SUHAIL" anchored adjacent to centerpiece
+   - Center: Centered Portrait with Pragmata Cursor Reveal
+   - Right: "An AI ENGINEER / FULL-STACK DEVELOPER" anchored adjacent to centerpiece
+   ======================================================== */
+
+.landing-section {
+  width: 100%;
+  max-width: var(--cMaxWidth);
+  margin: auto;
+  position: relative;
+  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  background-color: transparent;
+}
+
+.landing-container {
+  width: var(--cWidth);
+  margin: auto;
+  height: 100%;
+  position: relative;
+  max-width: var(--cMaxWidth);
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* Centerpiece Portrait with Pragmata Cursor Reveal */
+.hero-avatar-centerpiece {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 86vh;
+  max-height: 890px;
+  width: auto;
+  aspect-ratio: 771 / 1024;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  pointer-events: auto;
+}
+
+/* Left Side: OG Name */
+.landing-intro {
+  position: absolute;
+  z-index: 9;
+  top: 12%;
+  left: 0;
+  pointer-events: auto;
+}
+
+.landing-intro h2 {
+  margin: 0;
+  color: var(--accentColor, #38bdf8);
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: 2px;
+}
+
+.landing-intro h1 {
+  margin: 0;
+  margin-top: 4px;
+  letter-spacing: 2px;
+  font-size: 28px;
+  line-height: 0.92;
+  font-weight: 600;
+  font-family: "Geist", sans-serif;
+  color: var(--headingColor, #f8fafc);
+}
+
+.hero-name-first {
+  display: block;
+  margin: 0;
+  padding: 0;
+  line-height: 0.92;
+}
+
+.hero-name-last {
+  display: block;
+  margin: 0;
+  padding: 0;
+  line-height: 0.92;
+  margin-top: 0px;
+}
+
+.landing-intro h1 span {
+  font-weight: 700;
+}
+
+.landing-intro h1 .split-line,
+.hero-name-first .split-line,
+.hero-name-last .split-line {
+  line-height: 0.92 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+}
+
+/* Right Side: OG Info */
+.landing-info {
+  position: absolute;
+  right: 50%;
+  transform: translateX(50%);
+  bottom: 40px;
+  top: inherit;
+  z-index: 9;
+  pointer-events: auto;
+}
+
+.landing-info h3 {
+  font-size: 22px;
+  letter-spacing: 2px;
+  font-weight: 300;
+  color: var(--accentColor, #38bdf8);
+  margin: 0;
+}
+
+.landing-info h2 {
+  margin: 0;
+  margin-top: 4px;
+  font-family: "Geist", sans-serif;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 1.15;
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  white-space: nowrap;
+  color: var(--headingColor, #f8fafc);
+}
+
+.landing-h2-info {
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+[data-theme="light"] .landing-h2-info {
+  color: #334155;
+}
+
+h2.landing-info-h2 {
+  color: var(--accentColor, #38bdf8);
+  font-size: 36px;
+  margin: 0;
+  font-family: "Geist", sans-serif;
+  font-weight: 700;
+  position: relative;
+}
+
+/* Responsive Media Queries (Matches Inspiration Repo Breakpoints) */
+@media screen and (min-width: 500px) {
+  .landing-info h3 {
+    font-size: 18px;
+  }
+  .landing-intro h2 {
+    font-size: 18px;
+  }
+  .landing-intro h1 {
+    font-size: 30px;
+    line-height: 0.92;
+  }
+  .landing-info h2 {
+    font-size: 32px;
+    line-height: 1.15;
+  }
+  h2.landing-info-h2 {
+    font-size: 36px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .landing-intro h2 {
+    font-size: 22px;
+  }
+  .landing-intro h1 {
+    font-size: 38px;
+    line-height: 0.92;
+  }
+  .landing-info h3 {
+    font-size: 22px;
+  }
+  .landing-info h2 {
+    font-size: 38px;
+    line-height: 1.15;
+  }
+  h2.landing-info-h2 {
+    font-size: 46px;
+  }
+}
+
+/* Desktop Centered & Symmetric Layout (Balanced across center astronaut portrait) */
+@media screen and (min-width: 1025px) {
+  .landing-intro {
+    top: 48%;
+    left: auto;
+    right: calc(50% + clamp(150px, 14vw, 240px));
+    transform: translateY(-50%);
+    text-align: left;
+    max-width: calc(50% - clamp(150px, 14vw, 240px) - 20px);
+  }
+
+  .landing-intro h2 {
+    font-size: clamp(18px, 1.6vw, 24px);
+    line-height: 1.2;
+    margin: 0;
+    color: var(--accentColor, #38bdf8);
+  }
+
+  .landing-intro h1 {
+    font-size: clamp(30px, 2.9vw, 50px);
+    line-height: 0.92;
+    margin: 0;
+    margin-top: 4px;
+  }
+
+  .landing-intro h1 .split-line,
+  .hero-name-first,
+  .hero-name-last,
+  .hero-name-first .split-line,
+  .hero-name-last .split-line {
+    line-height: 0.92 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+
+  .landing-info {
+    bottom: auto;
+    top: 48%;
+    z-index: inherit;
+    text-align: left;
+    transform: translateY(-50%);
+    right: auto;
+    left: calc(50% + clamp(150px, 14vw, 240px));
+    max-width: calc(50% - clamp(150px, 14vw, 240px) - 20px);
+  }
+
+  .landing-info h3 {
+    font-size: clamp(18px, 1.6vw, 24px);
+    line-height: 1.2;
+    margin: 0;
+    color: var(--accentColor, #38bdf8);
+  }
+
+  h2.landing-info-h2 {
+    font-size: clamp(30px, 2.9vw, 50px);
+    line-height: 1.15;
+    margin: 0;
+    margin-top: 4px;
+    white-space: nowrap;
+    color: var(--accentColor, #38bdf8);
+    font-weight: 700;
+  }
+
+  .landing-info h2 {
+    font-size: clamp(24px, 2.3vw, 38px);
+    line-height: 1.15;
+    margin: 0;
+    margin-top: 4px;
+    letter-spacing: 2px;
+    white-space: nowrap;
+    color: var(--headingColor, #f8fafc);
+  }
+
+  .hero-avatar-centerpiece {
+    height: 88vh;
+    max-height: 900px;
+  }
+}
+
+@media screen and (min-width: 1600px) {
+  .landing-intro {
+    right: calc(50% + clamp(200px, 14vw, 280px));
+  }
+
+  .landing-info {
+    left: calc(50% + clamp(200px, 14vw, 280px));
+  }
+
+  .landing-intro h2 {
+    font-size: 26px;
+  }
+
+  .landing-intro h1 {
+    font-size: 54px;
+    line-height: 0.92;
+  }
+
+  .landing-info h3 {
+    font-size: 26px;
+  }
+
+  h2.landing-info-h2 {
+    font-size: 54px;
+    line-height: 1.15;
+  }
+
+  .landing-info h2 {
+    font-size: 42px;
+    line-height: 1.15;
+  }
+
+  .hero-avatar-centerpiece {
+    height: 90vh;
+    max-height: 980px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .hero-avatar-centerpiece {
+    height: 75vh;
+  }
+  .landing-intro {
+    top: 10%;
+    left: 0;
+  }
+  .landing-info {
+    bottom: 30px;
+    right: 50%;
+    transform: translateX(50%);
+    text-align: center;
+  }
+  .landing-info h2 {
+    justify-content: center;
+  }
+}
