@@ -1,6 +1,7 @@
 .work-section h2 {
-  margin-top: 100px;
-  font-size: 70px;
+  margin-top: 36px;
+  margin-bottom: 12px;
+  font-size: 56px;
   font-weight: 500;
 }
 
@@ -33,19 +34,21 @@
 }
 
 .work-box {
-  padding: 80px;
+  padding: 28px 50px 32px;
   display: flex;
   flex-direction: column;
-  width: 600px;
+  width: 580px;
   box-sizing: border-box;
   border-right: 1px solid #363636;
   flex-shrink: 0;
-  gap: 50px;
-  justify-content: start;
+  gap: 20px;
+  justify-content: center;
 }
 
 .work-flex .work-box:nth-child(even) {
   flex-direction: column-reverse;
+  justify-content: center;
+  padding-bottom: 40px;
 }
 
 .work-flex::before,
@@ -169,6 +172,7 @@
 .work-image img {
   width: 100%;
   height: auto;
+  max-height: 230px;
   aspect-ratio: 16 / 10;
   object-fit: cover;
   display: block;
@@ -254,18 +258,19 @@
 
 @media only screen and (max-height: 900px) {
   .work-image img {
-    max-height: 250px;
+    max-height: 200px;
   }
 
   .work-box {
-    padding-top: 40px;
-    padding-bottom: 40px;
+    padding-top: 20px;
+    padding-bottom: 24px;
+    gap: 16px;
   }
 
   .work-section h2 {
-    font-size: 60px;
-    margin-bottom: 30px;
-    margin-top: 70px;
+    font-size: 48px;
+    margin-bottom: 10px;
+    margin-top: 24px;
   }
 }
 
