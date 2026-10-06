@@ -22,7 +22,7 @@
   justify-content: space-between;
   width: 100%;
   padding: 0 4px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .space-cards-progress-pills {
@@ -62,7 +62,7 @@
 .space-cards-stage {
   position: relative;
   width: 100%;
-  height: 390px;
+  height: 385px;
   perspective: 1000px;
 }
 
@@ -82,25 +82,124 @@
   touch-action: none;
   overflow: hidden;
   will-change: transform, opacity;
+  box-sizing: border-box;
 }
 
 .space-card.dragging {
   cursor: grabbing;
 }
 
-/* Stack depths */
+/* Resting Stack Depths */
 .space-card.layer-top {
   z-index: 10;
+  transform: translate3d(0, 0, 0) scale(1);
+  opacity: 1;
+  transition: transform 0.28s cubic-bezier(0.18, 0.89, 0.32, 1.15), opacity 0.28s ease;
 }
 
 .space-card.layer-2 {
   z-index: 5;
   pointer-events: none;
+  transform: translate3d(0, 11px, -20px) scale(0.94);
+  opacity: 0.75;
+  transition: transform 0.28s cubic-bezier(0.18, 0.89, 0.32, 1.15), opacity 0.28s ease;
 }
 
 .space-card.layer-3 {
   z-index: 2;
   pointer-events: none;
+  transform: translate3d(0, 22px, -40px) scale(0.88);
+  opacity: 0.45;
+  transition: transform 0.28s cubic-bezier(0.18, 0.89, 0.32, 1.15), opacity 0.28s ease;
+}
+
+/* ========================================================
+   Step-Up Animations (Card beneath rises forward to top)
+   ======================================================== */
+@keyframes stepUpToTop {
+  0% {
+    transform: translate3d(0, 11px, -20px) scale(0.94);
+    opacity: 0.75;
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes stepUpTo2 {
+  0% {
+    transform: translate3d(0, 22px, -40px) scale(0.88);
+    opacity: 0.45;
+  }
+  100% {
+    transform: translate3d(0, 11px, -20px) scale(0.94);
+    opacity: 0.75;
+  }
+}
+
+.space-card.card-stepped-up {
+  animation: stepUpToTop 0.32s cubic-bezier(0.18, 0.89, 0.32, 1.15) forwards;
+}
+
+.space-card.layer-2.step-up-2 {
+  animation: stepUpTo2 0.32s cubic-bezier(0.18, 0.89, 0.32, 1.15) forwards;
+}
+
+/* ========================================================
+   Exiting Card Animations (Swiped card flies away into space)
+   ======================================================== */
+.space-card.layer-exiting {
+  z-index: 30;
+  pointer-events: none;
+}
+
+@keyframes flyOutRight {
+  0% {
+    transform: translate3d(var(--start-x, 0px), var(--start-y, 0px), 0) rotate(var(--start-rot, 0deg));
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(520px, var(--start-y, 0px), 0) rotate(28deg);
+    opacity: 0;
+  }
+}
+
+@keyframes flyOutLeft {
+  0% {
+    transform: translate3d(var(--start-x, 0px), var(--start-y, 0px), 0) rotate(var(--start-rot, 0deg));
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(-520px, var(--start-y, 0px), 0) rotate(-28deg);
+    opacity: 0;
+  }
+}
+
+.space-card.layer-exiting-right {
+  animation: flyOutRight 0.34s cubic-bezier(0.2, 0.85, 0.32, 1.1) forwards;
+}
+
+.space-card.layer-exiting-left {
+  animation: flyOutLeft 0.34s cubic-bezier(0.2, 0.85, 0.32, 1.1) forwards;
+}
+
+/* ========================================================
+   Rewind Animation (Previous card returns smoothly)
+   ======================================================== */
+@keyframes rewindCardIn {
+  0% {
+    transform: translate3d(-340px, -15px, 0) rotate(-18deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.space-card.card-rewinding {
+  animation: rewindCardIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Inner content */
@@ -108,7 +207,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 20px 18px 18px;
+  padding: 18px 16px 16px;
   box-sizing: border-box;
   text-align: left;
 }
@@ -118,7 +217,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .card-badge-glow {
@@ -152,21 +251,14 @@
   border-radius: 6px;
 }
 
-.card-loc-tag {
-  font-family: monospace;
-  font-size: 10px;
-  color: #64748b;
-  margin-left: 6px;
-}
-
 /* Titles */
 .card-role-title {
   font-family: "Geist", sans-serif;
-  font-size: 17px;
+  font-size: 16.5px;
   font-weight: 700;
-  line-height: 1.3;
+  line-height: 1.25;
   color: #ffffff;
-  margin: 0 0 6px;
+  margin: 0 0 5px;
   letter-spacing: -0.01em;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
 }
@@ -175,7 +267,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   flex-wrap: wrap;
 }
 
@@ -188,7 +280,7 @@
 }
 
 .card-company-name {
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
   color: #93c5fd;
   margin: 0;
@@ -205,10 +297,10 @@
 
 /* Description */
 .card-desc {
-  font-size: 12px;
-  line-height: 1.55;
+  font-size: 11.5px;
+  line-height: 1.5;
   color: #cbd5e1;
-  margin: 0 0 12px;
+  margin: 0 0 10px;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -216,37 +308,31 @@
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
-.card-desc-snippet {
-  font-size: 11px;
-  line-height: 1.45;
-  color: #94a3b8;
-  margin-top: 8px;
-  display: -webkit-box;
+.card-desc.preview-desc {
   -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  color: #94a3b8;
 }
 
 /* Bullets */
 .card-bullets {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-bottom: 14px;
+  gap: 5px;
+  margin-bottom: 12px;
 }
 
 .bullet-item {
   display: flex;
   align-items: flex-start;
-  gap: 7px;
-  font-size: 11px;
-  line-height: 1.4;
+  gap: 6px;
+  font-size: 10.5px;
+  line-height: 1.35;
   color: #e2e8f0;
 }
 
 .bullet-arrow {
   color: #38bdf8;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1;
 }
 
@@ -254,19 +340,19 @@
 .card-tech-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 5px;
   margin-top: auto;
 }
 
 .tech-chip {
   font-family: monospace;
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 600;
   color: #7dd3fc;
   background: rgba(56, 189, 248, 0.12);
   border: 1px solid rgba(56, 189, 248, 0.3);
-  padding: 3px 8px;
-  border-radius: 6px;
+  padding: 2px 7px;
+  border-radius: 5px;
   letter-spacing: 0.02em;
 }
 
@@ -282,7 +368,7 @@
   border-radius: 8px;
   border: 2px solid;
   pointer-events: none;
-  z-index: 20;
+  z-index: 35;
   transition: opacity 0.15s ease;
 }
 
@@ -290,7 +376,7 @@
   right: 18px;
   color: #34d399;
   border-color: #34d399;
-  background: rgba(16, 185, 129, 0.2);
+  background: rgba(16, 185, 129, 0.22);
   box-shadow: 0 0 16px rgba(16, 185, 129, 0.4);
   transform: rotate(12deg);
 }
@@ -299,7 +385,7 @@
   left: 18px;
   color: #f43f5e;
   border-color: #f43f5e;
-  background: rgba(244, 63, 94, 0.2);
+  background: rgba(244, 63, 94, 0.22);
   box-shadow: 0 0 16px rgba(244, 63, 94, 0.4);
   transform: rotate(-12deg);
 }
@@ -310,7 +396,7 @@
   align-items: center;
   justify-content: center;
   gap: 14px;
-  margin-top: 14px;
+  margin-top: 12px;
   width: 100%;
 }
 
@@ -348,60 +434,30 @@
 
 .btn-left {
   color: #f43f5e;
-  border-color: rgba(244, 63, 94, 0.3);
 }
 
 .btn-left:active {
-  background: rgba(244, 63, 94, 0.2);
-  transform: scale(0.9) translateX(-4px);
+  border-color: #f43f5e;
+  box-shadow: 0 0 16px rgba(244, 63, 94, 0.5);
 }
 
 .btn-right {
-  color: #38bdf8;
-  border-color: rgba(56, 189, 248, 0.35);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 14px rgba(56, 189, 248, 0.2);
+  color: #34d399;
 }
 
 .btn-right:active {
-  background: rgba(56, 189, 248, 0.25);
-  transform: scale(0.9) translateX(4px);
+  border-color: #34d399;
+  box-shadow: 0 0 16px rgba(52, 211, 153, 0.5);
 }
 
 .swipe-hint-pill {
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   font-family: monospace;
   font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  color: #64748b;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
   text-transform: uppercase;
-  padding: 4px 10px;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.04);
-}
-
-/* Light theme overrides */
-[data-theme="light"] .space-card {
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(15, 23, 42, 0.12);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-}
-
-[data-theme="light"] .card-role-title {
-  color: #0f172a;
-  text-shadow: none;
-}
-
-[data-theme="light"] .card-desc {
-  color: #334155;
-  text-shadow: none;
-}
-
-[data-theme="light"] .bullet-item {
-  color: #334155;
-}
-
-[data-theme="light"] .action-circle-btn {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(15, 23, 42, 0.12);
-  color: #0f172a;
 }

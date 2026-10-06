@@ -4,44 +4,133 @@ import { FiRotateCcw, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { IoSparkles } from "react-icons/io5";
 import "./MobileCareerCards.css";
 
+type ExperienceItem = (typeof config.experiences)[0];
+
+interface ExitingCardState {
+  exp: ExperienceItem;
+  index: number;
+  direction: "left" | "right";
+  startX: number;
+  startY: number;
+}
+
+const SpaceCardBody: React.FC<{
+  exp: ExperienceItem;
+  index: number;
+  preview?: boolean;
+}> = ({ exp, index, preview = false }) => {
+  return (
+    <div className="space-card-inner">
+      {/* Card Header */}
+      <div className="card-top-row">
+        <div className="card-badge-glow">
+          <IoSparkles className="sparkle-icon" />
+          <span>MILESTONE {index + 1}</span>
+        </div>
+        <span className="card-period-tag">{exp.period}</span>
+      </div>
+
+      {/* Role & Company */}
+      <h3 className="card-role-title">{exp.position}</h3>
+      <div className="card-company-row">
+        <span className="company-dot"></span>
+        <h4 className="card-company-name">{exp.company}</h4>
+        <span className="card-loc-pill">{exp.location}</span>
+      </div>
+
+      {/* Description */}
+      <p className={`card-desc ${preview ? "preview-desc" : ""}`}>{exp.description}</p>
+
+      {/* Responsibilities Highlights */}
+      {!preview && exp.responsibilities && (
+        <div className="card-bullets">
+          {exp.responsibilities.slice(0, 2).map((resp, i) => (
+            <div key={i} className="bullet-item">
+              <span className="bullet-arrow">▹</span>
+              <span>{resp}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Technologies Chips */}
+      {exp.technologies && (
+        <div className="card-tech-tags">
+          {exp.technologies.slice(0, 4).map((tech, i) => (
+            <span key={i} className="tech-chip">
+              {tech}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 export const MobileCareerCards: React.FC = () => {
   const experiences = config.experiences;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
-  const [exitDirection, setExitDirection] = useState<"left" | "right" | null>(null);
+  const [exitingCard, setExitingCard] = useState<ExitingCardState | null>(null);
+  const [justSwiped, setJustSwiped] = useState(false);
+  const [isRewinding, setIsRewinding] = useState(false);
 
   const startPos = useRef({ x: 0, y: 0 });
   const activePointerId = useRef<number | null>(null);
 
-  // Trigger swipe card exit
+  // Trigger swipe card exit: the card flies away, and the next card comes forward
   const triggerSwipe = (direction: "left" | "right") => {
-    if (exitDirection) return;
-    setExitDirection(direction);
+    if (exitingCard || isRewinding) return;
+
+    const currentExp = experiences[currentIndex];
+    const startX = dragOffset.x;
+    const startY = dragOffset.y;
+
+    // Snapshot the card that is flying off
+    setExitingCard({
+      exp: currentExp,
+      index: currentIndex,
+      direction,
+      startX,
+      startY,
+    });
+
+    // Reset drag immediately
+    setDragOffset({ x: 0, y: 0 });
+    setIsDragging(false);
+
+    // Immediately advance so the card beneath rises to the front
+    setCurrentIndex((prev) => (prev + 1) % experiences.length);
+    setJustSwiped(true);
+
     setTimeout(() => {
-      setCurrentIndex((prev) => (prev + 1) % experiences.length);
-      setExitDirection(null);
-      setDragOffset({ x: 0, y: 0 });
-    }, 320);
+      setExitingCard(null);
+      setJustSwiped(false);
+    }, 340);
   };
 
   // Rewind to previous card
   const handleRewind = () => {
-    if (exitDirection) return;
-    setCurrentIndex((prev) => (prev - 1 + experiences.length) % experiences.length);
+    if (exitingCard || isRewinding) return;
+    setIsRewinding(true);
     setDragOffset({ x: 0, y: 0 });
-    setExitDirection(null);
+    setIsDragging(false);
+    setCurrentIndex((prev) => (prev - 1 + experiences.length) % experiences.length);
+
+    setTimeout(() => {
+      setIsRewinding(false);
+    }, 320);
   };
 
   // Pointer drag gestures
   const onPointerDown = (e: React.PointerEvent) => {
-    if (exitDirection) return;
-    // Capture pointer for smooth tracking
+    if (exitingCard || isRewinding) return;
     activePointerId.current = e.pointerId;
     try {
-      (e.target as HTMLElement).setPointerCapture(e.pointerId);
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     } catch {
-      // Ignore if not supported
+      // Ignore
     }
     startPos.current = { x: e.clientX, y: e.clientY };
     setIsDragging(true);
@@ -50,7 +139,7 @@ export const MobileCareerCards: React.FC = () => {
   const onPointerMove = (e: React.PointerEvent) => {
     if (!isDragging || activePointerId.current !== e.pointerId) return;
     const deltaX = e.clientX - startPos.current.x;
-    const deltaY = (e.clientY - startPos.current.y) * 0.25; // Gentle vertical drag play
+    const deltaY = (e.clientY - startPos.current.y) * 0.2;
     setDragOffset({ x: deltaX, y: deltaY });
   };
 
@@ -59,32 +148,29 @@ export const MobileCareerCards: React.FC = () => {
     setIsDragging(false);
     activePointerId.current = null;
     try {
-      (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
     } catch {
       // Ignore
     }
 
-    const threshold = 65; // Distance to trigger card dismissal
+    const threshold = 60;
     if (dragOffset.x > threshold) {
       triggerSwipe("right");
     } else if (dragOffset.x < -threshold) {
       triggerSwipe("left");
     } else {
-      // Spring back to center
       setDragOffset({ x: 0, y: 0 });
     }
   };
 
-  // Calculate deck visible cards
   const total = experiences.length;
   const currentExp = experiences[currentIndex];
   const nextExp1 = experiences[(currentIndex + 1) % total];
   const nextExp2 = experiences[(currentIndex + 2) % total];
 
-  // Drag rotation and swipe cue intensity
   const rotateDeg = dragOffset.x * 0.08;
-  const cueOpacity = Math.min(Math.abs(dragOffset.x) / 75, 1);
-  const dragProgress = Math.min(Math.abs(dragOffset.x) / 100, 1);
+  const cueOpacity = Math.min(Math.abs(dragOffset.x) / 70, 1);
+  const dragProgress = Math.min(Math.abs(dragOffset.x) / 110, 1);
 
   return (
     <div className="space-cards-deck-container">
@@ -108,118 +194,93 @@ export const MobileCareerCards: React.FC = () => {
         {/* Card 3 (Bottom Layer) */}
         {total > 2 && (
           <div
-            className="space-card layer-3"
+            key={`layer3-${(currentIndex + 2) % total}`}
+            className={`space-card layer-3 ${justSwiped ? "step-up-3" : ""}`}
             style={{
-              transform: `translate3d(0, ${24 - dragProgress * 12}px, -40px) scale(${0.88 + dragProgress * 0.06})`,
-              opacity: 0.45 + dragProgress * 0.25,
+              transform: isDragging
+                ? `translate3d(0, ${22 - dragProgress * 11}px, -40px) scale(${0.88 + dragProgress * 0.06})`
+                : undefined,
+              opacity: isDragging ? 0.45 + dragProgress * 0.25 : undefined,
             }}
           >
-            <div className="space-card-inner">
-              <div className="card-top-row">
-                <span className="card-period-tag">{nextExp2.period}</span>
-              </div>
-              <h3 className="card-role-title">{nextExp2.position}</h3>
-              <h4 className="card-company-name">{nextExp2.company}</h4>
-            </div>
+            <SpaceCardBody exp={nextExp2} index={(currentIndex + 2) % total} preview />
           </div>
         )}
 
-        {/* Card 2 (Middle Layer) */}
+        {/* Card 2 (Middle Layer - Visible underneath top card) */}
         {total > 1 && (
           <div
-            className="space-card layer-2"
+            key={`layer2-${(currentIndex + 1) % total}`}
+            className={`space-card layer-2 ${justSwiped ? "step-up-2" : ""}`}
             style={{
-              transform: `translate3d(0, ${12 - dragProgress * 12}px, -20px) scale(${0.94 + dragProgress * 0.06})`,
-              opacity: 0.75 + dragProgress * 0.25,
+              transform: isDragging
+                ? `translate3d(0, ${11 - dragProgress * 11}px, -20px) scale(${0.94 + dragProgress * 0.06})`
+                : undefined,
+              opacity: isDragging ? 0.75 + dragProgress * 0.25 : undefined,
             }}
           >
-            <div className="space-card-inner">
-              <div className="card-top-row">
-                <span className="card-period-tag">{nextExp1.period}</span>
-                <span className="card-loc-tag">{nextExp1.location}</span>
-              </div>
-              <h3 className="card-role-title">{nextExp1.position}</h3>
-              <h4 className="card-company-name">{nextExp1.company}</h4>
-              <p className="card-desc-snippet">{nextExp1.description}</p>
-            </div>
+            <SpaceCardBody exp={nextExp1} index={(currentIndex + 1) % total} preview />
           </div>
         )}
 
         {/* Card 1 (Active Top Card - Fully Interactive) */}
         <div
-          className={`space-card layer-top ${exitDirection ? `swiped-${exitDirection}` : ""} ${isDragging ? "dragging" : ""}`}
+          key={`active-${currentIndex}`}
+          className={`space-card layer-top ${justSwiped ? "card-stepped-up" : ""} ${isRewinding ? "card-rewinding" : ""} ${isDragging ? "dragging" : ""}`}
           style={{
-            transform: exitDirection
-              ? `translate3d(${exitDirection === "right" ? 440 : -440}px, ${dragOffset.y}px, 0) rotate(${exitDirection === "right" ? 24 : -24}deg)`
-              : `translate3d(${dragOffset.x}px, ${dragOffset.y}px, 0) rotate(${rotateDeg}deg)`,
-            opacity: exitDirection ? 0 : 1,
-            transition: isDragging ? "none" : "transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease",
+            transform: isDragging
+              ? `translate3d(${dragOffset.x}px, ${dragOffset.y}px, 0) rotate(${rotateDeg}deg)`
+              : undefined,
+            transition: isDragging ? "none" : undefined,
           }}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerEnd}
           onPointerCancel={onPointerEnd}
         >
-          {/* Dynamic Swipe Cues */}
-          {dragOffset.x > 15 && (
+          {/* Dynamic Drag Cues */}
+          {dragOffset.x > 18 && (
             <div className="swipe-stamp stamp-right" style={{ opacity: cueOpacity }}>
               NEXT ➔
             </div>
           )}
-          {dragOffset.x < -15 && (
+          {dragOffset.x < -18 && (
             <div className="swipe-stamp stamp-left" style={{ opacity: cueOpacity }}>
               PASS ➔
             </div>
           )}
 
-          <div className="space-card-inner">
-            {/* Card Header */}
-            <div className="card-top-row">
-              <div className="card-badge-glow">
-                <IoSparkles className="sparkle-icon" />
-                <span>MILESTONE {currentIndex + 1}</span>
-              </div>
-              <span className="card-period-tag">{currentExp.period}</span>
-            </div>
-
-            {/* Role & Company */}
-            <h3 className="card-role-title">{currentExp.position}</h3>
-            <div className="card-company-row">
-              <span className="company-dot"></span>
-              <h4 className="card-company-name">{currentExp.company}</h4>
-              <span className="card-loc-pill">{currentExp.location}</span>
-            </div>
-
-            {/* Description */}
-            <p className="card-desc">{currentExp.description}</p>
-
-            {/* Responsibilities Highlights */}
-            {currentExp.responsibilities && (
-              <div className="card-bullets">
-                {currentExp.responsibilities.slice(0, 2).map((resp, i) => (
-                  <div key={i} className="bullet-item">
-                    <span className="bullet-arrow">▹</span>
-                    <span>{resp}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Technologies Chips */}
-            {currentExp.technologies && (
-              <div className="card-tech-tags">
-                {currentExp.technologies.slice(0, 4).map((tech, i) => (
-                  <span key={i} className="tech-chip">
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
+          <SpaceCardBody exp={currentExp} index={currentIndex} />
         </div>
+
+        {/* Exiting Card (Flies away into space, never returns) */}
+        {exitingCard && (
+          <div
+            key={`exit-${exitingCard.index}`}
+            className={`space-card layer-exiting layer-exiting-${exitingCard.direction}`}
+            style={
+              {
+                "--start-x": `${exitingCard.startX}px`,
+                "--start-y": `${exitingCard.startY}px`,
+                "--start-rot": `${exitingCard.startX * 0.08}deg`,
+              } as React.CSSProperties
+            }
+          >
+            {exitingCard.direction === "right" ? (
+              <div className="swipe-stamp stamp-right" style={{ opacity: 1 }}>
+                NEXT ➔
+              </div>
+            ) : (
+              <div className="swipe-stamp stamp-left" style={{ opacity: 1 }}>
+                PASS ➔
+              </div>
+            )}
+            <SpaceCardBody exp={exitingCard.exp} index={exitingCard.index} />
+          </div>
+        )}
       </div>
 
-      {/* Bottom Cosmic Action Bar */}
+      {/* Bottom Action Controls */}
       <div className="space-cards-controls">
         <button
           type="button"
