@@ -1,14 +1,141 @@
 import React, { useState, useRef } from "react";
-import { config } from "../../config";
 import { FiExternalLink } from "react-icons/fi";
 import "./MobileProjectCards.css";
 
-type ProjectItem = (typeof config.projects)[0] & { uid: number };
+export interface MobileProjectData {
+  id: number;
+  title: string;
+  category: string;
+  technologies: string;
+  image: string;
+  description: string;
+  link?: string;
+  certificateBadge?: string;
+  certificateUrl?: string;
+}
+
+// Mobile project priority sequence requested by user:
+// 1. Projects with certificates (SIH ArogyaMitr, iQOO NextPatient, Data Science Rental Analytics)
+// 2. Followed by: NovaClass (Smart Attendance), BroSync, AI Agent (ShieldSense)
+// 3. Followed by recent projects: Secure Exam Portal, VitaForge, MaternaGuard, BUILDR, NRCHS
+export const MOBILE_PROJECT_LIST: MobileProjectData[] = [
+  // 1. Certified Projects
+  {
+    id: 5,
+    title: "ArogyaMitr (SIH PS 26133)",
+    category: "Healthcare / SIH",
+    technologies: "Next.js, TypeScript, GeoLocation, REST APIs, TailwindCSS",
+    image: "/projects/sih-arogyamitr.png",
+    description: "Built for Smart India Hackathon PS 26133: Centralized healthcare access and emergency bed tracking platform connecting patients with regional hospitals in real time.",
+    link: "https://mahahealthconnect.vercel.app",
+    certificateBadge: "🏆 SIH Finalist",
+    certificateUrl: "/certificates/industry-hack-stpeters-certificate.png",
+  },
+  {
+    id: 1,
+    title: "NextPatient",
+    category: "Clinical AI / OSCE",
+    technologies: "Next.js, TypeScript, AI OSCE Engine, TailwindCSS, Vercel",
+    image: "/projects/nextpatient.png",
+    description: "Clinical AI OSCE Simulation Station built for iQOO Health-Tech Hackathon delivering realistic patient dialogue, diagnostic evaluation checklists, and real-time medical simulation.",
+    link: "https://nextpatient-app.vercel.app/",
+    certificateBadge: "🏆 iQOO Hackathon",
+  },
+  {
+    id: 10,
+    title: "Hyderabad Rental Analytics",
+    category: "Data Science & ML",
+    technologies: "Python, Pandas, NumPy, Matplotlib, Scikit-learn, EDA",
+    image: "/projects/house-rental-analytics.png",
+    description: "In-depth exploratory data analysis and price prediction modeling on Hyderabad real-estate rental trends across key localities. Awarded Certificate of Excellence.",
+    link: "https://github.com/mohammedsuhail0/house-rental-analytics",
+    certificateBadge: "📜 Data Science Cert",
+    certificateUrl: "/certificates/fsa-data-science-certificate.jpg",
+  },
+
+  // 2. Core Priority Projects: NovaClass, BroSync, AI Agent
+  {
+    id: 3,
+    title: "NovaClass (Smart Attendance)",
+    category: "Smart Classroom / Attendance",
+    technologies: "Next.js, React, WebAuthn, Node.js, MongoDB, TailwindCSS",
+    image: "/projects/smart-attendance.png",
+    description: "Automated institutional attendance and smart classroom platform with biometric verification, short-lived tokens, and live analytics dashboards.",
+    link: "https://smart-attendance-ecru-nu.vercel.app",
+  },
+  {
+    id: 2,
+    title: "BroSync (Seamless)",
+    category: "Real-Time Collaboration",
+    technologies: "Next.js, WebSockets, Node.js, Canvas API, TailwindCSS",
+    image: "/projects/seamless-brosync.png",
+    description: "High-performance real-time collaboration canvas with zero-latency synchronized state, multiplayer interactions, and instant workspace sharing.",
+    link: "https://brosync.vercel.app/",
+  },
+  {
+    id: 4,
+    title: "ShieldSense (AI Security Agent)",
+    category: "Cybersecurity / AI Agent",
+    technologies: "Next.js, TypeScript, Threat Intelligence API, TailwindCSS",
+    image: "/projects/shield-sense.png",
+    description: "Autonomous AI security monitoring dashboard and threat intelligence agent providing proactive vulnerability scanning and system posture metrics.",
+    link: "https://shieldsense-security-agent.vercel.app",
+  },
+
+  // 3. Recent Featured Projects
+  {
+    id: 6,
+    title: "Secure Online Exam Portal",
+    category: "EdTech / Security",
+    technologies: "React, Node.js, Express, Proctoring, MongoDB",
+    image: "/projects/secure-exam-portal.png",
+    description: "Secure, tamper-resistant online examination portal with automated anti-cheat detection, timer enforcement, and instantaneous test result computation.",
+    link: "https://secure-online-exam-portal-zt.vercel.app",
+  },
+  {
+    id: 7,
+    title: "VitaForge",
+    category: "Health & Fitness",
+    technologies: "React, TypeScript, Nutrition & Workout API, TailwindCSS",
+    image: "/projects/fitness-tracker.png",
+    description: "Comprehensive fitness tracking and workout companion application with custom routine planners, caloric tracking, and progress charts.",
+    link: "https://excersise-iota.vercel.app",
+  },
+  {
+    id: 8,
+    title: "MaternaGuard",
+    category: "Healthcare / AI",
+    technologies: "React, TypeScript, Health Analytics, TailwindCSS",
+    image: "/projects/ai-maternity-nanny.png",
+    description: "AI-assisted maternal and infant care health monitor providing scheduled vitals tracking, symptom guidance, and pediatric milestones.",
+    link: "https://frontend-pied-pi-riv3w4y14c.vercel.app",
+  },
+  {
+    id: 9,
+    title: "BUILDR",
+    category: "Developer Tools",
+    technologies: "Next.js, TypeScript, UI Components, TailwindCSS",
+    image: "/projects/builder-app.png",
+    description: "Modular application builder and UI scaffolding workspace enabling creators to assemble and preview web components rapidly.",
+    link: "https://buildr-liart.vercel.app",
+  },
+  {
+    id: 11,
+    title: "New Rosary Convent High School",
+    category: "Web Development",
+    technologies: "HTML5, CSS3, JavaScript, Responsive Web Architecture",
+    image: "/projects/nrchs-custom-theme.png",
+    description: "Custom digital presence and institutional portal for New Rosary Convent High School featuring notice boards, admissions flow, and curriculum overviews.",
+    link: "https://newrosaryconvent.in",
+  },
+];
+
+type ProjectItem = MobileProjectData & { uid: number };
 
 export const MobileProjectCards: React.FC = () => {
-  // Initialize deck with unique IDs for rock-solid DOM keys
+  // Initialize deck in reverse order so MOBILE_PROJECT_LIST[0] is rendered at the top (:nth-last-child(1))
   const [deck, setDeck] = useState<ProjectItem[]>(() =>
-    config.projects.map((proj, i) => ({ ...proj, uid: i }))
+    [...MOBILE_PROJECT_LIST].reverse().map((proj, i) => ({ ...proj, uid: i }))
   );
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
@@ -18,18 +145,20 @@ export const MobileProjectCards: React.FC = () => {
 
   const startPos = useRef({ x: 0, y: 0 });
   const activePointerId = useRef<number | null>(null);
-  const isAnimating = useRef(false);
 
   // Active top card is the last item in deck array
   const topCard = deck.length > 0 ? deck[deck.length - 1] : null;
   const secondCard = deck.length > 1 ? deck[deck.length - 2] : null;
 
+  const currentOrderIdx = topCard
+    ? MOBILE_PROJECT_LIST.findIndex((p) => p.id === topCard.id) + 1
+    : 1;
+
   const threshold = 90; // Swipe trigger threshold (px)
 
   // Trigger dismissal: animate card off-screen then remove & cycle to back
   const dismissTopCard = (direction: "left" | "right", releaseY: number = 0) => {
-    if (!topCard || isAnimating.current) return;
-    isAnimating.current = true;
+    if (!topCard || dismissingUid !== null) return;
 
     const departingCard = topCard;
     setDismissingUid(departingCard.uid);
@@ -45,15 +174,13 @@ export const MobileProjectCards: React.FC = () => {
         return [departingCard, ...nextDeck];
       });
       setDismissingUid(null);
-      isAnimating.current = false;
-    }, 350);
+    }, 320);
   };
 
   // Pointer gesture handlers
   const onPointerDown = (e: React.PointerEvent) => {
-    if (isAnimating.current || !topCard) return;
-    // Don't drag if user clicked directly on the live link button
-    if ((e.target as HTMLElement).closest(".project-card-link-btn")) return;
+    if (dismissingUid !== null || !topCard) return;
+    if ((e.target as HTMLElement).closest(".project-card-actions a, .project-card-link-btn, .project-card-cert-btn")) return;
 
     activePointerId.current = e.pointerId;
     try {
@@ -85,10 +212,35 @@ export const MobileProjectCards: React.FC = () => {
     if (Math.abs(dragOffset.x) >= threshold) {
       const direction = dragOffset.x > 0 ? "right" : "left";
       dismissTopCard(direction, dragOffset.y);
-    } else {
-      // Spring back to center
-      setDragOffset({ x: 0, y: 0 });
     }
+    setDragOffset({ x: 0, y: 0 });
+  };
+
+  // Touch gesture handlers for mobile
+  const onTouchStart = (e: React.TouchEvent) => {
+    if (dismissingUid !== null || !topCard) return;
+    if ((e.target as HTMLElement).closest(".project-card-actions a, .project-card-link-btn, .project-card-cert-btn")) return;
+    const touch = e.touches[0];
+    startPos.current = { x: touch.clientX, y: touch.clientY };
+    setIsDragging(true);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - startPos.current.x;
+    const deltaY = (touch.clientY - startPos.current.y) * 0.22;
+    setDragOffset({ x: deltaX, y: deltaY });
+  };
+
+  const onTouchEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    if (Math.abs(dragOffset.x) >= threshold) {
+      const direction = dragOffset.x > 0 ? "right" : "left";
+      dismissTopCard(direction, dragOffset.y);
+    }
+    setDragOffset({ x: 0, y: 0 });
   };
 
   // Drag physics calculations
@@ -148,6 +300,9 @@ export const MobileProjectCards: React.FC = () => {
               onPointerMove={isTop ? onPointerMove : undefined}
               onPointerUp={isTop ? onPointerEnd : undefined}
               onPointerCancel={isTop ? onPointerEnd : undefined}
+              onTouchStart={isTop ? onTouchStart : undefined}
+              onTouchMove={isTop ? onTouchMove : undefined}
+              onTouchEnd={isTop ? onTouchEnd : undefined}
             >
               {/* Dynamic Swipe Cues */}
               {isTop && dragOffset.x > 15 && (
@@ -185,6 +340,11 @@ export const MobileProjectCards: React.FC = () => {
                 )}
                 <div className="project-card-overlay" />
                 <span className="project-card-category">{proj.category}</span>
+                {proj.certificateBadge && (
+                  <span className="project-card-cert-badge">
+                    {proj.certificateBadge}
+                  </span>
+                )}
               </div>
 
               {/* Project Card Content */}
@@ -203,22 +363,57 @@ export const MobileProjectCards: React.FC = () => {
                   </div>
                 )}
 
-                {/* Project Live Link */}
-                {proj.link && (
-                  <a
-                    href={proj.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="project-card-link-btn"
-                  >
-                    <span>View Project</span>
-                    <FiExternalLink />
-                  </a>
-                )}
+                {/* Action Buttons: Live Demo & Certificate */}
+                <div className="project-card-actions">
+                  {proj.link && (
+                    <a
+                      href={proj.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="project-card-link-btn"
+                    >
+                      <span>Live Demo</span>
+                      <FiExternalLink />
+                    </a>
+                  )}
+                  {proj.certificateUrl && (
+                    <a
+                      href={proj.certificateUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="project-card-cert-btn"
+                    >
+                      <span>Certificate 📜</span>
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           );
         })}
+      </div>
+
+      {/* Swipe Deck Counter & Nav Controls */}
+      <div className="project-deck-hint">
+        <button
+          type="button"
+          className="deck-nav-btn prev-btn"
+          onClick={() => dismissTopCard("left")}
+          aria-label="Previous card"
+        >
+          ‹
+        </button>
+        <span className="deck-hint-text">
+          Swipe or tap to explore ({currentOrderIdx} of {MOBILE_PROJECT_LIST.length})
+        </span>
+        <button
+          type="button"
+          className="deck-nav-btn next-btn"
+          onClick={() => dismissTopCard("right")}
+          aria-label="Next card"
+        >
+          ›
+        </button>
       </div>
     </div>
   );
