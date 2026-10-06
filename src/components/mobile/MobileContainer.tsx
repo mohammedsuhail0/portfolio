@@ -28,6 +28,7 @@ import {
   FiChevronRight,
 } from "react-icons/fi";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
+import MobileCareerCards from "./MobileCareerCards";
 import "./MobileContainer.css";
 
 // Universally recognized popular icons (Ionicons v5) for mobile dock
@@ -240,24 +241,7 @@ export const MobileContainer = () => {
           <div className="mobile-section-badge">04 // EXPERIENCE</div>
           <h2 className="mobile-slide-title">Career Milestones</h2>
 
-          <div className="career-timeline-mobile">
-            {config.experiences.map((exp, idx) => (
-              <div key={idx} className="timeline-node-mobile">
-                <div className="node-marker">
-                  <span className="node-dot"></span>
-                  {idx < config.experiences.length - 1 && <span className="node-line"></span>}
-                </div>
-                <div className="node-content-glass">
-                  <div className="node-header">
-                    <h4>{exp.position}</h4>
-                    <span className="node-year">{exp.period}</span>
-                  </div>
-                  <h5>{exp.company}</h5>
-                  <p>{exp.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <MobileCareerCards />
         </section>
 
         {/* SLIDE 4: WORK (HORIZONTAL SWIPEABLE CAROUSEL) */}
