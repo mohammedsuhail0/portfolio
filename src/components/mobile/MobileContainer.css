@@ -193,7 +193,7 @@
 .hero-slide {
   position: relative;
   justify-content: flex-start;
-  padding: 60px 16px 74px;
+  padding: 46px 12px 64px;
 }
 
 .mobile-hero-header {
@@ -203,10 +203,10 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin-top: 4px;
-  padding: 12px 22px 10px;
-  border-radius: 20px;
-  background: radial-gradient(ellipse 100% 100% at center, rgba(3, 6, 16, 0.86) 0%, rgba(3, 6, 16, 0.45) 75%, transparent 100%);
+  margin-top: 0px;
+  padding: 2px 10px 4px;
+  border-radius: 14px;
+  background: transparent;
   pointer-events: none;
 }
 
@@ -238,31 +238,31 @@
 
 .hero-intro-hello {
   font-family: monospace;
-  font-size: 13px;
+  font-size: 9.5px;
   font-weight: 600;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   color: #38bdf8;
   margin: 0;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
 }
 
 .hero-intro-name {
   font-family: "Geist", sans-serif;
-  font-size: 28px;
+  font-size: 19px;
   font-weight: 800;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   color: #ffffff !important;
-  margin: 3px 0 6px;
-  text-shadow: 0 3px 18px rgba(0, 0, 0, 1), 0 0 2px rgba(0, 0, 0, 0.9);
+  margin: 1px 0 3px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 1), 0 0 2px rgba(0, 0, 0, 0.9);
 }
 
 .hero-intro-roles {
   display: flex;
   align-items: center;
-  gap: 7px;
-  font-size: 13px;
+  gap: 5px;
+  font-size: 10.5px;
   font-weight: 600;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
 }
 
 .role-cyan {
@@ -272,6 +272,7 @@
 
 .role-bullet {
   color: #64748b;
+  font-size: 8px;
 }
 
 .role-white {
@@ -282,12 +283,12 @@
 /* A1: Mobile Hero Action Buttons */
 .mobile-hero-actions {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  width: 100%;
-  max-width: 240px;
-  gap: 7px;
-  margin-top: 12px;
+  justify-content: center;
+  width: auto;
+  gap: 8px;
+  margin-top: 8px;
   pointer-events: auto;
 }
 
@@ -295,24 +296,24 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  padding: 7px 16px;
+  padding: 5px 14px;
   border-radius: 9999px;
   font-family: "Geist", -apple-system, sans-serif;
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   text-decoration: none;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   box-sizing: border-box;
+  white-space: nowrap;
 }
 
 .mobile-hero-btn.primary {
   background: var(--accentColor, #38bdf8);
   color: #041226;
   border: 1px solid var(--accentColor, #38bdf8);
-  box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
 }
 
 .mobile-hero-btn.secondary {
@@ -341,8 +342,8 @@
   transform: translateX(-50%);
   width: 100%;
   max-width: 380px;
-  height: 72vh;
-  max-height: 580px;
+  height: 68vh;
+  max-height: 540px;
   display: flex;
   align-items: flex-end;
   justify-content: center;

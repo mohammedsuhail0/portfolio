@@ -163,7 +163,6 @@ export const MobileContainer = () => {
 
         {/* SLIDE 1: ABOUT */}
         <section className="mobile-slide about-slide">
-          <div className="mobile-section-badge">02 // IDENTITY</div>
           <h2 className="mobile-slide-title">About Me</h2>
 
           <div className="mobile-card-glass about-card">
@@ -190,7 +189,6 @@ export const MobileContainer = () => {
 
         {/* SLIDE 2: WHAT I DO */}
         <section className="mobile-slide skills-slide">
-          <div className="mobile-section-badge">03 // CAPABILITIES</div>
           <h2 className="mobile-slide-title">What I Do</h2>
 
           <div className="skills-cards-stack">
@@ -250,7 +248,6 @@ export const MobileContainer = () => {
 
         {/* SLIDE 5: TECH STACK */}
         <section className="mobile-slide stack-slide">
-          <div className="mobile-section-badge">06 // INSTRUMENTARIUM</div>
           <div className="stack-scaled-wrapper">
             <TechStackNew />
           </div>
@@ -258,7 +255,6 @@ export const MobileContainer = () => {
 
         {/* SLIDE 6: CONTACT */}
         <section className="mobile-slide contact-slide">
-          <div className="mobile-section-badge">07 // DISPATCH</div>
           <h2 className="mobile-slide-title">Let's Connect</h2>
           <p className="contact-lead">
             Open for software engineering roles, AI projects, and innovative collaborations.
