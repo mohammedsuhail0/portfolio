@@ -27,6 +27,7 @@ import {
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import MobileCareerCards from "./MobileCareerCards";
 import MobileProjectCards from "./MobileProjectCards";
+import ProofStrip from "../ProofStrip";
 import "./MobileContainer.css";
 
 // Universally recognized popular icons (Ionicons v5) for mobile dock
@@ -121,13 +122,31 @@ export const MobileContainer = () => {
         <section className="mobile-slide hero-slide">
           {/* Top Text Header */}
           <div className="mobile-hero-header">
-
             <h2 className="hero-intro-hello">HELLO! I'M</h2>
             <h1 className="hero-intro-name">MOHAMMED SUHAIL</h1>
             <div className="hero-intro-roles">
               <span className="role-cyan">AI Engineer</span>
               <span className="role-bullet">•</span>
               <span className="role-white">Full-Stack Developer</span>
+            </div>
+
+            {/* A1: Hero Action Buttons (Stacked on mobile) */}
+            <div className="mobile-hero-actions">
+              <button
+                type="button"
+                className="mobile-hero-btn primary"
+                onClick={() => goToSlide(6)}
+              >
+                Hire Me
+              </button>
+              <a
+                href="/Mohammed_Suhail_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mobile-hero-btn secondary"
+              >
+                Download Resume
+              </a>
             </div>
           </div>
 
@@ -136,15 +155,9 @@ export const MobileContainer = () => {
             <RevealHeroFace variant="avatar" />
           </div>
 
-          {/* Floating Subtle Swipe Prompt */}
-          <div
-            className="mobile-swipe-indicator"
-            onClick={() => goToSlide(1)}
-            role="button"
-            tabIndex={0}
-          >
-            <span className="swipe-txt">SWIPE UP</span>
-            <span className="swipe-arrow">↑</span>
+          {/* A2: Proof Strip (2x2 grid on mobile) */}
+          <div className="mobile-hero-proof-dock">
+            <ProofStrip variant="mobile" />
           </div>
         </section>
 

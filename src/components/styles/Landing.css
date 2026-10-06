@@ -333,3 +333,57 @@ h2.landing-info-h2 {
     justify-content: center;
   }
 }
+
+/* ========================================================
+   HERO ACTION BUTTONS (A1)
+   ======================================================== */
+.hero-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 22px;
+  pointer-events: auto;
+}
+
+.hero-btn-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 22px;
+  border-radius: 9999px;
+  font-family: "Geist", -apple-system, sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.hero-btn-primary {
+  background: var(--accentColor, #38bdf8);
+  color: #041226;
+  border: 1px solid var(--accentColor, #38bdf8);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+}
+
+.hero-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 28px rgba(56, 189, 248, 0.65);
+}
+
+.hero-btn-secondary {
+  background: rgba(15, 23, 42, 0.6);
+  color: #ffffff;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.hero-btn-secondary:hover {
+  transform: translateY(-2px);
+  border-color: var(--accentColor, #38bdf8);
+  color: var(--accentColor, #38bdf8);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
+}

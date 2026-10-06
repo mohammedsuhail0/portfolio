@@ -41,6 +41,20 @@ const Work = () => {
         anticipatePin: 1,
         id: "work",
         invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          // A6: Update progress bar and hide cue when user reaches the end
+          const fill = document.querySelector<HTMLElement>(".work-progress-bar-fill");
+          if (fill) fill.style.width = `${Math.min(self.progress * 100, 100)}%`;
+
+          const cue = document.querySelector<HTMLElement>(".work-scroll-cue");
+          if (cue) {
+            if (self.progress >= 0.95) {
+              cue.classList.add("is-hidden");
+            } else {
+              cue.classList.remove("is-hidden");
+            }
+          }
+        },
       },
     });
 
@@ -49,12 +63,29 @@ const Work = () => {
       ease: "none",
     });
 
+    // A4: Fade out fixed left social icons while Work section is active
+    const socialTrigger = ScrollTrigger.create({
+      trigger: ".work-section",
+      start: "top 60%",
+      end: () => `+=${translateX + window.innerHeight * 0.8}`,
+      onToggle: (self) => {
+        gsap.to(".social-icons", {
+          opacity: self.isActive ? 0 : 1,
+          pointerEvents: self.isActive ? "none" : "auto",
+          duration: 0.3,
+          ease: "power2.out",
+        });
+      },
+    });
+
     // Refresh ScrollTrigger after layout settles
     ScrollTrigger.refresh();
 
     // Clean up
     return () => {
       timeline.kill();
+      socialTrigger.kill();
+      gsap.set(".social-icons", { opacity: 1, pointerEvents: "auto" });
       ScrollTrigger.getById("work")?.kill();
     };
   }, []);
@@ -65,23 +96,58 @@ const Work = () => {
           My <span>Work</span>
         </h2>
         <div className="work-flex">
-          {config.projects.slice(0, 6).map((project, index) => (
-            <div className="work-box" key={project.id}>
-              <div className="work-info">
-                <div className="work-title">
-                  <h3>0{index + 1}</h3>
+          {config.projects.slice(0, 6).map((project, index) => {
+            const isGithub = project.link?.includes("github.com");
+            const hasLink = Boolean(project.link);
+            const liveUrl = !isGithub && hasLink ? project.link : (project as any).demo;
+            const repoUrl = isGithub ? project.link : (project as any).repo || (project as any).github;
 
-                  <div>
-                    <h4>{project.title}</h4>
-                    <p>{project.category}</p>
+            return (
+              <div className="work-box" key={project.id}>
+                <div className="work-info">
+                  <div className="work-title">
+                    <h3>0{index + 1}</h3>
+
+                    <div>
+                      <h4>{project.title}</h4>
+                      <p>{project.category}</p>
+                    </div>
                   </div>
+                  <h4>Tools and features</h4>
+                  <p>{project.technologies}</p>
+
+                  {/* A5: Visible Live Demo and Repo pill buttons */}
+                  {(liveUrl || repoUrl) && (
+                    <div className="work-buttons-row">
+                      {liveUrl && (
+                        <a
+                          href={liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="work-btn-pill work-btn-primary"
+                          data-cursor="disable"
+                        >
+                          Live Demo ↗
+                        </a>
+                      )}
+                      {repoUrl && (
+                        <a
+                          href={repoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="work-btn-pill work-btn-secondary"
+                          data-cursor="disable"
+                        >
+                          Repo ↗
+                        </a>
+                      )}
+                    </div>
+                  )}
                 </div>
-                <h4>Tools and features</h4>
-                <p>{project.technologies}</p>
+                <WorkImage image={project.image} alt={project.title} link={project.link} />
               </div>
-              <WorkImage image={project.image} alt={project.title} link={project.link} />
-            </div>
-          ))}
+            );
+          })}
           {/* See All Works Button */}
           <div className="work-box work-box-cta">
             <div className="see-all-works">
@@ -91,6 +157,17 @@ const Work = () => {
                 See All Works →
               </Link>
             </div>
+          </div>
+        </div>
+
+        {/* A6: Horizontal scroll cue with arrow and progress bar */}
+        <div className="work-scroll-cue" aria-hidden="true">
+          <div className="work-scroll-label">
+            <span>Scroll</span>
+            <span className="scroll-arrow">→</span>
+          </div>
+          <div className="work-progress-bar-track">
+            <div className="work-progress-bar-fill"></div>
           </div>
         </div>
       </div>
