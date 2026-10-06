@@ -1,14 +1,14 @@
 import React, { useState, useRef } from "react";
 import { config } from "../../config";
-import { IoSparkles } from "react-icons/io5";
-import "./MobileCareerCards.css";
+import { FiExternalLink } from "react-icons/fi";
+import "./MobileProjectCards.css";
 
-type ExperienceItem = (typeof config.experiences)[0] & { uid: number };
+type ProjectItem = (typeof config.projects)[0] & { uid: number };
 
-export const MobileCareerCards: React.FC = () => {
+export const MobileProjectCards: React.FC = () => {
   // Initialize deck with unique IDs for rock-solid DOM keys
-  const [deck, setDeck] = useState<ExperienceItem[]>(() =>
-    config.experiences.map((exp, i) => ({ ...exp, uid: i }))
+  const [deck, setDeck] = useState<ProjectItem[]>(() =>
+    config.projects.map((proj, i) => ({ ...proj, uid: i }))
   );
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
@@ -52,6 +52,9 @@ export const MobileCareerCards: React.FC = () => {
   // Pointer gesture handlers
   const onPointerDown = (e: React.PointerEvent) => {
     if (isAnimating.current || !topCard) return;
+    // Don't drag if user clicked directly on the live link button
+    if ((e.target as HTMLElement).closest(".project-card-link-btn")) return;
+
     activePointerId.current = e.pointerId;
     try {
       (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
@@ -94,13 +97,18 @@ export const MobileCareerCards: React.FC = () => {
   const cueOpacity = Math.min(Math.abs(dragOffset.x) / 60, 1);
 
   return (
-    <div className="space-cards-deck-container">
+    <div className="project-cards-deck-container">
       {/* 3D Swipe Deck Stage */}
-      <div className="space-cards-stage">
-        {deck.map((exp) => {
-          const isTop = topCard?.uid === exp.uid;
-          const isSecond = secondCard?.uid === exp.uid;
-          const isDismissing = dismissingUid === exp.uid;
+      <div className="project-cards-stage">
+        {deck.map((proj) => {
+          const isTop = topCard?.uid === proj.uid;
+          const isSecond = secondCard?.uid === proj.uid;
+          const isDismissing = dismissingUid === proj.uid;
+
+          // Split technologies string into individual badges
+          const techList = proj.technologies
+            ? proj.technologies.split(",").map((t) => t.trim()).slice(0, 4)
+            : [];
 
           // Dynamic style calculation
           let cardStyle: React.CSSProperties = {};
@@ -121,7 +129,6 @@ export const MobileCareerCards: React.FC = () => {
               transition: "none",
             };
           } else if (isSecond && isDragging) {
-            // Smoothly scale up & brighten card underneath while dragging
             const targetScale = 0.95 + dragRatio * 0.05;
             const targetY = 14 - dragRatio * 14;
             const targetOpacity = 0.82 + dragRatio * 0.18;
@@ -134,8 +141,8 @@ export const MobileCareerCards: React.FC = () => {
 
           return (
             <div
-              key={exp.uid}
-              className={`space-card ${isTop ? "is-top-card" : ""} ${isDragging && isTop ? "is-dragging" : ""}`}
+              key={proj.uid}
+              className={`project-swipe-card ${isTop ? "is-top-card" : ""} ${isDragging && isTop ? "is-dragging" : ""}`}
               style={cardStyle}
               onPointerDown={isTop ? onPointerDown : undefined}
               onPointerMove={isTop ? onPointerMove : undefined}
@@ -164,49 +171,49 @@ export const MobileCareerCards: React.FC = () => {
                 </div>
               )}
 
-              {/* Card Inner Content */}
-              <div className="space-card-inner">
-                {/* Header */}
-                <div className="card-top-row">
-                  <div className="card-badge-glow">
-                    <IoSparkles className="sparkle-icon" />
-                    <span>MILESTONE {exp.uid + 1}</span>
-                  </div>
-                  <span className="card-period-tag">{exp.period}</span>
-                </div>
-
-                {/* Role & Company */}
-                <h3 className="card-role-title">{exp.position}</h3>
-                <div className="card-company-row">
-                  <span className="company-dot"></span>
-                  <h4 className="card-company-name">{exp.company}</h4>
-                  <span className="card-loc-pill">{exp.location}</span>
-                </div>
-
-                {/* Description */}
-                <p className="card-desc">{exp.description}</p>
-
-                {/* Bullets */}
-                {exp.responsibilities && (
-                  <div className="card-bullets">
-                    {exp.responsibilities.slice(0, 3).map((resp, i) => (
-                      <div key={i} className="bullet-item">
-                        <span className="bullet-arrow">▹</span>
-                        <span>{resp}</span>
-                      </div>
-                    ))}
-                  </div>
+              {/* Card Photo / Thumbnail Wrapper */}
+              <div className="project-card-thumb">
+                {proj.image ? (
+                  <img
+                    src={proj.image}
+                    alt={proj.title}
+                    className="project-thumb-img"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="project-thumb-placeholder" />
                 )}
+                <div className="project-card-overlay" />
+                <span className="project-card-category">{proj.category}</span>
+              </div>
 
-                {/* Technologies */}
-                {exp.technologies && (
-                  <div className="card-tech-tags">
-                    {exp.technologies.slice(0, 5).map((tech, i) => (
-                      <span key={i} className="tech-chip">
+              {/* Project Card Content */}
+              <div className="project-card-content">
+                <h3 className="project-card-title">{proj.title}</h3>
+                <p className="project-card-desc">{proj.description}</p>
+
+                {/* Tech Chips */}
+                {techList.length > 0 && (
+                  <div className="project-card-techs">
+                    {techList.map((tech, i) => (
+                      <span key={i} className="project-tech-chip">
                         {tech}
                       </span>
                     ))}
                   </div>
+                )}
+
+                {/* Project Live Link */}
+                {proj.link && (
+                  <a
+                    href={proj.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="project-card-link-btn"
+                  >
+                    <span>View Project</span>
+                    <FiExternalLink />
+                  </a>
                 )}
               </div>
             </div>
@@ -217,4 +224,4 @@ export const MobileCareerCards: React.FC = () => {
   );
 };
 
-export default MobileCareerCards;
+export default MobileProjectCards;

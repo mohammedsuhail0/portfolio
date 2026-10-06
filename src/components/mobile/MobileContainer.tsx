@@ -22,13 +22,11 @@ import {
 import {
   FiSun,
   FiMoon,
-  FiExternalLink,
   FiDownload,
-  FiChevronLeft,
-  FiChevronRight,
 } from "react-icons/fi";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import MobileCareerCards from "./MobileCareerCards";
+import MobileProjectCards from "./MobileProjectCards";
 import "./MobileContainer.css";
 
 // Universally recognized popular icons (Ionicons v5) for mobile dock
@@ -44,7 +42,6 @@ const SLIDES = [
 
 export const MobileContainer = () => {
   const [activeSlide, setActiveSlide] = useState(0);
-  const [workIndex, setWorkIndex] = useState(0);
   const isTransitioningRef = useRef(false);
   const { theme, toggleTheme } = useTheme();
 
@@ -83,16 +80,6 @@ export const MobileContainer = () => {
       }
     }
   };
-
-  // Horizontal navigation for Works carousel
-  const nextProject = () => {
-    setWorkIndex((prev) => (prev + 1) % config.projects.length);
-  };
-  const prevProject = () => {
-    setWorkIndex((prev) => (prev - 1 + config.projects.length) % config.projects.length);
-  };
-
-  const currentProject = config.projects[workIndex];
 
   return (
     <div
@@ -238,82 +225,14 @@ export const MobileContainer = () => {
 
         {/* SLIDE 3: CAREER */}
         <section className="mobile-slide career-slide">
-          <div className="mobile-section-badge">04 // EXPERIENCE</div>
           <h2 className="mobile-slide-title">Career Milestones</h2>
-
           <MobileCareerCards />
         </section>
 
-        {/* SLIDE 4: WORK (HORIZONTAL SWIPEABLE CAROUSEL) */}
+        {/* SLIDE 4: WORK (SWIPABLE 3D PROJECT DECK) */}
         <section className="mobile-slide work-slide">
-          <div className="mobile-section-badge">
-            05 // PORTFOLIO ({workIndex + 1}/{config.projects.length})
-          </div>
           <h2 className="mobile-slide-title">Featured Works</h2>
-
-          <div className="mobile-project-carousel">
-            <div className="project-display-card mobile-card-glass">
-              {currentProject.image && (
-                <div className="project-thumb-frame">
-                  <img
-                    src={currentProject.image}
-                    alt={currentProject.title}
-                    loading="lazy"
-                  />
-                  <span className="project-cat-pill">{currentProject.category}</span>
-                </div>
-              )}
-
-              <div className="project-details">
-                <h3 className="project-name">{currentProject.title}</h3>
-                <p className="project-desc">{currentProject.description}</p>
-                <div className="project-tech-line">
-                  {currentProject.technologies}
-                </div>
-
-                {currentProject.link && (
-                  <a
-                    href={currentProject.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="project-live-btn"
-                  >
-                    <span>View Project</span>
-                    <FiExternalLink />
-                  </a>
-                )}
-              </div>
-            </div>
-
-            {/* Carousel Navigation Arrows */}
-            <div className="carousel-controls">
-              <button
-                type="button"
-                onClick={prevProject}
-                className="carousel-btn"
-                aria-label="Previous Project"
-              >
-                <FiChevronLeft />
-              </button>
-              <div className="carousel-dots">
-                {config.projects.map((_, i) => (
-                  <span
-                    key={i}
-                    className={`dot ${i === workIndex ? "active" : ""}`}
-                    onClick={() => setWorkIndex(i)}
-                  />
-                ))}
-              </div>
-              <button
-                type="button"
-                onClick={nextProject}
-                className="carousel-btn"
-                aria-label="Next Project"
-              >
-                <FiChevronRight />
-              </button>
-            </div>
-          </div>
+          <MobileProjectCards />
         </section>
 
         {/* SLIDE 5: TECH STACK */}
