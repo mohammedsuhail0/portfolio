@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import { config } from "../../config";
 import RevealHeroFace from "../RevealHeroFace";
-import TechStackNew from "../TechStackNew";
+import MobileTechStack from "./MobileTechStack";
 import { useTheme } from "../../context/ThemeContext";
 import {
   IoHome,
@@ -248,9 +248,7 @@ export const MobileContainer = () => {
 
         {/* SLIDE 5: TECH STACK */}
         <section className="mobile-slide stack-slide">
-          <div className="stack-scaled-wrapper">
-            <TechStackNew />
-          </div>
+          <MobileTechStack />
         </section>
 
         {/* SLIDE 6: CONTACT */}
