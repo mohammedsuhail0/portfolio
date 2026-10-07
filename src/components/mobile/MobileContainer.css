@@ -341,9 +341,9 @@
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
-  max-width: 380px;
-  height: 68vh;
-  max-height: 540px;
+  max-width: 330px;
+  height: 56vh;
+  max-height: 450px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
