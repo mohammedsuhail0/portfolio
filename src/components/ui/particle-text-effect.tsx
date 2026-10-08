@@ -12,15 +12,15 @@ class Particle {
   target: Vector2D = { x: 0, y: 0 }
 
   closeEnoughTarget = 50
-  maxSpeed = 8.0
-  maxForce = 0.65
+  maxSpeed = 9.5
+  maxForce = 0.75
   particleSize = 2.0
   isKilled = false
 
   startColor = { r: 129, g: 140, b: 248 }
   targetColor = { r: 129, g: 140, b: 248 }
   colorWeight = 0
-  colorBlendRate = 0.03
+  colorBlendRate = 0.045
 
   move() {
     const dx = this.target.x - this.pos.x
@@ -47,8 +47,8 @@ class Particle {
       const desiredX = (dx / distance) * this.maxSpeed * proximityMult
       const desiredY = (dy / distance) * this.maxSpeed * proximityMult
 
-      const steerX = (desiredX - this.vel.x) * 0.1
-      const steerY = (desiredY - this.vel.y) * 0.1
+      const steerX = (desiredX - this.vel.x) * 0.12
+      const steerY = (desiredY - this.vel.y) * 0.12
 
       this.acc.x += steerX
       this.acc.y += steerY
@@ -359,10 +359,10 @@ export function ParticleTextEffect({
       })
     }
 
-    // Slow, comfortable word transitions (~210 frames ~3.5 seconds per word)
+    // Brisk, crisp word transitions (~135 frames ~2.25 seconds per word)
     if (!isWarping) {
       frameCountRef.current++
-      if (frameCountRef.current % 210 === 0) {
+      if (frameCountRef.current % 135 === 0) {
         const nextIdx = wordIndexRef.current + 1
         if (nextIdx >= words.length) {
           // Completed cycling through all words (finishing on SUHAIL)!

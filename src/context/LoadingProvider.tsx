@@ -27,11 +27,11 @@ export const LoadingProvider = ({ children }: PropsWithChildren) => {
   };
 
   useEffect(() => {
-    // Defer mounting heavy background components by 1.2s
+    // Defer mounting heavy background components by 1.0s
     // so frame 1 has 100% thread exclusivity (eliminates lag!)
     const timer = setTimeout(() => {
       setMountChildren(true);
-    }, 1200);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
