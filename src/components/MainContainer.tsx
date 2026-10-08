@@ -14,10 +14,13 @@ import setSplitText from "./utils/splitText";
 import { usePageScrollSnap } from "./utils/usePageScrollSnap";
 import MobileContainer from "./mobile/MobileContainer";
 
+import { useLoading } from "../context/LoadingProvider";
+
 const Scene = lazy(() => import("./Character/Scene"));
 
 const MainContainer = () => {
   usePageScrollSnap();
+  const { isLoading } = useLoading();
 
   const [isMobile, setIsMobile] = useState<boolean>(() => {
     return typeof window !== "undefined" && window.innerWidth <= 768;
@@ -27,7 +30,7 @@ const MainContainer = () => {
     const resizeHandler = () => {
       const mobile = window.innerWidth <= 768;
       setIsMobile(mobile);
-      if (!mobile) {
+      if (!mobile && !isLoading) {
         setSplitText();
       }
     };
@@ -36,7 +39,7 @@ const MainContainer = () => {
     return () => {
       window.removeEventListener("resize", resizeHandler);
     };
-  }, []);
+  }, [isLoading]);
 
   return (
     <div className="container-main">

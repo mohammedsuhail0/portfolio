@@ -1,13 +1,17 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { useLoading } from "../../context/LoadingProvider";
-import { setProgress } from "../Loading";
 import { useTheme } from "../../context/ThemeContext";
 
 const Scene = () => {
   const canvasDiv = useRef<HTMLDivElement | null>(null);
-  const { setLoading } = useLoading();
+  const { isLoading } = useLoading();
   const { theme } = useTheme();
+  const isLoadingRef = useRef(isLoading);
+
+  useEffect(() => {
+    isLoadingRef.current = isLoading;
+  }, [isLoading]);
 
   useEffect(() => {
     if (!canvasDiv.current) return;
@@ -20,7 +24,7 @@ const Scene = () => {
     // 1. Scene, Camera, Renderer
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 1000);
-    camera.position.z = 45;
+    camera.position.z = 68;
 
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
@@ -435,18 +439,6 @@ const Scene = () => {
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
 
-    // 4. Loading completion triggers initialFX
-    const progress = setProgress((value) => setLoading(value));
-    progress.loaded().then(() => {
-      setTimeout(() => {
-        import("../utils/initialFX").then((module) => {
-          if (module.initialFX) {
-            module.initialFX();
-          }
-        });
-      }, 500);
-    });
-
     // 5. Mouse Parallax & Scroll Reactivity
     let mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
     let scrollY = 0;
@@ -485,14 +477,29 @@ const Scene = () => {
     let animationFrameId: number;
     const clock = new THREE.Clock();
     let lastTime = 0;
+    let cameraZ = 68;
+    const targetCameraZ = 45;
 
     const animate = () => {
       if (!isMounted) return;
       animationFrameId = requestAnimationFrame(animate);
 
+      // Do not compete with preloader on GPU while loading
+      if (isLoadingRef.current) {
+        return;
+      }
+
       const elapsedTime = clock.getElapsedTime();
       const delta = Math.min(elapsedTime - lastTime, 0.1);
       lastTime = elapsedTime;
+
+      // Smooth cosmic warp dive-in on hero arrival
+      if (cameraZ > targetCameraZ + 0.05) {
+        cameraZ += (targetCameraZ - cameraZ) * 0.04;
+        camera.position.z = cameraZ;
+      } else if (camera.position.z !== targetCameraZ) {
+        camera.position.z = targetCameraZ;
+      }
 
       // Pass time to star shader for smooth organic twinkling
       starUniforms.uTime.value = elapsedTime;
@@ -579,7 +586,7 @@ const Scene = () => {
       nebulaMaterial.dispose();
       meteorMaterial.dispose();
     };
-  }, [setLoading, theme]);
+  }, [theme]);
 
   return <div className="global-starfield-container" ref={canvasDiv} />;
 };

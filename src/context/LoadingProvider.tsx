@@ -16,37 +16,30 @@ interface LoadingType {
 export const LoadingContext = createContext<LoadingType | null>(null);
 
 export const LoadingProvider = ({ children }: PropsWithChildren) => {
-  const [isLoading, setIsLoading] = useState(() => {
-    // Skip loading on mobile
-    if (window.innerWidth <= 768) return false;
-    return true;
-  });
+  const [isLoading, setIsLoading] = useState(true);
   const [loading, setLoading] = useState(0);
+  const [mountChildren, setMountChildren] = useState(false);
 
   const value = {
     isLoading,
     setIsLoading,
     setLoading,
   };
-  useEffect(() => {
-    // Auto-start animations on mobile since there's no 3D model
-    if (window.innerWidth <= 768) {
-      import("../components/utils/initialFX").then((module) => {
-        if (module.initialFX) {
-          setTimeout(() => {
-            module.initialFX();
-          }, 100);
-        }
-      });
-    }
-  }, []);
 
-  useEffect(() => {}, [loading]);
+  useEffect(() => {
+    // Defer mounting heavy background components by 1.2s
+    // so frame 1 has 100% thread exclusivity (eliminates lag!)
+    const timer = setTimeout(() => {
+      setMountChildren(true);
+    }, 1200);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <LoadingContext.Provider value={value as LoadingType}>
       {isLoading && <Loading percent={loading} />}
-      <main className="main-body">{children}</main>
+      {mountChildren && <main className="main-body">{children}</main>}
     </LoadingContext.Provider>
   );
 };

@@ -1,92 +1,63 @@
-import { useEffect, useState } from "react";
-import "./styles/Loading.css";
+import { useState, useRef } from "react";
 import { useLoading } from "../context/LoadingProvider";
+import { ParticleTextEffect } from "./ui/particle-text-effect";
 
-import Marquee from "react-fast-marquee";
+const SUHAIL_WORDS = [
+  "WELCOME",
+  "FULL-STACK",
+  "AI SYSTEMS",
+  "SUHAIL"
+];
 
-const Loading = ({ percent }: { percent: number }) => {
+const Loading = ({ percent: _percent }: { percent?: number } = {}) => {
   const { setIsLoading } = useLoading();
-  const [loaded, setLoaded] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [clicked, setClicked] = useState(false);
+  const [isLeaving, setIsLeaving] = useState(false);
+  const enteredRef = useRef(false);
 
-  if (percent >= 100) {
-    setTimeout(() => {
-      setLoaded(true);
-      setTimeout(() => {
-        setIsLoaded(true);
-      }, 1000);
-    }, 600);
-  }
+  const handleEnter = () => {
+    if (enteredRef.current) return;
+    enteredRef.current = true;
+    setIsLeaving(true);
 
-  useEffect(() => {
     import("./utils/initialFX").then((module) => {
-      if (isLoaded) {
-        setClicked(true);
-        setTimeout(() => {
-          if (module.initialFX) {
-            module.initialFX();
-          }
-          setIsLoading(false);
-        }, 900);
-      }
-    });
-  }, [isLoaded]);
+      // Start hero materialization while the shockwave expands across screen
+      setTimeout(() => {
+        if (module.initialFX) {
+          module.initialFX();
+        }
+      }, 200);
 
-  function handleMouseMove(e: React.MouseEvent<HTMLElement>) {
-    const { currentTarget: target } = e;
-    const rect = target.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    target.style.setProperty("--mouse-x", `${x}px`);
-    target.style.setProperty("--mouse-y", `${y}px`);
-  }
+      // Once the cosmic hyperspace fade finishes, fully remove preloader from DOM
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 880);
+    });
+  };
 
   return (
-    <>
-      <div className="loading-header">
-        <a href="/#" className="loader-title" data-cursor="disable">
-          MohammedSuhail
-        </a>
-        <div className={`loaderGame ${clicked && "loader-out"}`}>
-          <div className="loaderGame-container">
-            <div className="loaderGame-in">
-              {[...Array(27)].map((_, index) => (
-                <div className="loaderGame-line" key={index}></div>
-              ))}
-            </div>
-            <div className="loaderGame-ball"></div>
-          </div>
-        </div>
-      </div>
-      <div className="loading-screen">
-        <div className="loading-marquee">
-          <Marquee>
-            <span>&nbsp; Full-Stack Engineer &nbsp;</span> <span>&nbsp; AI-Assisted Systems &nbsp;</span>
-            <span>&nbsp; Rapid Prototyping &nbsp;</span> <span>&nbsp; Full-Stack Engineer &nbsp;</span>
-          </Marquee>
-        </div>
-        <div
-          className={`loading-wrap ${clicked && "loading-clicked"}`}
-          onMouseMove={(e) => handleMouseMove(e)}
-        >
-          <div className="loading-hover"></div>
-          <div className={`loading-button ${loaded && "loading-complete"}`}>
-            <div className="loading-container">
-              <div className="loading-content">
-                <div className="loading-content-in">
-                  Loading <span>{percent}%</span>
-                </div>
-              </div>
-              <div className="loading-box"></div>
-            </div>
-            <div className="loading-content2">
-              <span>Welcome</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
+    <div
+      className={`particle-loader-root ${isLeaving ? "is-leaving" : ""}`}
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 999999,
+        backgroundColor: "#000000",
+        transition: "opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s ease-out",
+        transform: isLeaving ? "scale(1.15)" : "scale(1)",
+        filter: isLeaving ? "blur(8px)" : "blur(0px)",
+        opacity: isLeaving ? 0 : 1,
+        pointerEvents: isLeaving ? "none" : "auto",
+        width: "100vw",
+        height: "100vh",
+        overflow: "hidden"
+      }}
+    >
+      <ParticleTextEffect
+        words={SUHAIL_WORDS}
+        isPreloader={true}
+        onComplete={handleEnter}
+      />
+    </div>
   );
 };
 
@@ -94,10 +65,9 @@ export default Loading;
 
 export const setProgress = (setLoading: (value: number) => void) => {
   let percent: number = 0;
-
   let interval = setInterval(() => {
     if (percent <= 50) {
-      let rand = Math.round(Math.random() * 5);
+      const rand = Math.round(Math.random() * 5);
       percent = percent + rand;
       setLoading(percent);
     } else {

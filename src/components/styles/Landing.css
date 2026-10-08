@@ -20,6 +20,15 @@
   background-color: transparent;
 }
 
+/* Ensure pristine zero-flicker state before GSAP initialFX materialization */
+.main-body:not(.main-active) .hero-avatar-centerpiece,
+.main-body:not(.main-active) .landing-intro,
+.main-body:not(.main-active) .landing-info,
+.main-body:not(.main-active) .hero-proof-strip-dock {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .landing-container {
   width: var(--cWidth);
   margin: auto;
