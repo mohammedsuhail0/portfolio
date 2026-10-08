@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import { FiExternalLink } from "react-icons/fi";
 import "./MobileProjectCards.css";
 
@@ -137,193 +137,250 @@ export const MobileProjectCards: React.FC = () => {
   const [deck, setDeck] = useState<ProjectItem[]>(() =>
     [...MOBILE_PROJECT_LIST].reverse().map((proj, i) => ({ ...proj, uid: i }))
   );
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
-  const [dismissingUid, setDismissingUid] = useState<number | null>(null);
-  const [dismissDirection, setDismissDirection] = useState<"left" | "right">("right");
-  const [dismissY, setDismissY] = useState(0);
 
-  const startPos = useRef({ x: 0, y: 0 });
+  const topCardRef = useRef<HTMLDivElement | null>(null);
+  const secondCardRef = useRef<HTMLDivElement | null>(null);
+  const stampRightRef = useRef<HTMLDivElement | null>(null);
+  const stampLeftRef = useRef<HTMLDivElement | null>(null);
+
+  const startPos = useRef({ x: 0, y: 0, time: 0 });
+  const currentDelta = useRef({ x: 0, y: 0 });
+  const isDragging = useRef(false);
+  const isAnimating = useRef(false);
   const activePointerId = useRef<number | null>(null);
+  const rafId = useRef<number | null>(null);
 
   // Active top card is the last item in deck array
   const topCard = deck.length > 0 ? deck[deck.length - 1] : null;
-  const secondCard = deck.length > 1 ? deck[deck.length - 2] : null;
 
   const currentOrderIdx = topCard
     ? MOBILE_PROJECT_LIST.findIndex((p) => p.id === topCard.id) + 1
     : 1;
 
-  const threshold = 90; // Swipe trigger threshold (px)
+  const threshold = 75; // Swipe trigger threshold (px)
 
-  // Trigger dismissal: animate card off-screen then remove & cycle to back
-  const dismissTopCard = (direction: "left" | "right", releaseY: number = 0) => {
-    if (!topCard || dismissingUid !== null) return;
+  // Fast, responsive spring fly-out dismissal
+  const dismissCard = useCallback((direction: "left" | "right") => {
+    if (isAnimating.current || !topCardRef.current) return;
+    isAnimating.current = true;
 
-    const departingCard = topCard;
-    setDismissingUid(departingCard.uid);
-    setDismissDirection(direction);
-    setDismissY(releaseY);
-    setDragOffset({ x: 0, y: 0 });
-    setIsDragging(false);
+    const topEl = topCardRef.current;
+    const secEl = secondCardRef.current;
+    const flyDist = window.innerWidth * 1.25;
+    const flyX = direction === "right" ? flyDist : -flyDist;
+    const flyRot = direction === "right" ? 22 : -22;
 
-    // After animation duration, remove and cycle card to beginning for endless browsing
+    // Zero-lag hardware accelerated transition
+    topEl.style.transition = "transform 0.26s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease-out";
+    topEl.style.transform = `translate3d(${flyX}px, ${currentDelta.current.y}px, 0) rotate(${flyRot}deg)`;
+    topEl.style.opacity = "0";
+
+    if (secEl) {
+      secEl.style.transition = "transform 0.26s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.26s ease";
+      secEl.style.transform = "translate3d(0, 0, 0) scale(1)";
+      secEl.style.opacity = "1";
+    }
+
+    if (stampRightRef.current) stampRightRef.current.style.opacity = direction === "right" ? "1" : "0";
+    if (stampLeftRef.current) stampLeftRef.current.style.opacity = direction === "left" ? "1" : "0";
+
     setTimeout(() => {
+      // Re-order deck
       setDeck((prev) => {
-        const nextDeck = prev.filter((c) => c.uid !== departingCard.uid);
-        return [departingCard, ...nextDeck];
+        if (prev.length <= 1) return prev;
+        const top = prev[prev.length - 1];
+        return [top, ...prev.slice(0, prev.length - 1)];
       });
-      setDismissingUid(null);
-    }, 320);
-  };
 
-  // Pointer gesture handlers
+      // Reset inline styles after state changes to next card
+      if (topEl) {
+        topEl.style.transition = "";
+        topEl.style.transform = "";
+        topEl.style.opacity = "";
+        topEl.classList.remove("is-dragging");
+      }
+      if (secEl) {
+        secEl.style.transition = "";
+        secEl.style.transform = "";
+        secEl.style.opacity = "";
+      }
+      if (stampRightRef.current) stampRightRef.current.style.opacity = "0";
+      if (stampLeftRef.current) stampLeftRef.current.style.opacity = "0";
+      currentDelta.current = { x: 0, y: 0 };
+      isAnimating.current = false;
+    }, 270);
+  }, []);
+
+  const snapBack = useCallback(() => {
+    const topEl = topCardRef.current;
+    const secEl = secondCardRef.current;
+    if (topEl) {
+      topEl.style.transition = "transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.25)";
+      topEl.style.transform = "translate3d(0, 0, 0) rotate(0deg)";
+    }
+    if (secEl) {
+      secEl.style.transition = "transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.25), opacity 0.28s ease";
+      secEl.style.transform = "translate3d(0, 14px, 0) scale(0.95)";
+      secEl.style.opacity = "0.82";
+    }
+    if (stampRightRef.current) stampRightRef.current.style.opacity = "0";
+    if (stampLeftRef.current) stampLeftRef.current.style.opacity = "0";
+    currentDelta.current = { x: 0, y: 0 };
+  }, []);
+
   const onPointerDown = (e: React.PointerEvent) => {
-    if (dismissingUid !== null || !topCard) return;
-    if ((e.target as HTMLElement).closest(".project-card-actions a, .project-card-link-btn, .project-card-cert-btn")) return;
+    if (isAnimating.current) return;
+    // Don't drag if tapping interactive buttons / links
+    if ((e.target as HTMLElement).closest("a, button, .project-card-actions")) return;
 
     activePointerId.current = e.pointerId;
+    isDragging.current = true;
+    startPos.current = { x: e.clientX, y: e.clientY, time: performance.now() };
+    currentDelta.current = { x: 0, y: 0 };
+
     try {
       (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     } catch {
       // Ignore
     }
-    startPos.current = { x: e.clientX, y: e.clientY };
-    setIsDragging(true);
+
+    const topEl = topCardRef.current;
+    const secEl = secondCardRef.current;
+    if (topEl) {
+      topEl.classList.add("is-dragging");
+      topEl.style.transition = "none";
+    }
+    if (secEl) {
+      secEl.style.transition = "none";
+    }
   };
 
   const onPointerMove = (e: React.PointerEvent) => {
-    if (!isDragging || activePointerId.current !== e.pointerId) return;
-    const deltaX = e.clientX - startPos.current.x;
-    const deltaY = (e.clientY - startPos.current.y) * 0.22;
-    setDragOffset({ x: deltaX, y: deltaY });
+    if (!isDragging.current || activePointerId.current !== e.pointerId) return;
+
+    const dx = e.clientX - startPos.current.x;
+    const dy = (e.clientY - startPos.current.y) * 0.18;
+    currentDelta.current = { x: dx, y: dy };
+
+    if (rafId.current === null) {
+      rafId.current = requestAnimationFrame(() => {
+        rafId.current = null;
+        if (!isDragging.current) return;
+
+        const curX = currentDelta.current.x;
+        const curY = currentDelta.current.y;
+        const rot = curX * 0.07;
+
+        if (topCardRef.current) {
+          topCardRef.current.style.transform = `translate3d(${curX}px, ${curY}px, 0) rotate(${rot}deg)`;
+        }
+
+        if (secondCardRef.current) {
+          const ratio = Math.min(Math.abs(curX) / 80, 1);
+          const scale = 0.95 + ratio * 0.05;
+          const y = 14 - ratio * 14;
+          const op = 0.82 + ratio * 0.18;
+          secondCardRef.current.style.transform = `translate3d(0, ${y}px, 0) scale(${scale})`;
+          secondCardRef.current.style.opacity = `${op}`;
+        }
+
+        if (stampRightRef.current && stampLeftRef.current) {
+          if (curX > 14) {
+            stampRightRef.current.style.opacity = `${Math.min((curX - 14) / 45, 1)}`;
+            stampLeftRef.current.style.opacity = "0";
+          } else if (curX < -14) {
+            stampLeftRef.current.style.opacity = `${Math.min((-curX - 14) / 45, 1)}`;
+            stampRightRef.current.style.opacity = "0";
+          } else {
+            stampRightRef.current.style.opacity = "0";
+            stampLeftRef.current.style.opacity = "0";
+          }
+        }
+      });
+    }
   };
 
-  const onPointerEnd = (e: React.PointerEvent) => {
-    if (!isDragging || activePointerId.current !== e.pointerId) return;
-    setIsDragging(false);
+  const onPointerUp = (e: React.PointerEvent) => {
+    if (!isDragging.current || activePointerId.current !== e.pointerId) return;
+    isDragging.current = false;
     activePointerId.current = null;
+
+    if (rafId.current !== null) {
+      cancelAnimationFrame(rafId.current);
+      rafId.current = null;
+    }
+
     try {
       (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
     } catch {
       // Ignore
     }
 
-    if (Math.abs(dragOffset.x) >= threshold) {
-      const direction = dragOffset.x > 0 ? "right" : "left";
-      dismissTopCard(direction, dragOffset.y);
+    if (topCardRef.current) {
+      topCardRef.current.classList.remove("is-dragging");
     }
-    setDragOffset({ x: 0, y: 0 });
-  };
 
-  // Touch gesture handlers for mobile
-  const onTouchStart = (e: React.TouchEvent) => {
-    if (dismissingUid !== null || !topCard) return;
-    if ((e.target as HTMLElement).closest(".project-card-actions a, .project-card-link-btn, .project-card-cert-btn")) return;
-    const touch = e.touches[0];
-    startPos.current = { x: touch.clientX, y: touch.clientY };
-    setIsDragging(true);
-  };
+    const dx = currentDelta.current.x;
+    const elapsed = Math.max(performance.now() - startPos.current.time, 1);
+    const velocityX = Math.abs(dx) / elapsed; // px/ms
+    const isFling = velocityX > 0.42 && Math.abs(dx) > 30;
 
-  const onTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging) return;
-    const touch = e.touches[0];
-    const deltaX = touch.clientX - startPos.current.x;
-    const deltaY = (touch.clientY - startPos.current.y) * 0.22;
-    setDragOffset({ x: deltaX, y: deltaY });
-  };
-
-  const onTouchEnd = () => {
-    if (!isDragging) return;
-    setIsDragging(false);
-    if (Math.abs(dragOffset.x) >= threshold) {
-      const direction = dragOffset.x > 0 ? "right" : "left";
-      dismissTopCard(direction, dragOffset.y);
+    if (Math.abs(dx) >= threshold || isFling) {
+      dismissCard(dx > 0 ? "right" : "left");
+    } else {
+      snapBack();
     }
-    setDragOffset({ x: 0, y: 0 });
   };
 
-  // Drag physics calculations
-  const dragRatio = Math.min(Math.abs(dragOffset.x) / threshold, 1);
-  const rotateDeg = dragOffset.x * 0.08;
-  const cueOpacity = Math.min(Math.abs(dragOffset.x) / 60, 1);
+  useEffect(() => {
+    return () => {
+      if (rafId.current !== null) {
+        cancelAnimationFrame(rafId.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="project-cards-deck-container">
       {/* 3D Swipe Deck Stage */}
       <div className="project-cards-stage">
-        {deck.map((proj) => {
-          const isTop = topCard?.uid === proj.uid;
-          const isSecond = secondCard?.uid === proj.uid;
-          const isDismissing = dismissingUid === proj.uid;
+        {deck.map((proj, idx) => {
+          const isTop = idx === deck.length - 1;
+          const isSecond = idx === deck.length - 2;
 
           // Split technologies string into individual badges
           const techList = proj.technologies
             ? proj.technologies.split(",").map((t) => t.trim()).slice(0, 4)
             : [];
 
-          // Dynamic style calculation
-          let cardStyle: React.CSSProperties = {};
-
-          if (isDismissing) {
-            const flyX = dismissDirection === "right" ? 540 : -540;
-            const flyRot = dismissDirection === "right" ? 28 : -28;
-            cardStyle = {
-              transform: `translate3d(${flyX}px, ${dismissY}px, 0) rotate(${flyRot}deg)`,
-              opacity: 0,
-              transition: "transform 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.1), opacity 0.35s ease-out",
-              zIndex: 30,
-              pointerEvents: "none",
-            };
-          } else if (isTop && isDragging) {
-            cardStyle = {
-              transform: `translate3d(${dragOffset.x}px, ${dragOffset.y}px, 0) rotate(${rotateDeg}deg)`,
-              transition: "none",
-            };
-          } else if (isSecond && isDragging) {
-            const targetScale = 0.95 + dragRatio * 0.05;
-            const targetY = 14 - dragRatio * 14;
-            const targetOpacity = 0.82 + dragRatio * 0.18;
-            cardStyle = {
-              transform: `translate3d(0, ${targetY}px, 0) scale(${targetScale})`,
-              opacity: targetOpacity,
-              transition: "none",
-            };
-          }
-
           return (
             <div
               key={proj.uid}
-              className={`project-swipe-card ${isTop ? "is-top-card" : ""} ${isDragging && isTop ? "is-dragging" : ""}`}
-              style={cardStyle}
+              ref={isTop ? topCardRef : isSecond ? secondCardRef : null}
+              className={`project-swipe-card ${isTop ? "is-top-card" : ""}`}
               onPointerDown={isTop ? onPointerDown : undefined}
               onPointerMove={isTop ? onPointerMove : undefined}
-              onPointerUp={isTop ? onPointerEnd : undefined}
-              onPointerCancel={isTop ? onPointerEnd : undefined}
-              onTouchStart={isTop ? onTouchStart : undefined}
-              onTouchMove={isTop ? onTouchMove : undefined}
-              onTouchEnd={isTop ? onTouchEnd : undefined}
+              onPointerUp={isTop ? onPointerUp : undefined}
+              onPointerCancel={isTop ? onPointerUp : undefined}
             >
               {/* Dynamic Swipe Cues */}
-              {isTop && dragOffset.x > 15 && (
-                <div className="swipe-stamp stamp-right" style={{ opacity: cueOpacity }}>
-                  NEXT ➔
-                </div>
-              )}
-              {isTop && dragOffset.x < -15 && (
-                <div className="swipe-stamp stamp-left" style={{ opacity: cueOpacity }}>
-                  PASS ➔
-                </div>
-              )}
-              {isDismissing && dismissDirection === "right" && (
-                <div className="swipe-stamp stamp-right" style={{ opacity: 1 }}>
-                  NEXT ➔
-                </div>
-              )}
-              {isDismissing && dismissDirection === "left" && (
-                <div className="swipe-stamp stamp-left" style={{ opacity: 1 }}>
-                  PASS ➔
-                </div>
+              {isTop && (
+                <>
+                  <div
+                    ref={stampRightRef}
+                    className="swipe-stamp stamp-right"
+                    style={{ opacity: 0 }}
+                  >
+                    NEXT ➔
+                  </div>
+                  <div
+                    ref={stampLeftRef}
+                    className="swipe-stamp stamp-left"
+                    style={{ opacity: 0 }}
+                  >
+                    PASS ➔
+                  </div>
+                </>
               )}
 
               {/* Card Photo / Thumbnail Wrapper */}
@@ -398,7 +455,7 @@ export const MobileProjectCards: React.FC = () => {
         <button
           type="button"
           className="deck-nav-btn prev-btn"
-          onClick={() => dismissTopCard("left")}
+          onClick={() => dismissCard("left")}
           aria-label="Previous card"
         >
           ‹
@@ -409,7 +466,7 @@ export const MobileProjectCards: React.FC = () => {
         <button
           type="button"
           className="deck-nav-btn next-btn"
-          onClick={() => dismissTopCard("right")}
+          onClick={() => dismissCard("right")}
           aria-label="Next card"
         >
           ›
