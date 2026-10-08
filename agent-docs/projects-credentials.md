@@ -13,7 +13,7 @@ This document is the absolute source of truth for all projects, hackathons, cred
 | **3** | **Hyderabad Rental Analytics** | Data Science & ML | [house-rental-analytics](https://github.com/mohammedsuhail0/house-rental-analytics) | [house-rental-analytics](https://github.com/mohammedsuhail0/house-rental-analytics) | Python, Pandas, NumPy, Matplotlib, Scikit-learn, EDA | `📜 Data Science Cert` (Full Stack Academy) |
 | **4** | **NovaClass (Smart Attendance)** | Smart Classroom / Attendance | [smart-attendance-ecru-nu.vercel.app](https://smart-attendance-ecru-nu.vercel.app) | [attendence](https://github.com/mohammedsuhail0/attendence) | Next.js, React, WebAuthn, Node.js, Express, MongoDB | N/A |
 | **5** | **BroSync (Seamless)** | Real-Time Collaboration | [brosync.vercel.app](https://brosync.vercel.app/) | [seamless](https://github.com/mohammedsuhail0/seamless) | Next.js, WebSockets, Node.js, Canvas API, TailwindCSS | N/A |
-| **6** | **ShieldSense** | Cybersecurity / AI Agent | [shieldsense-security-agent.vercel.app](https://shieldsense-security-agent.vercel.app) | [PUNK-RECORDS-SPIH168-](https://github.com/mohammedsuhail0/PUNK-RECORDS-SPIH168-) | Next.js, TypeScript, Threat Intelligence API, TailwindCSS | N/A |
+| **6** | **ShieldSense** | Cybersecurity / AI Agent | [shieldsense-security-agent.vercel.app](https://shieldsense-security-agent.vercel.app) | [PUNK-RECORDS-SPIH168-](https://github.com/mohammedsuhail0/PUNK-RECORDS-SPIH168-) | Next.js, TypeScript, Threat Intelligence API, TailwindCSS | `🏆 Industry Hack Cert` (St. Peter's) |
 | **7** | **Secure Online Exam Portal** | EdTech / Security | [secure-online-exam-portal-zt.vercel.app](https://secure-online-exam-portal-zt.vercel.app) | [exam](https://github.com/mohammedsuhail0/exam) | React, Node.js, Express, Proctoring, MongoDB | N/A |
 | **8** | **VitaForge** | Health & Fitness | [excersise-iota.vercel.app](https://excersise-iota.vercel.app) | [excersise](https://github.com/mohammedsuhail0/excersise) | React, TypeScript, Nutrition & Workout API, TailwindCSS | N/A |
 | **9** | **MaternaGuard** | Healthcare / AI | [frontend-pied-pi-riv3w4y14c.vercel.app](https://frontend-pied-pi-riv3w4y14c.vercel.app) | [AI-mternity-nanny-](https://github.com/mohammedsuhail0/AI-mternity-nanny-) | React, TypeScript, Health Analytics, TailwindCSS | N/A |
@@ -29,7 +29,8 @@ All certificate image files reside in `/public/certificates/`:
 1. **Smart India Hackathon (SIH 2024 / PS 26133)**:
    - Team: Team Punk Records
    - Focus: Vernacular voice triage, rural kiosk, and emergency ICU bed tracking platform (`ArogyaMitr`).
-2. **SPEC's Industry Hack 2026**:
+2. **SPEC's Industry Hack 2026 (ShieldSense)**:
+   - Associated Project: `ShieldSense (AI Security Agent)` (Repo: `PUNK-RECORDS-SPIH168-`)
    - Location: St. Peter's Engineering College, Hyderabad
    - Certificate File: `/certificates/industry-hack-stpeters-certificate.png`
    - Team: Team Punk Records

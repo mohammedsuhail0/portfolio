@@ -116,8 +116,8 @@ const Work = () => {
                   <h4>Tools and features</h4>
                   <p>{project.technologies}</p>
 
-                  {/* A5: Visible Live Demo and Repo pill buttons */}
-                  {(liveUrl || repoUrl) && (
+                  {/* A5: Visible Live Demo, Repo, and Certificate pill buttons */}
+                  {(liveUrl || repoUrl || (project as any).certificateUrl) && (
                     <div className="work-buttons-row">
                       {liveUrl && (
                         <a
@@ -128,6 +128,17 @@ const Work = () => {
                           data-cursor="disable"
                         >
                           Live Demo ↗
+                        </a>
+                      )}
+                      {(project as any).certificateUrl && (
+                        <a
+                          href={(project as any).certificateUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="work-btn-pill work-btn-certificate"
+                          data-cursor="disable"
+                        >
+                          Certificate 📜
                         </a>
                       )}
                       {repoUrl && (

@@ -119,8 +119,9 @@ export const config = {
             category: "Cybersecurity / Agent",
             technologies: "Next.js, TypeScript, Threat Intelligence API, TailwindCSS",
             image: "/projects/shield-sense.png",
-            description: "Intelligent security monitoring dashboard and threat intelligence agent providing proactive vulnerability scanning and system posture metrics.",
-            link: "https://shieldsense-security-agent.vercel.app"
+            description: "Intelligent security monitoring dashboard and threat intelligence agent built for SPEC's Industry Hack 2026, providing proactive vulnerability scanning and system posture metrics.",
+            link: "https://shieldsense-security-agent.vercel.app",
+            certificateUrl: "/certificates/industry-hack-stpeters-certificate.png"
         },
         {
             id: 5,

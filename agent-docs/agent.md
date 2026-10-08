@@ -42,13 +42,13 @@
 
 ### B. Project Prioritization Order (User Requirement)
 1. **Certified Projects First**:
-   - `ArogyaMitr (SIH PS 26133)` (Smart India Hackathon Finalist with Team Punk Records)
+   - `ShieldSense (AI Security Agent)` (SPEC's Industry Hack 2026 Certificate - St. Peter's Engineering College)
    - `NextPatient` (Clinical AI OSCE Simulation for iQOO Health-Tech Hackathon)
    - `Hyderabad Rental Analytics` (Full Stack Academy Data Science Specialization - Certificate of Excellence)
 2. **Core Priority Products (If No Certificate)**:
    - `NovaClass (Smart Attendance)` (Tokenized biometric institutional attendance)
    - `BroSync (Seamless)` (Real-time collaboration canvas)
-   - `ShieldSense (AI Security Agent)` (Autonomous AI cybersecurity monitoring agent)
+   - `ArogyaMitr (SIH PS 26133)` (Smart India Hackathon Finalist with Team Punk Records)
 3. **Recent Featured Projects**:
    - `Secure Online Exam Portal`, `VitaForge`, `MaternaGuard`, `BUILDR`, `New Rosary Convent High School`.
 

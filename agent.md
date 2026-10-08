@@ -12,6 +12,6 @@
 - **Owner**: Mohammed Suhail
 - **Production Site**: [https://mohammed-suhail.vercel.app/](https://mohammed-suhail.vercel.app/)
 - **GitHub**: [https://github.com/mohammedsuhail0](https://github.com/mohammedsuhail0)
-- **Top Certified Projects**: ArogyaMitr (SIH PS 26133), NextPatient (iQOO Hackathon), Hyderabad Rental Analytics (Full Stack Academy Data Science Certificate).
-- **Core Products**: NovaClass (Smart Attendance), BroSync (Seamless), ShieldSense (AI Security Agent).
+- **Top Certified Projects**: ShieldSense (SPEC's Industry Hack 2026 Certificate), Hyderabad Rental Analytics (Full Stack Academy Data Science Certificate), NextPatient (iQOO Hackathon).
+- **Core Products**: NovaClass (Smart Attendance), BroSync (Seamless), ArogyaMitr (SIH PS 26133).
 - **Strict Rule**: Never use the terms "vibe", "vibe coder", or "vibe coding". Never hallucinate non-existent projects or URLs.

@@ -15,20 +15,20 @@ export interface MobileProjectData {
 }
 
 // Mobile project priority sequence requested by user:
-// 1. Projects with certificates (SIH ArogyaMitr, iQOO NextPatient, Data Science Rental Analytics)
-// 2. Followed by: NovaClass (Smart Attendance), BroSync, AI Agent (ShieldSense)
+// 1. Projects with certificates (ShieldSense, NextPatient, Data Science Rental Analytics)
+// 2. Followed by: NovaClass (Smart Attendance), BroSync, ArogyaMitr
 // 3. Followed by recent projects: Secure Exam Portal, VitaForge, MaternaGuard, BUILDR, NRCHS
 export const MOBILE_PROJECT_LIST: MobileProjectData[] = [
   // 1. Certified Projects
   {
-    id: 5,
-    title: "ArogyaMitr (SIH PS 26133)",
-    category: "Healthcare / SIH",
-    technologies: "Next.js, TypeScript, GeoLocation, REST APIs, TailwindCSS",
-    image: "/projects/sih-arogyamitr.png",
-    description: "Built for Smart India Hackathon PS 26133: Centralized healthcare access and emergency bed tracking platform connecting patients with regional hospitals in real time.",
-    link: "https://mahahealthconnect.vercel.app",
-    certificateBadge: "🏆 SIH Finalist",
+    id: 4,
+    title: "ShieldSense (AI Security Agent)",
+    category: "Cybersecurity / AI Agent",
+    technologies: "Next.js, TypeScript, Threat Intelligence API, TailwindCSS",
+    image: "/projects/shield-sense.png",
+    description: "Autonomous AI cybersecurity threat intelligence agent built for SPEC's Industry Hack 2026, delivering real-time vulnerability scanning, automated perimeter defenses, and incident triage.",
+    link: "https://shieldsense-security-agent.vercel.app",
+    certificateBadge: "🏆 Industry Hack Cert",
     certificateUrl: "/certificates/industry-hack-stpeters-certificate.png",
   },
   {
@@ -53,7 +53,7 @@ export const MOBILE_PROJECT_LIST: MobileProjectData[] = [
     certificateUrl: "/certificates/fsa-data-science-certificate.jpg",
   },
 
-  // 2. Core Priority Projects: NovaClass, BroSync, AI Agent
+  // 2. Core Priority Projects: NovaClass, BroSync, ArogyaMitr
   {
     id: 3,
     title: "NovaClass (Smart Attendance)",
@@ -73,13 +73,13 @@ export const MOBILE_PROJECT_LIST: MobileProjectData[] = [
     link: "https://brosync.vercel.app/",
   },
   {
-    id: 4,
-    title: "ShieldSense (AI Security Agent)",
-    category: "Cybersecurity / AI Agent",
-    technologies: "Next.js, TypeScript, Threat Intelligence API, TailwindCSS",
-    image: "/projects/shield-sense.png",
-    description: "Autonomous AI security monitoring dashboard and threat intelligence agent providing proactive vulnerability scanning and system posture metrics.",
-    link: "https://shieldsense-security-agent.vercel.app",
+    id: 5,
+    title: "ArogyaMitr (SIH PS 26133)",
+    category: "Healthcare / SIH",
+    technologies: "Next.js, TypeScript, GeoLocation, REST APIs, TailwindCSS",
+    image: "/projects/sih-arogyamitr.png",
+    description: "Built for Smart India Hackathon PS 26133: Centralized healthcare access and emergency bed tracking platform connecting patients with regional hospitals in real time.",
+    link: "https://mahahealthconnect.vercel.app",
   },
 
   // 3. Recent Featured Projects

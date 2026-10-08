@@ -155,6 +155,23 @@
   box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
 }
 
+.work-btn-certificate {
+  background: rgba(251, 191, 36, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.2);
+}
+
+.work-btn-certificate:hover {
+  transform: translateY(-2px);
+  background: rgba(251, 191, 36, 0.24);
+  border-color: #f59e0b;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.45);
+}
+
 .work-image {
   display: flex;
   width: 100%;
