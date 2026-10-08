@@ -126,8 +126,6 @@ export function ParticleTextEffect({
   const warpProgressRef = useRef(0)
   const mouseRef = useRef({ x: 0, y: 0, isPressed: false })
 
-  const pixelSteps = 3
-
   const nextWord = (word: string, canvas: HTMLCanvasElement) => {
     if (!offscreenRef.current) {
       offscreenRef.current = document.createElement("canvas")
@@ -136,8 +134,9 @@ export function ParticleTextEffect({
     const offscreenCtx = offscreen.getContext("2d", { willReadFrequently: true })
     if (!offscreenCtx) return
 
-    // Clean responsive font sizing
+    // Clean responsive font sizing and particle density
     const isMobile = canvas.width < 768
+    const pixelSteps = isMobile ? 4 : 3
     const baseFontSize = isMobile
       ? Math.min(canvas.width / (word.length * 0.72), 68)
       : Math.min(canvas.width / (word.length * 0.68), canvas.height / 3.2, 115)
@@ -237,9 +236,16 @@ export function ParticleTextEffect({
     }
   }
 
+  const isVisibleRef = useRef(!document.hidden)
+
   const animate = () => {
     const canvas = canvasRef.current
     if (!canvas) return
+
+    if (!isVisibleRef.current) {
+      animationRef.current = requestAnimationFrame(animate)
+      return
+    }
 
     const ctx = canvas.getContext("2d")
     if (!ctx) return
@@ -435,6 +441,11 @@ export function ParticleTextEffect({
       mouseRef.current.isPressed = false
     }
 
+    const handleVisibilityChange = () => {
+      isVisibleRef.current = !document.hidden
+    }
+    document.addEventListener("visibilitychange", handleVisibilityChange)
+
     window.addEventListener("resize", handleResize)
     window.addEventListener("mousedown", handleMouseDown)
     window.addEventListener("mouseup", handleMouseUp)
@@ -447,6 +458,7 @@ export function ParticleTextEffect({
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current)
       }
+      document.removeEventListener("visibilitychange", handleVisibilityChange)
       window.removeEventListener("resize", handleResize)
       window.removeEventListener("mousedown", handleMouseDown)
       window.removeEventListener("mouseup", handleMouseUp)

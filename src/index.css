@@ -1,8 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Syne:wght@700;800;900&family=Bebas+Neue&display=swap");
-
 html {
-  scroll-behavior: smooth;
-  scroll-snap-type: y proximity;
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
 }
@@ -45,7 +41,6 @@ body,
   font-optical-sizing: auto;
   font-style: normal;
   line-height: 1.5;
-  scroll-behavior: smooth;
   color-scheme: dark;
   color: var(--textColor);
   background-color: var(--backgroundColor);

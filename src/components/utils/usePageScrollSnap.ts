@@ -10,7 +10,19 @@ export function usePageScrollSnap() {
     let isWheeling = false;
     let wheelTimeout: ReturnType<typeof setTimeout> | null = null;
 
+    const scrollToTarget = (targetTop: number) => {
+      const lenisInstance = (window as any).lenis;
+      if (lenisInstance) {
+        lenisInstance.scrollTo(targetTop, { duration: 0.8 });
+      } else {
+        window.scrollTo({ top: targetTop, behavior: "smooth" });
+      }
+    };
+
     const onWheel = (e: WheelEvent) => {
+      // Skip on mobile/touch screens (handled by swipe container)
+      if (window.innerWidth <= 768) return;
+
       // Allow browser zoom (Ctrl / Cmd + Wheel)
       if (e.ctrlKey || e.metaKey) return;
 
@@ -36,7 +48,7 @@ export function usePageScrollSnap() {
         }
         e.preventDefault();
         isWheeling = true;
-        window.scrollTo({ top: aboutTop, behavior: "smooth" });
+        scrollToTarget(aboutTop);
         if (wheelTimeout) clearTimeout(wheelTimeout);
         wheelTimeout = setTimeout(() => {
           isWheeling = false;
@@ -52,7 +64,7 @@ export function usePageScrollSnap() {
         }
         e.preventDefault();
         isWheeling = true;
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        scrollToTarget(0);
         if (wheelTimeout) clearTimeout(wheelTimeout);
         wheelTimeout = setTimeout(() => {
           isWheeling = false;
@@ -68,7 +80,7 @@ export function usePageScrollSnap() {
         }
         e.preventDefault();
         isWheeling = true;
-        window.scrollTo({ top: whatIdoTop, behavior: "smooth" });
+        scrollToTarget(whatIdoTop);
         if (wheelTimeout) clearTimeout(wheelTimeout);
         wheelTimeout = setTimeout(() => {
           isWheeling = false;
@@ -84,7 +96,7 @@ export function usePageScrollSnap() {
         }
         e.preventDefault();
         isWheeling = true;
-        window.scrollTo({ top: aboutTop, behavior: "smooth" });
+        scrollToTarget(aboutTop);
         if (wheelTimeout) clearTimeout(wheelTimeout);
         wheelTimeout = setTimeout(() => {
           isWheeling = false;

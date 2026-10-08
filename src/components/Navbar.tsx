@@ -15,25 +15,29 @@ const Navbar = () => {
   useEffect(() => {
     // Initialize Lenis smooth scroll
     lenis = new Lenis({
-      duration: 1.7,
+      duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
-      wheelMultiplier: 1.7,
-      touchMultiplier: 2,
+      wheelMultiplier: 1.1,
+      touchMultiplier: 1.5,
       infinite: false,
     });
 
+    // Synchronize Lenis with GSAP ScrollTrigger
+    lenis.on("scroll", ScrollTrigger.update);
+
+    const updateTicker = (time: number) => {
+      lenis?.raf(time * 1000);
+    };
+
+    gsap.ticker.add(updateTicker);
+    gsap.ticker.lagSmoothing(0);
+
     // Start smooth scrolling
     lenis.start();
-
-    // Handle smooth scroll animation frame
-    function raf(time: number) {
-      lenis?.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
+    (window as any).lenis = lenis;
 
     // Handle navigation links
     let links = document.querySelectorAll(".header ul a");
@@ -46,7 +50,7 @@ const Navbar = () => {
           const target = document.querySelector(section) as HTMLElement;
           if (target) {
             if (lenis) {
-              lenis.scrollTo(target, { duration: 1.4 });
+              lenis.scrollTo(target, { duration: 1.2 });
             } else {
               target.scrollIntoView({ behavior: "smooth" });
             }
@@ -56,12 +60,17 @@ const Navbar = () => {
     });
 
     // Handle resize
-    window.addEventListener("resize", () => {
+    const handleResize = () => {
       lenis?.resize();
-    });
+    };
+    window.addEventListener("resize", handleResize);
 
     return () => {
+      window.removeEventListener("resize", handleResize);
+      gsap.ticker.remove(updateTicker);
       lenis?.destroy();
+      lenis = null;
+      (window as any).lenis = null;
     };
   }, []);
   return (

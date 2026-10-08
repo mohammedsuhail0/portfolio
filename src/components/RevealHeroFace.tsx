@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 import "./styles/RevealHeroFace.css";
 
 interface Props {
@@ -15,18 +15,54 @@ export const RevealHeroFace: React.FC<Props> = ({
   variant = "avatar",
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
+  const cyberLayerRef = useRef<HTMLDivElement>(null);
 
   // Mouse tracking
   const mouseRef = useRef({ x: 0, y: 0 });
   const currentRef = useRef({ x: 0, y: 0 });
+  const isHoveredRef = useRef(false);
+  const animIdRef = useRef<number | null>(null);
+  const currentOpacityRef = useRef(0);
 
-  // Render state for position & opacity
-  const [renderState, setRenderState] = useState({
-    x: 0,
-    y: 0,
-    opacity: 0,
-  });
+  const startLoop = useCallback(() => {
+    if (animIdRef.current !== null) return;
+
+    const revealRadius = 165;
+
+    const loop = () => {
+      const targetOpacity = isHoveredRef.current ? 1 : 0;
+      currentOpacityRef.current += (targetOpacity - currentOpacityRef.current) * 0.16;
+
+      if (!isHoveredRef.current && currentOpacityRef.current < 0.005) {
+        currentOpacityRef.current = 0;
+        if (cyberLayerRef.current) {
+          cyberLayerRef.current.style.opacity = "0";
+        }
+        animIdRef.current = null;
+        return; // Fully sleep when idle to preserve 60fps/120Hz
+      }
+
+      // Smooth lerp damping following cursor
+      const factor = 0.25;
+      currentRef.current.x += (mouseRef.current.x - currentRef.current.x) * factor;
+      currentRef.current.y += (mouseRef.current.y - currentRef.current.y) * factor;
+
+      const px = Math.round(currentRef.current.x);
+      const py = Math.round(currentRef.current.y);
+      const op = currentOpacityRef.current.toFixed(3);
+
+      if (cyberLayerRef.current) {
+        const maskGradient = `radial-gradient(circle ${revealRadius}px at ${px}px ${py}px, black 0%, rgba(0,0,0,0.95) 45%, rgba(0,0,0,0.35) 80%, transparent 100%)`;
+        cyberLayerRef.current.style.webkitMaskImage = maskGradient;
+        cyberLayerRef.current.style.maskImage = maskGradient;
+        cyberLayerRef.current.style.opacity = op;
+      }
+
+      animIdRef.current = requestAnimationFrame(loop);
+    };
+
+    animIdRef.current = requestAnimationFrame(loop);
+  }, []);
 
   // Track cursor movement
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -36,11 +72,12 @@ export const RevealHeroFace: React.FC<Props> = ({
     const y = e.clientY - rect.top;
     mouseRef.current = { x, y };
 
-    if (!isHovered) {
+    if (!isHoveredRef.current) {
       currentRef.current = { x, y };
+      isHoveredRef.current = true;
+      startLoop();
     }
-    setIsHovered(true);
-  }, [isHovered]);
+  }, [startLoop]);
 
   const handleMouseEnter = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current) return;
@@ -49,12 +86,14 @@ export const RevealHeroFace: React.FC<Props> = ({
     const y = e.clientY - rect.top;
     mouseRef.current = { x, y };
     currentRef.current = { x, y };
-    setIsHovered(true);
-  }, []);
+    isHoveredRef.current = true;
+    startLoop();
+  }, [startLoop]);
 
   const handleMouseLeave = useCallback(() => {
-    setIsHovered(false);
-  }, []);
+    isHoveredRef.current = false;
+    startLoop();
+  }, [startLoop]);
 
   // Mobile touch movement
   const handleTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
@@ -64,56 +103,22 @@ export const RevealHeroFace: React.FC<Props> = ({
     const x = touch.clientX - rect.left;
     const y = touch.clientY - rect.top;
     mouseRef.current = { x, y };
-    setIsHovered(true);
-  }, []);
+    isHoveredRef.current = true;
+    startLoop();
+  }, [startLoop]);
 
   const handleTouchEnd = useCallback(() => {
-    setIsHovered(false);
-  }, []);
+    isHoveredRef.current = false;
+    startLoop();
+  }, [startLoop]);
 
-  // Smooth damping loop for cursor tracking
   useEffect(() => {
-    let animId: number;
-    let currentOpacity = 0;
-
-    const loop = () => {
-      animId = requestAnimationFrame(loop);
-
-      const targetOpacity = isHovered ? 1 : 0;
-      currentOpacity += (targetOpacity - currentOpacity) * 0.16;
-
-      if (currentOpacity < 0.005) {
-        if (renderState.opacity !== 0) {
-          setRenderState((prev) => ({ ...prev, opacity: 0 }));
-        }
-        return;
+    return () => {
+      if (animIdRef.current !== null) {
+        cancelAnimationFrame(animIdRef.current);
       }
-
-      // Smooth lerp damping following cursor
-      const factor = 0.25;
-      currentRef.current.x += (mouseRef.current.x - currentRef.current.x) * factor;
-      currentRef.current.y += (mouseRef.current.y - currentRef.current.y) * factor;
-
-      setRenderState({
-        x: Math.round(currentRef.current.x),
-        y: Math.round(currentRef.current.y),
-        opacity: Number(currentOpacity.toFixed(3)),
-      });
     };
-
-    loop();
-
-    return () => cancelAnimationFrame(animId);
-  }, [isHovered]);
-
-  const revealRadius = 165;
-
-  const cyberMaskStyle: React.CSSProperties = {
-    WebkitMaskImage: `radial-gradient(circle ${revealRadius}px at ${renderState.x}px ${renderState.y}px, black 0%, rgba(0,0,0,0.95) 45%, rgba(0,0,0,0.35) 80%, transparent 100%)`,
-    maskImage: `radial-gradient(circle ${revealRadius}px at ${renderState.x}px ${renderState.y}px, black 0%, rgba(0,0,0,0.95) 45%, rgba(0,0,0,0.35) 80%, transparent 100%)`,
-    opacity: renderState.opacity,
-    transition: "opacity 0.2s ease-out",
-  };
+  }, []);
 
   return (
     <div
@@ -143,8 +148,9 @@ export const RevealHeroFace: React.FC<Props> = ({
 
         {/* Layer 2: Pragmata Astronaut Suit (Direct cursor reveal with feathered blend) */}
         <div
+          ref={cyberLayerRef}
           className="reveal-layer cyber-layer"
-          style={cyberMaskStyle}
+          style={{ opacity: 0 }}
         >
           <img
             src="/suhail-astronaut-transparent.png"

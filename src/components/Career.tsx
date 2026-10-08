@@ -13,7 +13,10 @@ const getDisplayYear = (period: string) => {
 
 const Career = () => {
   useEffect(() => {
-    setAllTimeline();
+    const tl = setAllTimeline();
+    return () => {
+      tl?.kill();
+    };
   }, []);
 
   return (

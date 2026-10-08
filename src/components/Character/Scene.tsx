@@ -26,13 +26,16 @@ const Scene = () => {
     const camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 1000);
     camera.position.z = 68;
 
+    const isMobile = window.innerWidth <= 768;
+    const pixelRatioLimit = isMobile ? 1.25 : 1.5;
+
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
-      antialias: true,
+      antialias: !isMobile, // Disable MSAA on mobile for massive GPU fill-rate savings
       powerPreference: "high-performance",
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, pixelRatioLimit));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.2;
 
@@ -134,7 +137,7 @@ const Scene = () => {
 
     const starUniforms = {
       uTime: { value: 0 },
-      uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
+      uPixelRatio: { value: Math.min(window.devicePixelRatio, pixelRatioLimit) },
       uThemeIsLight: { value: isLight ? 1.0 : 0.0 },
     };
 
@@ -148,9 +151,9 @@ const Scene = () => {
     });
 
     // -------------------------------------------------------------
-    // GENERATE GALAXY SPIRAL STARS & BULGE (7,000 stars)
+    // GENERATE GALAXY SPIRAL STARS & BULGE (Adaptive count for smooth 60fps)
     // -------------------------------------------------------------
-    const galaxyStarCount = 7000;
+    const galaxyStarCount = isMobile ? 2500 : 7000;
     const galaxyGeo = new THREE.BufferGeometry();
     const gPositions = new Float32Array(galaxyStarCount * 3);
     const gColors = new Float32Array(galaxyStarCount * 3);
@@ -237,9 +240,9 @@ const Scene = () => {
     galaxyGroup.add(galaxyStars);
 
     // -------------------------------------------------------------
-    // GENERATE AMBIENT DEEP-SPACE FIELD STARS (3,500 stars)
+    // GENERATE AMBIENT DEEP-SPACE FIELD STARS (Adaptive count)
     // -------------------------------------------------------------
-    const fieldStarCount = 3500;
+    const fieldStarCount = isMobile ? 1200 : 3500;
     const fieldGeo = new THREE.BufferGeometry();
     const fPositions = new Float32Array(fieldStarCount * 3);
     const fColors = new Float32Array(fieldStarCount * 3);
@@ -354,7 +357,7 @@ const Scene = () => {
       blending: isLight ? THREE.NormalBlending : THREE.AdditiveBlending,
     });
 
-    const nebulaCount = 160;
+    const nebulaCount = isMobile ? 70 : 160;
     const nebulaGeo = new THREE.BufferGeometry();
     const nPositions = new Float32Array(nebulaCount * 3);
     const nColors = new Float32Array(nebulaCount * 3);
@@ -465,13 +468,23 @@ const Scene = () => {
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height);
-      const pr = Math.min(window.devicePixelRatio, 2);
+      const prLimit = window.innerWidth <= 768 ? 1.25 : 1.5;
+      const pr = Math.min(window.devicePixelRatio, prLimit);
       renderer.setPixelRatio(pr);
       starUniforms.uPixelRatio.value = pr;
       nebulaMaterial.uniforms.uPixelRatio.value = pr;
     };
 
     window.addEventListener("resize", handleResize);
+
+    let isTabVisible = !document.hidden;
+    const handleVisibilityChange = () => {
+      isTabVisible = !document.hidden;
+      if (isTabVisible) {
+        lastTime = clock.getElapsedTime();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     // 6. Animation Loop
     let animationFrameId: number;
@@ -484,8 +497,8 @@ const Scene = () => {
       if (!isMounted) return;
       animationFrameId = requestAnimationFrame(animate);
 
-      // Do not compete with preloader on GPU while loading
-      if (isLoadingRef.current) {
+      // Do not waste GPU/battery if tab is hidden or preloader is active
+      if (!isTabVisible || isLoadingRef.current) {
         return;
       }
 
@@ -570,6 +583,7 @@ const Scene = () => {
 
     return () => {
       isMounted = false;
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("mousemove", handleWindowMouseMove);
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleResize);
