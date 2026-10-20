@@ -9,14 +9,34 @@ export function initialFX() {
   }
   document.getElementsByTagName("main")[0]?.classList.add("main-active");
 
-  // 1. Centerpiece Avatar Hologram Materialization (emerges from particle warp center)
+  // 1. Giant Background Typography Entrance ("CREATIVE")
+  if (document.querySelector(".hero-giant-bg-text")) {
+    gsap.fromTo(
+      ".hero-giant-bg-text",
+      {
+        opacity: 0,
+        scale: 0.92,
+        filter: "blur(12px)",
+      },
+      {
+        opacity: 1,
+        scale: 1,
+        filter: "blur(0px)",
+        duration: 1.6,
+        ease: "power2.out",
+        delay: 0.15,
+      }
+    );
+  }
+
+  // 2. Centerpiece Avatar Hologram Materialization (emerges from particle warp center)
   const avatarWrapper = document.querySelector(".hero-avatar-centerpiece .reveal-hero-wrapper, .mobile-hero-portrait-stage .reveal-hero-wrapper");
   if (avatarWrapper) {
     gsap.fromTo(
       avatarWrapper,
       {
         opacity: 0,
-        scale: 0.86,
+        scale: 0.88,
         transformOrigin: "center bottom",
         filter: "brightness(2.2) drop-shadow(0 0 50px rgba(56, 189, 248, 0.95)) blur(12px)",
       },
@@ -31,7 +51,49 @@ export function initialFX() {
     );
   }
 
-  // Mobile Hero elements entrance
+  // 3. Desktop Left Column UI Entrance
+  if (document.querySelector(".hero-headline-main")) {
+    gsap.fromTo(
+      [".hero-kicker", ".hero-headline-main", ".hero-subtext"],
+      { opacity: 0, y: 35, filter: "blur(4px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 1.1, stagger: 0.08, ease: "power2.out", delay: 0.25 }
+    );
+
+    gsap.fromTo(
+      ".hero-headline-main",
+      { textShadow: "0 0 35px rgba(56, 189, 248, 0.85)" },
+      { textShadow: "0 0 0px rgba(56, 189, 248, 0)", duration: 1.8, ease: "power2.out", delay: 0.3 }
+    );
+
+    gsap.fromTo(
+      ".hero-actions-row",
+      { opacity: 0, y: 25 },
+      { opacity: 1, y: 0, duration: 1.0, ease: "power2.out", delay: 0.45 }
+    );
+
+    gsap.fromTo(
+      ".hero-metric-pill",
+      { opacity: 0, y: 25 },
+      { opacity: 1, y: 0, duration: 1.0, stagger: 0.1, ease: "power2.out", delay: 0.55 }
+    );
+  }
+
+  // 4. Desktop Right Column UI Entrance
+  if (document.querySelector(".hero-role-block")) {
+    gsap.fromTo(
+      [".hero-role-block", ".hero-bio-text"],
+      { opacity: 0, y: 35, filter: "blur(4px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 1.1, stagger: 0.08, ease: "power2.out", delay: 0.35 }
+    );
+
+    gsap.fromTo(
+      ".hero-partner-card",
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 1.1, ease: "power2.out", delay: 0.6 }
+    );
+  }
+
+  // 5. Mobile Hero elements entrance
   if (document.querySelector(".hero-intro-name")) {
     gsap.fromTo(
       [".hero-intro-hello", ".hero-intro-name", ".hero-intro-roles"],
@@ -50,7 +112,7 @@ export function initialFX() {
     );
   }
 
-  // 2. Desktop Name & Intro Typography with Cyan Glow Dissolve
+  // 6. Legacy fallback for split text if present
   const selectors = [
     ".landing-info h3",
     ".landing-intro h2",
@@ -76,48 +138,10 @@ export function initialFX() {
         delay: 0.25,
       }
     );
-
-    // Cyan energy aura on the name chars that matches SUHAIL particles
-    gsap.fromTo(
-      [".hero-name-first", ".hero-name-last"],
-      { textShadow: "0 0 35px rgba(56, 189, 248, 0.95)" },
-      {
-        textShadow: "0 0 0px rgba(56, 189, 248, 0)",
-        duration: 1.8,
-        ease: "power2.out",
-        delay: 0.3,
-      }
-    );
   }
 
-  // 3. Desktop Action buttons & bottom proof strip
-  gsap.fromTo(
-    ".hero-actions-row",
-    { opacity: 0, y: 30 },
-    {
-      opacity: 1,
-      y: 0,
-      duration: 1.0,
-      ease: "power3.out",
-      delay: 0.65,
-    }
-  );
-
-  gsap.fromTo(
-    ".hero-proof-strip-dock",
-    { opacity: 0, y: 35 },
-    {
-      opacity: 1,
-      y: 0,
-      duration: 1.1,
-      ease: "power3.out",
-      delay: 0.8,
-    }
-  );
-
-  let TextProps = { type: "chars,lines", linesClass: "split-h2" };
-
   if (document.querySelector(".landing-h2-info")) {
+    let TextProps = { type: "chars,lines", linesClass: "split-h2" };
     var landingText2 = new TextSplitter(".landing-h2-info", TextProps);
     gsap.fromTo(
       landingText2.chars,
@@ -141,17 +165,6 @@ export function initialFX() {
     LoopText(landingText4, landingText5);
   }
 
-  gsap.fromTo(
-    ".landing-info-h2",
-    { opacity: 0, y: 30 },
-    {
-      opacity: 1,
-      duration: 1.2,
-      ease: "power1.inOut",
-      y: 0,
-      delay: 0.8,
-    }
-  );
   gsap.fromTo(
     [".header", ".icons-section", ".nav-fade"],
     { opacity: 0 },

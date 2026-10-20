@@ -16,9 +16,10 @@ interface LoadingType {
 export const LoadingContext = createContext<LoadingType | null>(null);
 
 export const LoadingProvider = ({ children }: PropsWithChildren) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const isSkip = typeof window !== "undefined" && window.location.search.includes("skipLoader=true");
+  const [isLoading, setIsLoading] = useState(!isSkip);
   const [loading, setLoading] = useState(0);
-  const [mountChildren, setMountChildren] = useState(false);
+  const [mountChildren, setMountChildren] = useState(isSkip);
 
   const value = {
     isLoading,
@@ -27,6 +28,10 @@ export const LoadingProvider = ({ children }: PropsWithChildren) => {
   };
 
   useEffect(() => {
+    if (isSkip) {
+      import("../components/utils/initialFX").then((m) => m.initialFX());
+      return;
+    }
     // Defer mounting heavy background components by 1.0s
     // so frame 1 has 100% thread exclusivity (eliminates lag!)
     const timer = setTimeout(() => {
@@ -34,12 +39,12 @@ export const LoadingProvider = ({ children }: PropsWithChildren) => {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [isSkip]);
 
   return (
     <LoadingContext.Provider value={value as LoadingType}>
       {isLoading && <Loading percent={loading} />}
-      {mountChildren && <main className="main-body">{children}</main>}
+      {mountChildren && <main className={`main-body ${isSkip ? "main-active" : ""}`}>{children}</main>}
     </LoadingContext.Provider>
   );
 };

@@ -27,7 +27,6 @@ import {
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import MobileCareerCards from "./MobileCareerCards";
 import MobileProjectCards from "./MobileProjectCards";
-import ProofStrip from "../ProofStrip";
 import "./MobileContainer.css";
 
 // Universally recognized popular icons (Ionicons v5) for mobile dock
@@ -120,6 +119,11 @@ export const MobileContainer = () => {
       >
         {/* SLIDE 0: HERO */}
         <section className="mobile-slide hero-slide">
+          {/* Giant Layered Background Typography */}
+          <div className="mobile-hero-giant-bg" aria-hidden="true">
+            CREATIVE
+          </div>
+
           {/* Top Text Header */}
           <div className="mobile-hero-header">
             <h2 className="hero-intro-hello">HELLO! I'M</h2>
@@ -155,9 +159,22 @@ export const MobileContainer = () => {
             <RevealHeroFace variant="avatar" />
           </div>
 
-          {/* A2: Proof Strip (2x2 grid on mobile) */}
-          <div className="mobile-hero-proof-dock">
-            <ProofStrip variant="mobile" />
+          {/* Frosted Metric Badges Matching Inspiration & Desktop */}
+          <div className="mobile-hero-badges-dock">
+            <div className="mobile-metric-pill">
+              <span className="mobile-metric-bullet">•</span>
+              <div className="mobile-metric-info">
+                <span className="mobile-metric-label">HACKATHONS</span>
+                <span className="mobile-metric-val">SIH '24 Finalist</span>
+              </div>
+            </div>
+            <div className="mobile-metric-pill">
+              <span className="mobile-metric-bullet">•</span>
+              <div className="mobile-metric-info">
+                <span className="mobile-metric-label">SHIPPED</span>
+                <span className="mobile-metric-val">11+ Live Apps</span>
+              </div>
+            </div>
           </div>
         </section>
 

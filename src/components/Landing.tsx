@@ -1,78 +1,118 @@
 import "./styles/Landing.css";
-import { config } from "../config";
 import RevealHeroFace from "./RevealHeroFace";
-import ProofStrip from "./ProofStrip";
 import { lenis } from "./Navbar";
 
 const Landing = () => {
-  const nameParts = config.developer.fullName.split(" ");
-  const firstName = nameParts[0] || config.developer.name;
-  const lastName = nameParts.slice(1).join(" ") || "";
-
-  const handleHireMe = () => {
-    const contactSection = document.querySelector("#contact") as HTMLElement;
-    if (contactSection) {
+  const handleScrollTo = (targetId: string) => {
+    const targetSection = document.querySelector(targetId) as HTMLElement;
+    if (targetSection) {
       if (lenis) {
-        lenis.scrollTo(contactSection, { duration: 1.4 });
+        lenis.scrollTo(targetSection, { duration: 1.4 });
       } else {
-        contactSection.scrollIntoView({ behavior: "smooth" });
+        targetSection.scrollIntoView({ behavior: "smooth" });
       }
     }
   };
 
   return (
     <div className="landing-section" id="landingDiv">
-      {/* Centerpiece Portrait with Cyborg Cursor Reveal */}
+      {/* 1. Giant Layered Background Typography (Midground Behind Character) */}
+      <div className="hero-giant-bg-text" aria-hidden="true">
+        CREATIVE
+      </div>
+
+      {/* 2. Centerpiece Character Portrait with Astronaut Cursor Reveal */}
       <div className="hero-avatar-centerpiece">
         <RevealHeroFace variant="avatar" />
       </div>
 
+      {/* 3. Hero Content Container (Left & Right UI Docks) */}
       <div className="landing-container">
-        {/* Left Side: OG Intro & Name */}
-        <div className="landing-intro">
-          <h2>Hello! I'm</h2>
-          <h1>
-            <span className="hero-name-first">{firstName.toUpperCase()}</span>
-            {lastName && <span className="hero-name-last">{lastName.toUpperCase()}</span>}
-          </h1>
+        {/* LEFT COLUMN */}
+        <div className="hero-col hero-left-col">
+          <div className="hero-col-top">
+            <div className="hero-kicker">
+              <span className="hero-kicker-dot"></span>
+              <span className="hero-kicker-text">FULL-STACK & AI SYSTEMS</span>
+            </div>
 
-          {/* Hero Action Buttons */}
-          <div className="hero-actions-row">
-            <button
-              type="button"
-              className="hero-btn-pill hero-btn-primary"
-              onClick={handleHireMe}
-              data-cursor="disable"
-            >
-              Hire Me
-            </button>
-            <a
-              href="/Mohammed_Suhail_Resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hero-btn-pill hero-btn-secondary"
-              data-cursor="disable"
-            >
-              Download Resume
-            </a>
+            <h1 className="hero-headline-main">
+              GIVE YOUR VISION A SYSTEM IT CAN ACTUALLY SCALE INTO
+            </h1>
+
+            <p className="hero-subtext">
+              Engineering high-scale cloud architectures, autonomous AI pipelines, and pixel-crafted digital products with zero-latency precision.
+            </p>
+
+            <div className="hero-actions-row">
+              <button
+                type="button"
+                className="hero-btn-pill hero-btn-primary"
+                onClick={() => handleScrollTo("#work")}
+                data-cursor="disable"
+              >
+                <span>Explore Work</span>
+                <span className="hero-btn-arrow">↗</span>
+              </button>
+              <button
+                type="button"
+                className="hero-btn-pill hero-btn-secondary"
+                onClick={() => handleScrollTo("#contact")}
+                data-cursor="disable"
+              >
+                Hire Me
+              </button>
+            </div>
+          </div>
+
+          {/* Bottom Left: Two frosted glass metric badges */}
+          <div className="hero-col-bottom hero-badges-row">
+            <div className="hero-metric-pill">
+              <span className="hero-metric-bullet">•</span>
+              <div className="hero-metric-info">
+                <span className="hero-metric-label">HACKATHONS</span>
+                <span className="hero-metric-val">SIH '24 Finalist</span>
+              </div>
+            </div>
+
+            <div className="hero-metric-pill">
+              <span className="hero-metric-bullet">•</span>
+              <div className="hero-metric-info">
+                <span className="hero-metric-label">SHIPPED</span>
+                <span className="hero-metric-val">11+ Live Apps</span>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Right Side: OG Info & Roles */}
-        <div className="landing-info">
-          <h3>An</h3>
-          <h2 className="landing-info-h2">
-            <div className="landing-h2-1">AI Engineer</div>
-          </h2>
-          <h2>
-            <div className="landing-h2-info">Full-Stack Developer</div>
-          </h2>
-        </div>
-      </div>
+        {/* RIGHT COLUMN */}
+        <div className="hero-col hero-right-col">
+          <div className="hero-col-top">
+            <div className="hero-role-block">
+              <span className="hero-role-title">FULL-STACK</span>
+              <span className="hero-role-title hero-role-highlight">ENGINEER</span>
+            </div>
 
-      {/* Compact Proof Strip near bottom of Hero Viewport */}
-      <div className="hero-proof-strip-dock">
-        <ProofStrip variant="desktop" />
+            <p className="hero-bio-text">
+              Specialized in React, Next.js, Node.js, and GenAI workflows. Turning ambitious ideas into high-throughput, mission-ready production systems.
+            </p>
+          </div>
+
+          {/* Bottom Right: Floating frosted glass feature card */}
+          <div
+            className="hero-col-bottom hero-partner-card"
+            onClick={() => handleScrollTo("#about")}
+            data-cursor="disable"
+          >
+            <div className="hero-partner-card-header">
+              <span>Your Partner in Digital Innovation</span>
+              <span className="hero-partner-arrow">↗</span>
+            </div>
+            <p className="hero-partner-card-desc">
+              Smart India Hackathon Finalist • Certified in Data Science & Google AI/ML • 99.9% Uptime Mindset.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
