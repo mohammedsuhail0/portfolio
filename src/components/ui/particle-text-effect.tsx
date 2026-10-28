@@ -291,8 +291,8 @@ export function ParticleTextEffect({
         ctx.restore()
       }
 
-      // Signal completion ~220ms into warp so hero components materialize through shockwave
-      if (warpProg >= 0.32 && !completedRef.current) {
+      // Signal completion early into warp so the blue flame transition ignites from dispersing particles
+      if (warpProg >= 0.12 && !completedRef.current) {
         completedRef.current = true
         if (onComplete) {
           onComplete()
