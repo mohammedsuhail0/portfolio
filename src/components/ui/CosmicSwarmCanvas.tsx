@@ -2,8 +2,8 @@ import React, { useEffect, useRef } from "react";
 
 interface Fish {
   id: number;
-  t: number;             // Progress along stream curve (0 to 1)
-  speed: number;         // Swimming speed along curve
+  t: number;             // Progress along stream curve (-0.1 to 1.1)
+  speed: number;         // Calibrated serene swimming speed
   laneOffset: number;    // Perpendicular stream lane offset
   length: number;        // Number of articulated spine segments (5 to 7)
   size: number;          // Size of the fish
@@ -70,7 +70,6 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
     const parent = canvas.parentElement;
     if (!parent) return;
 
-    // Use desynchronized & alpha context for lowest latency GPU presentation
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
@@ -121,8 +120,8 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
     const getWaveCenterY = (x: number, time: number) => {
       const nx = x / width;
       const wave =
-        Math.sin(nx * Math.PI * 2.2 - 0.85 - time * 0.28) * (height * 0.21) +
-        Math.sin(nx * Math.PI * 4.4 + 0.45 + time * 0.16) * (height * 0.07);
+        Math.sin(nx * Math.PI * 2.2 - 0.85 - time * 0.16) * (height * 0.21) +
+        Math.sin(nx * Math.PI * 4.4 + 0.45 + time * 0.10) * (height * 0.07);
 
       const baseCenter = height * 0.38;
       return baseCenter + wave;
@@ -140,8 +139,8 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
       };
     };
 
-    // Perfectly balanced population: 85-95 celestial fishes (ultra fluid 60-120fps)
-    const FISH_COUNT = Math.min(Math.round(width * 0.08), 92);
+    // Perfectly balanced population: 85-92 serene celestial fishes
+    const FISH_COUNT = Math.min(Math.round(width * 0.08), 90);
     const fishes: Fish[] = [];
     const ribbonHalfWidth = Math.min(height * 0.23, 200);
 
@@ -150,11 +149,27 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
       const laneNorm = ((i % 16) / 15 - 0.5) * 2;
       const offset = laneNorm * ribbonHalfWidth + (Math.random() - 0.5) * 14;
       const segCount = 5 + (i % 3); // 5 to 7 segments
+      const initT = Math.random();
+
+      // Properly calculate initial segment positions in-place so there is ZERO initial streak or snap!
+      const initX = initT * width;
+      const initWaveY = getWaveCenterY(initX, 0);
+      const initNorm = getWaveNormal(initX, 0);
+      const initHeadX = initX + initNorm.nx * offset;
+      const initHeadY = initWaveY + initNorm.ny * offset;
+      const initAngle = initNorm.tangentAngle;
+      const segDist = 5.0;
+
+      const segments = Array.from({ length: segCount }, (_, sIdx) => ({
+        x: initHeadX - Math.cos(initAngle) * (sIdx * segDist),
+        y: initHeadY - Math.sin(initAngle) * (sIdx * segDist),
+      }));
 
       fishes.push({
         id: i,
-        t: Math.random(),
-        speed: 0.0008 + (i % 5) * 0.00015,
+        t: initT,
+        // Serene, tranquil swimming speed (calibrated ~2.5x slower for peaceful cosmic drift)
+        speed: 0.00030 + (i % 5) * 0.00006,
         laneOffset: offset,
         length: segCount,
         size: (i % 4 === 0) ? 3.0 : (i % 2 === 0) ? 2.2 : 1.6,
@@ -163,10 +178,11 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
         haloColor: palette.halo,
         bodyColor: palette.body,
         alpha: 0.70 + (i % 4) * 0.08,
-        twinkleSpeed: 2.5 + (i % 3) * 0.8,
-        waggleSpeed: 8.5 + (i % 4) * 1.2,
+        twinkleSpeed: 1.8 + (i % 3) * 0.5,
+        // Natural waggle speed matching the gentle swimming velocity
+        waggleSpeed: 4.2 + (i % 4) * 0.6,
         phase: (i * 0.7) % (Math.PI * 2),
-        segments: Array.from({ length: segCount }, () => ({ x: 0, y: 0 })),
+        segments,
         vx: 0,
         vy: 0,
       });
@@ -220,18 +236,18 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
         }
       }
 
-      // Fast single clear (no 3,000 loop fillRect!)
+      // Fast single clear (0ms CPU time)
       ctx.clearRect(0, 0, width, height);
 
-      // 1. Draw drifting celestial stream stars (simple direct paths, 0 shadowBlur)
+      // 1. Draw drifting celestial stream stars
       for (let sIdx = 0; sIdx < streamStars.length; sIdx++) {
         const star = streamStars[sIdx];
-        const starX = ((star.nx + time * 0.015) % 1.0) * width;
+        const starX = ((star.nx + time * 0.008) % 1.0) * width;
         const waveY = getWaveCenterY(starX, time);
         const norm = getWaveNormal(starX, time);
         const starY = waveY + norm.ny * star.laneOffset;
 
-        const twinkle = 0.55 + 0.45 * Math.sin(time * 3.0 + star.twinklePhase);
+        const twinkle = 0.55 + 0.45 * Math.sin(time * 2.2 + star.twinklePhase);
         ctx.globalAlpha = twinkle * 0.8;
         ctx.fillStyle = star.color;
         ctx.strokeStyle = star.color;
@@ -278,10 +294,28 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
       for (let i = 0; i < fLen; i++) {
         const fish = fishes[i];
 
-        // Advance along curve
+        // Advance along curve at tranquil swimming speed
         fish.t += fish.speed;
-        if (fish.t > 1.06) {
-          fish.t = -0.05;
+
+        // Clean wrap-around off-screen left with proper segment realignment (NO FLASH, NO SNAP)
+        if (fish.t > 1.08) {
+          fish.t = -0.08 - Math.random() * 0.04;
+          fish.vx = 0;
+          fish.vy = 0;
+
+          const wrapX = fish.t * width;
+          const wrapWaveY = getWaveCenterY(wrapX, time);
+          const wrapNorm = getWaveNormal(wrapX, time);
+          const wrapHeadX = wrapX + wrapNorm.nx * fish.laneOffset;
+          const wrapHeadY = wrapWaveY + wrapNorm.ny * fish.laneOffset;
+          const wrapAngle = wrapNorm.tangentAngle;
+          const segDist = 5.0;
+
+          // Align segments smoothly behind the head in the swimming direction off-screen
+          for (let j = 0; j < fish.length; j++) {
+            fish.segments[j].x = wrapHeadX - Math.cos(wrapAngle) * (j * segDist);
+            fish.segments[j].y = wrapHeadY - Math.sin(wrapAngle) * (j * segDist);
+          }
         }
 
         const headX = fish.t * width;
@@ -301,30 +335,30 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
           if (distSq < radiusSq && distSq > 0) {
             const dist = Math.sqrt(distSq);
             const force = (1 - dist / 160);
-            const repel = 60 * force;
-            fish.vx += (dx / dist) * repel * 0.22;
-            fish.vy += (dy / dist) * repel * 0.22;
+            const repel = 50 * force;
+            fish.vx += (dx / dist) * repel * 0.18;
+            fish.vy += (dy / dist) * repel * 0.18;
           }
         }
 
         // Return spring
-        fish.vx += (targetHeadX - (fish.segments[0].x || targetHeadX)) * 0.09;
-        fish.vy += (targetHeadY - (fish.segments[0].y || targetHeadY)) * 0.09;
-        fish.vx *= 0.82;
-        fish.vy *= 0.82;
+        fish.vx += (targetHeadX - (fish.segments[0].x || targetHeadX)) * 0.08;
+        fish.vy += (targetHeadY - (fish.segments[0].y || targetHeadY)) * 0.08;
+        fish.vx *= 0.84;
+        fish.vy *= 0.84;
 
         const currentHeadX = (fish.segments[0].x || targetHeadX) + fish.vx;
         const currentHeadY = (fish.segments[0].y || targetHeadY) + fish.vy;
         fish.segments[0] = { x: currentHeadX, y: currentHeadY };
 
         // Swimming waggle wave running down spine
-        const waggleAngle = Math.sin(time * fish.waggleSpeed + fish.phase) * 0.32;
+        const waggleAngle = Math.sin(time * fish.waggleSpeed + fish.phase) * 0.30;
         const fishAngle = norm.tangentAngle;
         const segDist = 5.0;
 
         for (let j = 1; j < fish.length; j++) {
           const segProgress = j / fish.length;
-          const spineWaggle = Math.sin(time * fish.waggleSpeed - j * 0.65 + fish.phase) * (segProgress * 4.5);
+          const spineWaggle = Math.sin(time * fish.waggleSpeed - j * 0.65 + fish.phase) * (segProgress * 4.0);
           const angle = fishAngle + waggleAngle * segProgress;
           const prevSeg = fish.segments[j - 1];
 
@@ -337,11 +371,18 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
           };
         }
 
-        // Twinkle luminance
-        const twinkle = 0.78 + 0.22 * Math.sin(time * fish.twinkleSpeed + fish.phase);
-        ctx.globalAlpha = fish.alpha * twinkle;
+        // Smooth edge alpha feathering (soft fade-in at left border, soft fade-out at right border)
+        let edgeAlpha = 1.0;
+        if (fish.t < 0.06) {
+          edgeAlpha = Math.max(0, (fish.t - (-0.08)) / 0.14);
+        } else if (fish.t > 0.94) {
+          edgeAlpha = Math.max(0, (1.08 - fish.t) / 0.14);
+        }
 
-        // Draw fish body from tail to head (100% vector primitives, 0 shadowBlur)
+        const twinkle = 0.78 + 0.22 * Math.sin(time * fish.twinkleSpeed + fish.phase);
+        ctx.globalAlpha = fish.alpha * twinkle * edgeAlpha;
+
+        // Draw fish body from tail to head
         for (let j = fish.length - 1; j >= 0; j--) {
           const seg = fish.segments[j];
           if (!seg.x) continue;
@@ -365,7 +406,7 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
               ctx.beginPath();
               ctx.moveTo(seg.x, seg.y - sLen);
               ctx.quadraticCurveTo(seg.x, seg.y, seg.x + sLen, seg.y);
-              ctx.quadraticCurveTo(seg.x, seg.y, seg.x, seg.y + sLen);
+              ctx.quadraticCurveTo(seg.x, seg.y, seg.x + sLen, seg.y);
               ctx.quadraticCurveTo(seg.x, seg.y, seg.x - sLen, seg.y);
               ctx.quadraticCurveTo(seg.x, seg.y, seg.x, seg.y - sLen);
               ctx.fill();
