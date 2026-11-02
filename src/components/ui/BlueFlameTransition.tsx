@@ -70,16 +70,6 @@ void main() {
     // Upward flame bias (fire burns taller at the top)
     float upwardBias = (p.y < 0.0) ? (p.y * 0.08) : 0.0;
 
-    // Expanding burn radius: grows from 0 to 1.6 to ensure total corner clearance
-    float burnRadius = u_progress * 1.55;
-    float burnDist = dist - burnRadius + turbulence + upwardBias;
-
-    // Inside the burn hole: 100% transparent (reveals the website underneath!)
-    if (burnDist < -0.075) {
-        gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
-        return;
-    }
-
     // Electric Blue Flame Color Palette (matching inspiration video):
     // White-hot core -> Electric Cyan -> Radiant Royal Cobalt -> Deep Midnight Indigo -> Void Black
     vec3 colWhite  = vec3(1.0, 1.0, 1.0);
@@ -87,6 +77,22 @@ void main() {
     vec3 colBlue   = vec3(0.03, 0.28, 0.98);
     vec3 colDeep   = vec3(0.02, 0.07, 0.48);
     vec3 colBlack  = vec3(0.0, 0.0, 0.0);
+
+    // Initial state: at zero progress, guarantee 100% solid black preloader surface
+    if (u_progress <= 0.001) {
+        gl_FragColor = vec4(colBlack, 1.0);
+        return;
+    }
+
+    // Expanding burn radius: grows from -0.10 (pinpoint center flame) to 1.85 (full corner clearance)
+    float burnRadius = -0.10 + u_progress * 1.85;
+    float burnDist = dist - burnRadius + turbulence + upwardBias;
+
+    // Inside the burn hole: 100% transparent (reveals the website underneath!)
+    if (burnDist < -0.075) {
+        gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+        return;
+    }
 
     vec4 finalColor;
 

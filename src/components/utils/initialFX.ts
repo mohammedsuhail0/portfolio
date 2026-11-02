@@ -29,24 +29,21 @@ export function initialFX() {
     );
   }
 
-  // 2. Centerpiece Avatar Hologram Materialization (emerges from particle warp center)
+  // 2. Centerpiece Avatar Reveal (revealed purely as the blue flame portal burns open)
   const avatarWrapper = document.querySelector(".hero-avatar-centerpiece .reveal-hero-wrapper, .mobile-hero-portrait-stage .reveal-hero-wrapper");
   if (avatarWrapper) {
     gsap.fromTo(
       avatarWrapper,
       {
-        opacity: 0,
-        scale: 0.88,
+        opacity: 0.6,
+        scale: 0.96,
         transformOrigin: "center bottom",
-        filter: "brightness(2.2) drop-shadow(0 0 50px rgba(56, 189, 248, 0.95)) blur(12px)",
       },
       {
         opacity: 1,
         scale: 1,
-        filter: "brightness(1) drop-shadow(0 0 0px rgba(56, 189, 248, 0)) blur(0px)",
-        duration: 1.4,
+        duration: 0.8,
         ease: "power2.out",
-        delay: 0.1,
       }
     );
   }

@@ -51,8 +51,7 @@ const Loading = ({ percent: _percent }: { percent?: number } = {}) => {
           width: "100vw",
           height: "100vh",
           overflow: "hidden",
-          opacity: isFlameActive ? 0 : 1,
-          transition: "opacity 0.2s ease-out",
+          display: isFlameActive ? "none" : "block",
         }}
       >
         <ParticleTextEffect

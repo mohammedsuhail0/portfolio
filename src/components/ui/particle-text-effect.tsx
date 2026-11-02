@@ -101,7 +101,6 @@ interface ParticleTextEffectProps {
   words?: string[]
   className?: string
   onComplete?: () => void
-  onWarpStart?: () => void
   isPreloader?: boolean
 }
 
@@ -112,7 +111,6 @@ export function ParticleTextEffect({
   words = DEFAULT_WORDS,
   className = "",
   onComplete,
-  onWarpStart,
   isPreloader = true
 }: ParticleTextEffectProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -122,8 +120,6 @@ export function ParticleTextEffect({
   const frameCountRef = useRef(0)
   const wordIndexRef = useRef(0)
   const completedRef = useRef(false)
-  const isWarpingRef = useRef(false)
-  const warpProgressRef = useRef(0)
   const mouseRef = useRef({ x: 0, y: 0, isPressed: false })
 
   const nextWord = (word: string, canvas: HTMLCanvasElement) => {
@@ -240,7 +236,7 @@ export function ParticleTextEffect({
 
   const animate = () => {
     const canvas = canvasRef.current
-    if (!canvas) return
+    if (!canvas || completedRef.current) return
 
     if (!isVisibleRef.current) {
       animationRef.current = requestAnimationFrame(animate)
@@ -255,88 +251,8 @@ export function ParticleTextEffect({
     ctx.fillStyle = "rgba(0, 0, 0, 0.16)"
     ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-    const isWarping = isWarpingRef.current
-    const cx = canvas.width / 2
-    const cy = canvas.height / 2
-
-    if (isWarping) {
-      warpProgressRef.current += 0.022
-      const warpProg = warpProgressRef.current
-      const maxDim = Math.max(canvas.width, canvas.height)
-
-      // Expanding electric cyan shockwave ring connecting SUHAIL to Hero
-      const ringRadius = warpProg * (maxDim * 0.72)
-      const ringAlpha = Math.max(0, 1 - warpProg * 1.08)
-
-      if (ringAlpha > 0) {
-        ctx.save()
-        ctx.beginPath()
-        ctx.arc(cx, cy, ringRadius, 0, Math.PI * 2)
-        ctx.strokeStyle = `rgba(56, 189, 248, ${ringAlpha * 0.85})`
-        ctx.lineWidth = Math.max(1.5, 14 * (1 - warpProg * 0.75))
-        ctx.shadowColor = "#38bdf8"
-        ctx.shadowBlur = 28
-        ctx.stroke()
-
-        // Inner harmonic ring
-        if (warpProg > 0.08) {
-          ctx.beginPath()
-          ctx.arc(cx, cy, ringRadius * 0.65, 0, Math.PI * 2)
-          ctx.strokeStyle = `rgba(168, 85, 247, ${ringAlpha * 0.45})`
-          ctx.lineWidth = Math.max(1, 6 * (1 - warpProg))
-          ctx.shadowColor = "#a855f7"
-          ctx.shadowBlur = 16
-          ctx.stroke()
-        }
-        ctx.restore()
-      }
-
-      // Signal completion early into warp so the blue flame transition ignites from dispersing particles
-      if (warpProg >= 0.12 && !completedRef.current) {
-        completedRef.current = true
-        if (onComplete) {
-          onComplete()
-        }
-      }
-
-      // Disperse complete
-      if (warpProg >= 1.0) {
-        return
-      }
-    }
-
     for (let i = particles.length - 1; i >= 0; i--) {
       const particle = particles[i]
-
-      if (isWarping) {
-        const dx = particle.pos.x - cx
-        const dy = particle.pos.y - cy
-        const dist = Math.sqrt(dx * dx + dy * dy) || 1
-        const warpProg = warpProgressRef.current
-        const push = 1.6 + warpProg * 8.5
-
-        particle.vel.x += (dx / dist) * push
-        particle.vel.y += (dy / dist) * push
-        particle.pos.x += particle.vel.x
-        particle.pos.y += particle.vel.y
-
-        // Render luminous speed streak in direction of hyperspace motion
-        const speed = Math.sqrt(particle.vel.x * particle.vel.x + particle.vel.y * particle.vel.y)
-        const streakLen = Math.min(speed * 2.8, 120)
-        const streakAlpha = Math.max(0, 1 - warpProg * 0.85)
-
-        ctx.strokeStyle = `rgba(56, 189, 248, ${streakAlpha})`
-        ctx.lineWidth = Math.max(1.2, particle.particleSize * 0.75)
-        ctx.beginPath()
-        ctx.moveTo(particle.pos.x, particle.pos.y)
-        ctx.lineTo(
-          particle.pos.x - (particle.vel.x / (speed || 1)) * streakLen,
-          particle.pos.y - (particle.vel.y / (speed || 1)) * streakLen
-        )
-        ctx.stroke()
-        continue
-      }
-
       particle.move()
       particle.draw(ctx)
 
@@ -353,7 +269,7 @@ export function ParticleTextEffect({
     }
 
     // Smooth interactive scatter on cursor interaction
-    if (!isWarping && mouseRef.current.isPressed) {
+    if (mouseRef.current.isPressed) {
       particles.forEach((particle) => {
         const dx = particle.pos.x - mouseRef.current.x
         const dy = particle.pos.y - mouseRef.current.y
@@ -366,22 +282,22 @@ export function ParticleTextEffect({
     }
 
     // Brisk, crisp word transitions (~135 frames ~2.25 seconds per word)
-    if (!isWarping) {
-      frameCountRef.current++
-      if (frameCountRef.current % 135 === 0) {
-        const nextIdx = wordIndexRef.current + 1
-        if (nextIdx >= words.length) {
-          // Completed cycling through all words (finishing on SUHAIL)!
-          if (!isWarpingRef.current) {
-            isWarpingRef.current = true
-            if (onWarpStart) {
-              onWarpStart()
-            }
+    frameCountRef.current++
+    if (frameCountRef.current % 135 === 0) {
+      const nextIdx = wordIndexRef.current + 1
+      if (nextIdx >= words.length) {
+        // Completed cycling through all words (finishing on SUHAIL)!
+        // Immediately ignite the blue flame transition (no old shockwave rings or streak warp)
+        if (!completedRef.current) {
+          completedRef.current = true
+          if (onComplete) {
+            onComplete()
           }
-        } else {
-          wordIndexRef.current = nextIdx
-          nextWord(words[wordIndexRef.current], canvas)
         }
+        return
+      } else {
+        wordIndexRef.current = nextIdx
+        nextWord(words[wordIndexRef.current], canvas)
       }
     }
 
