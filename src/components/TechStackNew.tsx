@@ -7,7 +7,7 @@ interface TechItem {
   name: string;
   category: "ai" | "fullstack" | "cloud";
   icon: string;
-  role: string;
+  isCustomNext?: boolean;
   invertOnDark?: boolean;
 }
 
@@ -17,126 +17,123 @@ const TECH_ITEMS: TechItem[] = [
     name: "PyTorch",
     category: "ai",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg",
-    role: "Tensors & Neural Networks",
   },
   {
     id: "nextjs",
     name: "Next.js 15",
     category: "fullstack",
-    icon: "/images/nextBL.webp",
-    role: "Production App Architecture",
-  },
-  {
-    id: "redis",
-    name: "Redis",
-    category: "cloud",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg",
-    role: "Low-Latency In-Memory Cache",
-  },
-  {
-    id: "nodejs",
-    name: "Node.js",
-    category: "fullstack",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
-    role: "High-Throughput Services",
-  },
-  {
-    id: "threejs",
-    name: "WebGL / Three.js",
-    category: "fullstack",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg",
-    role: "Real-time 3D & Shaders",
-    invertOnDark: true,
-  },
-  {
-    id: "docker",
-    name: "Docker",
-    category: "cloud",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
-    role: "Containerized Deployments",
-  },
-  {
-    id: "python",
-    name: "Python",
-    category: "ai",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
-    role: "Core AI & Data Engineering",
+    icon: "",
+    isCustomNext: true,
   },
   {
     id: "typescript",
     name: "TypeScript",
     category: "fullstack",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-    role: "Strict End-to-End Type Safety",
+  },
+  {
+    id: "python",
+    name: "Python",
+    category: "ai",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
   },
   {
     id: "fastapi",
     name: "FastAPI",
     category: "fullstack",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg",
-    role: "Asynchronous Microservices",
   },
   {
     id: "react",
     name: "React 19",
     category: "fullstack",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-    role: "Concurrent Client Systems",
+  },
+  {
+    id: "docker",
+    name: "Docker",
+    category: "cloud",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
+  },
+  {
+    id: "redis",
+    name: "Redis",
+    category: "cloud",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg",
+  },
+  {
+    id: "nodejs",
+    name: "Node.js",
+    category: "fullstack",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+  },
+  {
+    id: "threejs",
+    name: "WebGL / Three.js",
+    category: "fullstack",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg",
+    invertOnDark: true,
   },
   {
     id: "postgresql",
     name: "PostgreSQL",
     category: "cloud",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg",
-    role: "Relational & Vector Data",
   },
   {
     id: "huggingface",
     name: "Hugging Face",
     category: "ai",
     icon: "https://huggingface.co/front/assets/huggingface_logo-noborder.svg",
-    role: "Transformers & LLM Pipelines",
   },
   {
     id: "tensorflow",
     name: "TensorFlow",
     category: "ai",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg",
-    role: "Deep Learning & Vision",
   },
   {
     id: "aws",
     name: "AWS Cloud",
     category: "cloud",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg",
-    role: "Cloud Infrastructure & Edge",
   },
   {
     id: "tailwind",
     name: "Tailwind CSS",
     category: "fullstack",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
-    role: "Adaptive Fluid Tokens",
   },
   {
     id: "linux",
-    name: "Linux Kernel",
+    name: "Linux",
     category: "cloud",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg",
-    role: "UNIX Shell & Server OS",
+  },
+  {
+    id: "github",
+    name: "GitHub",
+    category: "cloud",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
+    invertOnDark: true,
+  },
+  {
+    id: "cplusplus",
+    name: "C++",
+    category: "ai",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg",
   },
 ];
 
 const CATEGORIES = [
-  { id: "all", label: "All Systems" },
-  { id: "ai", label: "AI & Intelligence" },
-  { id: "fullstack", label: "Full-Stack Architecture" },
-  { id: "cloud", label: "Data & Infrastructure" },
+  { id: "all", label: "All Tech" },
+  { id: "ai", label: "AI & ML" },
+  { id: "fullstack", label: "Full-Stack" },
+  { id: "cloud", label: "Cloud & Infra" },
 ] as const;
 
 export const TechStackNew: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string>("all");
-  const [hoveredTech, setHoveredTech] = useState<string | null>(null);
 
   const filteredItems = activeCategory === "all"
     ? TECH_ITEMS
@@ -144,16 +141,16 @@ export const TechStackNew: React.FC = () => {
 
   return (
     <section className="techstack-cosmic-section" id="techstack">
-      {/* Interactive Flowing Cosmic Swarm Canvas (matches the user's reference) */}
+      {/* Interactive School of Space Fishes / Cosmic Starlight Stream Canvas */}
       <CosmicSwarmCanvas className="techstack-bg-canvas" />
 
-      {/* Subtle top & bottom section gradient blends */}
+      {/* Top & bottom subtle section gradient blends */}
       <div className="techstack-vignette-top" />
       <div className="techstack-vignette-bottom" />
 
       {/* Foreground Content */}
       <div className="techstack-container">
-        {/* Header matching reference */}
+        {/* Header row matching reference */}
         <div className="techstack-header-row">
           <div className="techstack-title-group">
             <span className="techstack-kicker">ENGINEERING ARSENAL</span>
@@ -174,29 +171,38 @@ export const TechStackNew: React.FC = () => {
           </div>
         </div>
 
-        {/* Clean Tech Badges Grid */}
-        <div className="techstack-grid">
+        {/* Clean Logo-Only Glass Tiles Grid */}
+        <div className="techstack-logo-grid">
           {filteredItems.map((tech) => (
             <div
               key={tech.id}
-              className={`techstack-badge-card ${hoveredTech === tech.id ? "is-hovered" : ""}`}
-              onMouseEnter={() => setHoveredTech(tech.id)}
-              onMouseLeave={() => setHoveredTech(null)}
+              className="techstack-logo-tile"
+              title={tech.name}
+              data-name={tech.name}
             >
-              <div className="techstack-badge-inner">
-                <div className="techstack-badge-icon-wrap">
+              <div className="techstack-logo-wrap">
+                {tech.isCustomNext ? (
+                  <svg viewBox="0 0 180 180" width="100%" height="100%" fill="none" className="techstack-logo-img">
+                    <mask id="next-mask" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="180" height="180">
+                      <circle cx="90" cy="90" r="90" fill="black" />
+                    </mask>
+                    <g mask="url(#next-mask)">
+                      <circle cx="90" cy="90" r="90" fill="black" stroke="rgba(255,255,255,0.4)" strokeWidth="6" />
+                      <path d="M149.508 157.52L69.142 54H54V125.97H66.1136V69.3836L139.999 164.845C143.333 162.614 146.509 160.16 149.508 157.52Z" fill="white" />
+                      <rect x="115" y="54" width="12" height="72" fill="white" />
+                    </g>
+                  </svg>
+                ) : (
                   <img
                     src={tech.icon}
                     alt={tech.name}
-                    className={`techstack-badge-icon ${tech.invertOnDark ? "invert-dark" : ""}`}
+                    className={`techstack-logo-img ${tech.invertOnDark ? "invert-dark" : ""}`}
                     loading="lazy"
                   />
-                </div>
-                <div className="techstack-badge-info">
-                  <span className="techstack-badge-name">{tech.name}</span>
-                  <span className="techstack-badge-role">{tech.role}</span>
-                </div>
+                )}
               </div>
+              {/* Tooltip on Hover */}
+              <span className="techstack-logo-tooltip">{tech.name}</span>
             </div>
           ))}
         </div>

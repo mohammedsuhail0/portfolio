@@ -1,34 +1,38 @@
-/* Cosmic Swarm Tech Stack Section */
+/* ==========================================================================
+   COSMIC STREAM TECH STACK SECTION (School of Space Fishes)
+   ========================================================================== */
+
 .techstack-cosmic-section {
   position: relative;
   width: 100%;
   min-height: 100vh;
   background-color: #030508;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-end;
   overflow: hidden;
-  padding: 120px 24px;
+  padding: 80px 24px 70px;
+  box-sizing: border-box;
   z-index: 10;
 }
 
-/* Background Canvas */
+/* Background Cosmic Swarm Canvas */
 .techstack-bg-canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   z-index: 1;
-  pointer-events: auto;
+  pointer-events: none;
 }
 
-/* Top and bottom subtle section fades */
+/* Top & Bottom Vignettes */
 .techstack-vignette-top {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 140px;
+  height: 120px;
   background: linear-gradient(to bottom, #030508 0%, transparent 100%);
   pointer-events: none;
   z-index: 2;
@@ -39,18 +43,18 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 140px;
+  height: 120px;
   background: linear-gradient(to top, #030508 0%, transparent 100%);
   pointer-events: none;
   z-index: 2;
 }
 
-/* Container */
+/* Foreground Container */
 .techstack-container {
   position: relative;
   z-index: 5;
   width: 100%;
-  max-width: 1240px;
+  max-width: 1100px;
   margin: 0 auto;
   pointer-events: auto;
 }
@@ -60,15 +64,15 @@
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 24px;
-  margin-bottom: 48px;
+  gap: 20px;
+  margin-bottom: 32px;
   flex-wrap: wrap;
 }
 
 .techstack-title-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .techstack-kicker {
@@ -93,7 +97,7 @@
 }
 
 .techstack-main-title {
-  font-size: clamp(26px, 4vw, 42px);
+  font-size: clamp(24px, 3.8vw, 36px);
   font-weight: 800;
   letter-spacing: -0.02em;
   text-transform: uppercase;
@@ -114,7 +118,7 @@
   background: rgba(14, 22, 36, 0.72);
   border: 1px solid rgba(56, 189, 248, 0.18);
   border-radius: 9999px;
-  padding: 8px 16px;
+  padding: 6px 14px;
   font-size: 12px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.72);
@@ -132,138 +136,120 @@
 }
 
 .techstack-cat-btn.active {
-  background: rgba(56, 189, 248, 0.2);
+  background: rgba(56, 189, 248, 0.22);
   border-color: #38bdf8;
   color: #38bdf8;
-  box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
 }
 
-/* Grid */
-.techstack-grid {
+/* ==========================================================================
+   LOGO-ONLY GLASS TILES GRID (Clean, minimal, no bloated text)
+   ========================================================================== */
+
+.techstack-logo-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 14px;
+  justify-items: center;
 }
 
-@media (max-width: 1100px) {
-  .techstack-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .techstack-grid {
-    grid-template-columns: repeat(2, 1fr);
+@media (max-width: 1024px) {
+  .techstack-logo-grid {
+    grid-template-columns: repeat(6, 1fr);
     gap: 12px;
   }
 }
 
-@media (max-width: 480px) {
-  .techstack-grid {
-    grid-template-columns: 1fr;
+@media (max-width: 680px) {
+  .techstack-logo-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
   }
 }
 
-/* Badge Card */
-.techstack-badge-card {
+@media (max-width: 420px) {
+  .techstack-logo-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+}
+
+/* Individual Logo Tile */
+.techstack-logo-tile {
   position: relative;
-  background: rgba(10, 16, 26, 0.68);
-  border: 1px solid rgba(56, 189, 248, 0.14);
-  border-radius: 14px;
-  padding: 16px 20px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  cursor: default;
-  overflow: hidden;
-}
-
-.techstack-badge-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.3), transparent);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.techstack-badge-card:hover {
-  transform: translateY(-5px);
-  background: rgba(14, 24, 40, 0.85);
-  border-color: rgba(56, 189, 248, 0.45);
-  box-shadow: 0 12px 30px -8px rgba(0, 245, 255, 0.22), 0 0 20px rgba(56, 189, 248, 0.1);
-}
-
-.techstack-badge-card:hover::before {
-  opacity: 1;
-}
-
-.techstack-badge-inner {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.techstack-badge-icon-wrap {
-  flex-shrink: 0;
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  width: 100%;
+  max-width: 82px;
+  aspect-ratio: 1 / 1;
+  background: rgba(12, 18, 28, 0.75);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
 }
 
-.techstack-badge-card:hover .techstack-badge-icon-wrap {
-  transform: scale(1.08);
-  border-color: rgba(56, 189, 248, 0.35);
-  background: rgba(56, 189, 248, 0.08);
+.techstack-logo-tile:hover {
+  transform: translateY(-6px) scale(1.08);
+  background: rgba(16, 26, 44, 0.92);
+  border-color: rgba(56, 189, 248, 0.65);
+  box-shadow: 0 12px 28px -6px rgba(0, 245, 255, 0.28), 0 0 16px rgba(56, 189, 248, 0.2);
 }
 
-.techstack-badge-icon {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+.techstack-logo-wrap {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: transform 0.3s ease;
 }
 
-.techstack-badge-icon.invert-dark {
-  filter: brightness(0) invert(1) drop-shadow(0 0 6px rgba(255, 255, 255, 0.35));
+.techstack-logo-tile:hover .techstack-logo-wrap {
+  transform: scale(1.12);
 }
 
-.techstack-badge-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
+.techstack-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5));
+  transition: filter 0.3s ease;
 }
 
-.techstack-badge-name {
-  font-size: 15px;
-  font-weight: 600;
+.techstack-logo-img.invert-dark {
+  filter: brightness(0) invert(1) drop-shadow(0 0 6px rgba(255, 255, 255, 0.45));
+}
+
+/* Tooltip on Hover */
+.techstack-logo-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: rgba(8, 12, 20, 0.95);
+  border: 1px solid rgba(56, 189, 248, 0.4);
   color: #ffffff;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.techstack-badge-role {
   font-size: 11px;
-  color: rgba(148, 163, 184, 0.85);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 4px 10px;
+  border-radius: 6px;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6), 0 0 10px rgba(56, 189, 248, 0.25);
+  z-index: 20;
 }
 
-.techstack-badge-card:hover .techstack-badge-role {
-  color: #38bdf8;
+.techstack-logo-tile:hover .techstack-logo-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
 }

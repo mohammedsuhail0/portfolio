@@ -281,9 +281,9 @@ export function ParticleTextEffect({
       })
     }
 
-    // Brisk, crisp word transitions (~135 frames ~2.25 seconds per word)
+    // Fast, energetic word transitions (~42 frames ~0.7 seconds per word)
     frameCountRef.current++
-    if (frameCountRef.current % 135 === 0) {
+    if (frameCountRef.current % 42 === 0) {
       const nextIdx = wordIndexRef.current + 1
       if (nextIdx >= words.length) {
         // Completed cycling through all words (finishing on SUHAIL)!

@@ -65,7 +65,7 @@ const Loading = ({ percent: _percent }: { percent?: number } = {}) => {
       <BlueFlameTransition
         isActive={isFlameActive}
         onComplete={handleFlameComplete}
-        duration={1500}
+        duration={1000}
         forcedProgress={forcedProgress}
       />
     </>
