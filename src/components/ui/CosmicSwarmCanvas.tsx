@@ -2,12 +2,12 @@ import React, { useEffect, useRef } from "react";
 
 interface Fish {
   id: number;
-  t: number;             // progress along the wave (0 to 1)
-  speed: number;         // swimming speed
-  streamOffset: number;  // perpendicular offset from curve centerline
-  baseOffset: number;
-  length: number;        // number of spine segments (6 to 10)
-  size: number;          // base particle size
+  t: number;             // Progress along stream curve (0 to 1)
+  speed: number;         // Swimming speed along curve
+  laneOffset: number;    // Perpendicular stream lane offset
+  targetOffset: number;
+  length: number;        // Number of articulated spine segments (5 to 9)
+  size: number;          // Size of the fish
   colorType: "cyan" | "gold" | "white" | "teal";
   headColor: string;
   bodyColor: string;
@@ -17,12 +17,21 @@ interface Fish {
   waggleSpeed: number;
   phase: number;
 
-  // Segment positions for smooth spine trailing
+  // Segment positions for smooth swimming spine
   segments: { x: number; y: number }[];
 
   // Interactive avoidance velocity
   vx: number;
   vy: number;
+}
+
+interface StreamStar {
+  nx: number;            // Normalized x position (0 to 1)
+  laneOffset: number;    // Perpendicular stream lane offset
+  size: number;
+  color: string;
+  twinklePhase: number;
+  isPlus: boolean;
 }
 
 interface CursorSpark {
@@ -44,6 +53,7 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animIdRef = useRef<number | null>(null);
   const fishesRef = useRef<Fish[]>([]);
+  const starsRef = useRef<StreamStar[]>([]);
   const sparksRef = useRef<CursorSpark[]>([]);
 
   const mouseRef = useRef({
@@ -71,55 +81,54 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
     let height = (canvas.height = parent.clientHeight || window.innerHeight);
 
     // Color palettes matching reference:
-    // Electric Cyan, Neon Turquoise, Amber Gold, Pure White Spark
+    // Glowing Electric Cyan, Neon Turquoise, Radiant Amber Gold, Pure White Spark
     const FISH_PALETTES = [
       {
         type: "cyan" as const,
         head: "#ffffff",
         body: "#00f5ff",
-        glow: "rgba(0, 245, 255, 0.75)",
+        glow: "rgba(0, 245, 255, 0.85)",
       },
       {
         type: "cyan" as const,
         head: "#67e8f9",
         body: "#38bdf8",
-        glow: "rgba(56, 189, 248, 0.70)",
+        glow: "rgba(56, 189, 248, 0.80)",
       },
       {
         type: "teal" as const,
         head: "#a7f3d0",
         body: "#06b6d4",
-        glow: "rgba(6, 182, 212, 0.65)",
+        glow: "rgba(6, 182, 212, 0.75)",
       },
       {
         type: "gold" as const,
         head: "#ffffff",
         body: "#fbbf24",
-        glow: "rgba(251, 191, 36, 0.85)",
+        glow: "rgba(251, 191, 36, 0.90)",
       },
       {
         type: "gold" as const,
-        head: "#fde68a",
+        head: "#fef08a",
         body: "#f59e0b",
-        glow: "rgba(245, 158, 11, 0.75)",
+        glow: "rgba(245, 158, 11, 0.85)",
       },
       {
         type: "white" as const,
         head: "#ffffff",
         body: "#e0f2fe",
-        glow: "rgba(255, 255, 255, 0.90)",
+        glow: "rgba(255, 255, 255, 0.95)",
       },
     ];
 
-    // Centerline wave positioned in the center to serve as a living ambient background
-    // swimming directly behind and around the foreground tech stack cards
+    // Elegant undulating S-curve across the upper-center backdrop
     const getWaveCenterY = (x: number, time: number) => {
       const nx = x / width;
       const wave =
-        Math.sin(nx * Math.PI * 2.15 - 0.75 - time * 0.32) * (height * 0.18) +
-        Math.sin(nx * Math.PI * 4.3 + 0.5 + time * 0.20) * (height * 0.06);
+        Math.sin(nx * Math.PI * 2.2 - 0.85 - time * 0.28) * (height * 0.21) +
+        Math.sin(nx * Math.PI * 4.4 + 0.45 + time * 0.16) * (height * 0.07);
 
-      const baseCenter = height * 0.48; // Centered directly behind the tech stack
+      const baseCenter = height * 0.38; // Sweeps across upper half & behind top of tech cards
       return baseCenter + wave;
     };
 
@@ -136,36 +145,36 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
       };
     };
 
-    // Rich ambient population of articulated fish swimming across the entire backdrop
-    const FISH_COUNT = Math.min(Math.round(width * 0.11), 135);
+    // Dense celestial river of 260-300 articulated space fishes
+    const FISH_COUNT = Math.min(Math.round(width * 0.22), 280);
     const fishes: Fish[] = [];
 
-    // Wide vertical spread so fish swim above, through, and behind the tech cards
-    const ribbonHalfWidth = Math.min(height * 0.26, 210);
+    // Ribbon half-width creates multiple streaming lanes
+    const ribbonHalfWidth = Math.min(height * 0.24, 210);
 
     for (let i = 0; i < FISH_COUNT; i++) {
       const palette = FISH_PALETTES[Math.floor(Math.random() * FISH_PALETTES.length)];
-      // Streamline lanes distribution
-      const r1 = Math.random();
-      const r2 = Math.random();
-      const offset = (r1 - r2) * ribbonHalfWidth;
-      const segCount = 6 + Math.floor(Math.random() * 4); // 6 to 9 segments per fish
+      // Distributed across ~18 parallel lanes
+      const laneIndex = Math.floor(Math.random() * 18);
+      const laneNorm = (laneIndex / 17 - 0.5) * 2; // -1 to 1
+      const offset = laneNorm * ribbonHalfWidth + (Math.random() - 0.5) * 16;
+      const segCount = 5 + Math.floor(Math.random() * 4); // 5 to 8 segments per fish
 
       fishes.push({
         id: i,
         t: Math.random(),
-        speed: 0.00065 + Math.random() * 0.00055,
-        streamOffset: offset,
-        baseOffset: offset,
+        speed: 0.00075 + Math.random() * 0.00065,
+        laneOffset: offset,
+        targetOffset: offset,
         length: segCount,
         size: Math.random() < 0.25 ? 3.4 : Math.random() < 0.65 ? 2.4 : 1.7,
         colorType: palette.type,
         headColor: palette.head,
         bodyColor: palette.body,
         glowColor: palette.glow,
-        alpha: 0.65 + Math.random() * 0.35,
-        twinkleSpeed: 2.0 + Math.random() * 3.0,
-        waggleSpeed: 7.0 + Math.random() * 4.0,
+        alpha: 0.70 + Math.random() * 0.30,
+        twinkleSpeed: 2.2 + Math.random() * 3.5,
+        waggleSpeed: 8.0 + Math.random() * 4.0,
         phase: Math.random() * Math.PI * 2,
         segments: Array.from({ length: segCount }, () => ({ x: 0, y: 0 })),
         vx: 0,
@@ -173,7 +182,23 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
       });
     }
 
+    // Static/drifting celestial starbursts and micro-crosses embedded in the stream
+    const STAR_COUNT = 140;
+    const streamStars: StreamStar[] = [];
+    for (let i = 0; i < STAR_COUNT; i++) {
+      const isGold = Math.random() < 0.30;
+      streamStars.push({
+        nx: Math.random(),
+        laneOffset: (Math.random() - 0.5) * (ribbonHalfWidth * 2.2),
+        size: Math.random() < 0.3 ? 2.8 : 1.6,
+        color: isGold ? "#fbbf24" : Math.random() < 0.6 ? "#00f5ff" : "#ffffff",
+        twinklePhase: Math.random() * Math.PI * 2,
+        isPlus: Math.random() < 0.45,
+      });
+    }
+
     fishesRef.current = fishes;
+    starsRef.current = streamStars;
     let startTime = performance.now();
 
     // Render loop
@@ -182,8 +207,8 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
 
       // Mouse smoothing
       const mouse = mouseRef.current;
-      mouse.x += (mouse.targetX - mouse.x) * 0.16;
-      mouse.y += (mouse.targetY - mouse.y) * 0.16;
+      mouse.x += (mouse.targetX - mouse.x) * 0.18;
+      mouse.y += (mouse.targetY - mouse.y) * 0.18;
 
       const mouseDx = mouse.x - mouse.prevX;
       const mouseDy = mouse.y - mouse.prevY;
@@ -194,25 +219,58 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
       ctx.clearRect(0, 0, width, height);
 
       // Micro carbon dot-grid in background
-      ctx.fillStyle = "rgba(255, 255, 255, 0.024)";
-      const gridSpacing = 28;
+      ctx.fillStyle = "rgba(255, 255, 255, 0.026)";
+      const gridSpacing = 26;
       for (let gx = 0; gx < width; gx += gridSpacing) {
         for (let gy = 0; gy < height; gy += gridSpacing) {
           ctx.fillRect(gx, gy, 1, 1);
         }
       }
 
+      // Render drifting Stream Stars (pluses and sparkling diamond dots)
+      for (let sIdx = 0; sIdx < streamStars.length; sIdx++) {
+        const star = streamStars[sIdx];
+        const starX = ((star.nx + time * 0.02) % 1.0) * width;
+        const waveY = getWaveCenterY(starX, time);
+        const norm = getWaveNormal(starX, time);
+        const starY = waveY + norm.ny * star.laneOffset;
+
+        const twinkle = 0.5 + 0.5 * Math.sin(time * 3.0 + star.twinklePhase);
+        ctx.save();
+        ctx.globalAlpha = twinkle * 0.85;
+        ctx.fillStyle = star.color;
+        ctx.strokeStyle = star.color;
+        ctx.shadowColor = star.color;
+        ctx.shadowBlur = 6;
+
+        if (star.isPlus) {
+          const pSize = star.size * 1.5;
+          ctx.lineWidth = 1.1;
+          ctx.beginPath();
+          ctx.moveTo(starX - pSize, starY);
+          ctx.lineTo(starX + pSize, starY);
+          ctx.moveTo(starX, starY - pSize);
+          ctx.lineTo(starX, starY + pSize);
+          ctx.stroke();
+        } else {
+          ctx.beginPath();
+          ctx.arc(starX, starY, star.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+
       // Cursor sparks generator
-      if (mouse.isHovering && mouse.speed > 2.0 && sparksRef.current.length < 50) {
+      if (mouse.isHovering && mouse.speed > 1.8 && sparksRef.current.length < 60) {
         sparksRef.current.push({
-          x: mouse.x + (Math.random() - 0.5) * 16,
-          y: mouse.y + (Math.random() - 0.5) * 16,
-          vx: (Math.random() - 0.5) * 2.8 + mouseDx * 0.15,
-          vy: (Math.random() - 0.5) * 2.8 + mouseDy * 0.15,
+          x: mouse.x + (Math.random() - 0.5) * 14,
+          y: mouse.y + (Math.random() - 0.5) * 14,
+          vx: (Math.random() - 0.5) * 3.2 + mouseDx * 0.18,
+          vy: (Math.random() - 0.5) * 3.2 + mouseDy * 0.18,
           size: Math.random() * 2.4 + 1.2,
           color: Math.random() < 0.45 ? "#fbbf24" : "#00f5ff",
-          alpha: 0.9,
-          decay: 0.028 + Math.random() * 0.02,
+          alpha: 0.95,
+          decay: 0.026 + Math.random() * 0.02,
         });
       }
 
@@ -221,8 +279,8 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
         const s = sparksRef.current[sIdx];
         s.x += s.vx;
         s.y += s.vy;
-        s.vx *= 0.91;
-        s.vy *= 0.91;
+        s.vx *= 0.92;
+        s.vy *= 0.92;
         s.alpha -= s.decay;
 
         if (s.alpha <= 0) {
@@ -241,7 +299,7 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
         ctx.restore();
       }
 
-      // Animate and render School of Fishes
+      // Animate and render School of Space Fishes
       const fLen = fishes.length;
       for (let i = 0; i < fLen; i++) {
         const fish = fishes[i];
@@ -257,8 +315,8 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
         const norm = getWaveNormal(headX, time);
 
         // Target head position with stream lane offset
-        const targetHeadX = headX + norm.nx * fish.streamOffset;
-        const targetHeadY = waveCenterY + norm.ny * fish.streamOffset;
+        const targetHeadX = headX + norm.nx * fish.laneOffset;
+        const targetHeadY = waveCenterY + norm.ny * fish.laneOffset;
 
         // Interactive cursor repulsion / school scattering
         if (mouse.isHovering) {
@@ -269,22 +327,22 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
 
           if (dist < influenceRadius && dist > 0) {
             const force = (1 - dist / influenceRadius);
-            const repelStrength = 70 * force;
-            const swirlStrength = (mouse.speed * 0.45) * force;
+            const repelStrength = 75 * force;
+            const swirlStrength = (mouse.speed * 0.48) * force;
 
             // Dart away from cursor
-            fish.vx += (dx / dist) * repelStrength * 0.22;
-            fish.vy += (dy / dist) * repelStrength * 0.22;
+            fish.vx += (dx / dist) * repelStrength * 0.24;
+            fish.vy += (dy / dist) * repelStrength * 0.24;
 
             // Swirl in direction of mouse motion
-            fish.vx += (-dy / dist) * swirlStrength * 0.12;
-            fish.vy += (dx / dist) * swirlStrength * 0.12;
+            fish.vx += (-dy / dist) * swirlStrength * 0.14;
+            fish.vy += (dx / dist) * swirlStrength * 0.14;
           }
         }
 
         // Return to stream lane with smooth elastic spring
-        fish.vx += (targetHeadX - (fish.segments[0].x || targetHeadX)) * 0.085;
-        fish.vy += (targetHeadY - (fish.segments[0].y || targetHeadY)) * 0.085;
+        fish.vx += (targetHeadX - (fish.segments[0].x || targetHeadX)) * 0.088;
+        fish.vy += (targetHeadY - (fish.segments[0].y || targetHeadY)) * 0.088;
 
         fish.vx *= 0.82;
         fish.vy *= 0.82;
@@ -299,7 +357,7 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
         const fishAngle = norm.tangentAngle;
 
         // Position spine segments trailing behind the head with realistic swimming waggle
-        const segDist = 5.5;
+        const segDist = 5.2;
         for (let j = 1; j < fish.length; j++) {
           const segProgress = j / fish.length;
           const spineWaggle = Math.sin(time * fish.waggleSpeed - j * 0.6 + fish.phase) * (segProgress * 5.0);
@@ -321,7 +379,7 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
 
         // Twinkle luminance
         const twinkle = 0.75 + 0.25 * Math.sin(time * fish.twinkleSpeed + fish.phase);
-        const finalAlpha = Math.min(1.0, Math.max(0.2, fish.alpha * twinkle));
+        const finalAlpha = Math.min(1.0, Math.max(0.25, fish.alpha * twinkle));
 
         ctx.save();
         ctx.globalAlpha = finalAlpha;
@@ -355,7 +413,7 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
             } else {
               // Luminous head circle
               ctx.beginPath();
-              ctx.arc(seg.x, seg.y, segSize * 1.3, 0, Math.PI * 2);
+              ctx.arc(seg.x, seg.y, segSize * 1.35, 0, Math.PI * 2);
               ctx.fill();
             }
           } else if (isTail) {

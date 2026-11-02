@@ -281,9 +281,9 @@ export function ParticleTextEffect({
       })
     }
 
-    // Natural, rhythmic word transitions (~75 frames ~1.25s per word - readable & cinematic)
+    // Rhythmic, comfortable word transitions (~96 frames ~1.6s per word - perfectly paced & legible)
     frameCountRef.current++
-    if (frameCountRef.current % 75 === 0) {
+    if (frameCountRef.current % 96 === 0) {
       const nextIdx = wordIndexRef.current + 1
       if (nextIdx >= words.length) {
         // Completed cycling through all words (finishing on SUHAIL)!
