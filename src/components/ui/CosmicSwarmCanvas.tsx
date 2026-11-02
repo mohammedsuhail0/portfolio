@@ -111,15 +111,15 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
       },
     ];
 
-    // Centerline wave matching the reference image:
-    // Flows through the upper half in a sweeping S-curve
+    // Centerline wave positioned in the center to serve as a living ambient background
+    // swimming directly behind and around the foreground tech stack cards
     const getWaveCenterY = (x: number, time: number) => {
       const nx = x / width;
       const wave =
-        Math.sin(nx * Math.PI * 2.15 - 0.75 - time * 0.32) * (height * 0.16) +
-        Math.sin(nx * Math.PI * 4.3 + 0.5 + time * 0.20) * (height * 0.05);
+        Math.sin(nx * Math.PI * 2.15 - 0.75 - time * 0.32) * (height * 0.18) +
+        Math.sin(nx * Math.PI * 4.3 + 0.5 + time * 0.20) * (height * 0.06);
 
-      const baseCenter = height * 0.30;
+      const baseCenter = height * 0.48; // Centered directly behind the tech stack
       return baseCenter + wave;
     };
 
@@ -136,11 +136,12 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
       };
     };
 
-    // Spawn 120-150 articulated fish swimming together in tight stream lanes
-    const FISH_COUNT = Math.min(Math.round(width * 0.12), 140);
+    // Rich ambient population of articulated fish swimming across the entire backdrop
+    const FISH_COUNT = Math.min(Math.round(width * 0.11), 135);
     const fishes: Fish[] = [];
 
-    const ribbonHalfWidth = Math.min(height * 0.17, 130);
+    // Wide vertical spread so fish swim above, through, and behind the tech cards
+    const ribbonHalfWidth = Math.min(height * 0.26, 210);
 
     for (let i = 0; i < FISH_COUNT; i++) {
       const palette = FISH_PALETTES[Math.floor(Math.random() * FISH_PALETTES.length)];
