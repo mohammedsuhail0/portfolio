@@ -409,7 +409,21 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
       animIdRef.current = requestAnimationFrame(render);
     };
 
-    animIdRef.current = requestAnimationFrame(render);
+    let isIntersecting = false;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isIntersecting = entry.isIntersecting;
+        if (isIntersecting && !animIdRef.current) {
+          startTime = performance.now();
+          animIdRef.current = requestAnimationFrame(render);
+        } else if (!isIntersecting && animIdRef.current) {
+          cancelAnimationFrame(animIdRef.current);
+          animIdRef.current = null;
+        }
+      },
+      { threshold: 0.05, rootMargin: "300px" }
+    );
+    observer.observe(parent);
 
     const handleResize = () => {
       if (!canvas || !parent) return;
@@ -450,6 +464,7 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
     parent.addEventListener("touchend", handleTouchEnd);
 
     return () => {
+      observer.disconnect();
       if (animIdRef.current) {
         cancelAnimationFrame(animIdRef.current);
       }

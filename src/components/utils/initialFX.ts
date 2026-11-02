@@ -15,16 +15,14 @@ export function initialFX() {
       ".hero-giant-bg-text",
       {
         opacity: 0,
-        scale: 0.92,
-        filter: "blur(12px)",
+        scale: 0.94,
       },
       {
         opacity: 1,
         scale: 1,
-        filter: "blur(0px)",
-        duration: 1.6,
+        duration: 1.2,
         ease: "power2.out",
-        delay: 0.15,
+        delay: 0.1,
       }
     );
   }
@@ -48,30 +46,24 @@ export function initialFX() {
     );
   }
 
-  // 3. Desktop Left Column UI Entrance
+  // 3. Desktop Left Column UI Entrance (pure hardware-accelerated opacity & translateY)
   if (document.querySelector(".hero-headline-main")) {
     gsap.fromTo(
       [".hero-kicker", ".hero-headline-main", ".hero-subtext"],
-      { opacity: 0, y: 35, filter: "blur(4px)" },
-      { opacity: 1, y: 0, filter: "blur(0px)", duration: 1.1, stagger: 0.08, ease: "power2.out", delay: 0.25 }
-    );
-
-    gsap.fromTo(
-      ".hero-headline-main",
-      { textShadow: "0 0 35px rgba(56, 189, 248, 0.85)" },
-      { textShadow: "0 0 0px rgba(56, 189, 248, 0)", duration: 1.8, ease: "power2.out", delay: 0.3 }
+      { opacity: 0, y: 24 },
+      { opacity: 1, y: 0, duration: 0.9, stagger: 0.06, ease: "power2.out", delay: 0.15 }
     );
 
     gsap.fromTo(
       ".hero-actions-row",
-      { opacity: 0, y: 25 },
-      { opacity: 1, y: 0, duration: 1.0, ease: "power2.out", delay: 0.45 }
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.9, ease: "power2.out", delay: 0.3 }
     );
 
     gsap.fromTo(
       ".hero-metric-pill",
-      { opacity: 0, y: 25 },
-      { opacity: 1, y: 0, duration: 1.0, stagger: 0.1, ease: "power2.out", delay: 0.55 }
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.9, stagger: 0.08, ease: "power2.out", delay: 0.4 }
     );
   }
 
@@ -79,14 +71,14 @@ export function initialFX() {
   if (document.querySelector(".hero-role-block")) {
     gsap.fromTo(
       [".hero-role-block", ".hero-bio-text"],
-      { opacity: 0, y: 35, filter: "blur(4px)" },
-      { opacity: 1, y: 0, filter: "blur(0px)", duration: 1.1, stagger: 0.08, ease: "power2.out", delay: 0.35 }
+      { opacity: 0, y: 24 },
+      { opacity: 1, y: 0, duration: 0.9, stagger: 0.06, ease: "power2.out", delay: 0.2 }
     );
 
     gsap.fromTo(
       ".hero-partner-card",
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 1.1, ease: "power2.out", delay: 0.6 }
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.9, ease: "power2.out", delay: 0.45 }
     );
   }
 
@@ -94,18 +86,13 @@ export function initialFX() {
   if (document.querySelector(".hero-intro-name")) {
     gsap.fromTo(
       [".hero-intro-hello", ".hero-intro-name", ".hero-intro-roles"],
-      { opacity: 0, y: 35, filter: "blur(5px)" },
-      { opacity: 1, y: 0, filter: "blur(0px)", duration: 1.1, stagger: 0.1, ease: "power2.out", delay: 0.2 }
-    );
-    gsap.fromTo(
-      ".hero-intro-name",
-      { textShadow: "0 0 35px rgba(56, 189, 248, 0.95)" },
-      { textShadow: "0 0 0px rgba(56, 189, 248, 0)", duration: 1.8, ease: "power2.out", delay: 0.25 }
+      { opacity: 0, y: 24 },
+      { opacity: 1, y: 0, duration: 0.9, stagger: 0.08, ease: "power2.out", delay: 0.15 }
     );
     gsap.fromTo(
       [".mobile-hero-actions", ".mobile-hero-proof-dock"],
-      { opacity: 0, y: 25 },
-      { opacity: 1, y: 0, duration: 1.0, stagger: 0.12, ease: "power2.out", delay: 0.55 }
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.9, stagger: 0.1, ease: "power2.out", delay: 0.4 }
     );
   }
 

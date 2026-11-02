@@ -41,7 +41,8 @@ float fbm(vec2 p) {
     float a = 0.5;
     vec2 shift = vec2(100.0);
     mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.5));
-    for (int i = 0; i < 5; ++i) {
+    // 3 octaves for high 60fps performance with organic turbulence
+    for (int i = 0; i < 3; ++i) {
         v += a * noise(p);
         p = rot * p * 2.15 + shift;
         a *= 0.48;
@@ -50,8 +51,8 @@ float fbm(vec2 p) {
 }
 
 void main() {
-    // Stylized pixelation scale matching the inspiration WebGL video
-    float pixelScale = 2.5;
+    // Stylized pixelation scale matching the inspiration WebGL video (clean, retro, performant)
+    float pixelScale = 3.5;
     vec2 pixelCoord = floor(gl_FragCoord.xy / pixelScale) * pixelScale;
     
     // Normalized coordinates centered at screen center
@@ -290,6 +291,8 @@ export const BlueFlameTransition: React.FC<BlueFlameTransitionProps> = ({
         zIndex: 9999999,
         pointerEvents: "none",
         display: "block",
+        imageRendering: "pixelated",
+        willChange: "contents",
       }}
     />
   );
