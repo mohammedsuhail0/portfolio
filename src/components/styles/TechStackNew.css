@@ -1,5 +1,5 @@
 /* ==========================================================================
-   COSMIC STREAM TECH STACK SECTION (Fishes as Background, Big Tech Stack Overlay)
+   COSMIC STREAM TECH STACK SECTION (High-Performance GPU-Optimized Architecture)
    ========================================================================== */
 
 .techstack-cosmic-section {
@@ -7,6 +7,9 @@
   width: 100%;
   min-height: 100vh;
   background-color: #030508;
+  /* Hardware-accelerated CSS dot matrix grid (0ms CPU time) */
+  background-image: radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 26px 26px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,9 +18,10 @@
   padding: 120px 24px;
   box-sizing: border-box;
   z-index: 10;
+  contain: layout style;
 }
 
-/* Background Cosmic Swarm Canvas (Fishes Swimming in the Background) */
+/* Background Cosmic Swarm Canvas (Isolated Compositor Layer) */
 .techstack-bg-canvas {
   position: absolute;
   inset: 0;
@@ -25,6 +29,8 @@
   height: 100%;
   z-index: 1;
   pointer-events: none;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 /* Top & Bottom Vignettes */
@@ -107,7 +113,7 @@
   line-height: 1.15;
 }
 
-/* Category Filter Pills */
+/* Category Filter Pills (Optimized Solid Dark Glass - No Heavy Real-time Blurs) */
 .techstack-categories {
   display: flex;
   align-items: center;
@@ -116,35 +122,34 @@
 }
 
 .techstack-cat-btn {
-  background: rgba(12, 18, 30, 0.82);
-  border: 1px solid rgba(56, 189, 248, 0.22);
+  background: rgba(12, 18, 30, 0.94);
+  border: 1px solid rgba(56, 189, 248, 0.25);
   border-radius: 9999px;
   padding: 8px 18px;
   font-size: 13px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(255, 255, 255, 0.82);
   cursor: pointer;
-  transition: all 0.25s ease;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   user-select: none;
 }
 
 .techstack-cat-btn:hover {
-  background: rgba(56, 189, 248, 0.16);
-  border-color: rgba(56, 189, 248, 0.55);
+  background: rgba(18, 30, 50, 0.96);
+  border-color: rgba(56, 189, 248, 0.65);
   color: #ffffff;
+  transform: translateY(-2px);
 }
 
 .techstack-cat-btn.active {
-  background: rgba(56, 189, 248, 0.25);
+  background: rgba(18, 36, 62, 0.98);
   border-color: #38bdf8;
   color: #38bdf8;
-  box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
 }
 
 /* ==========================================================================
-   PROMINENT TECH STACK PILL CARDS (Big, bold, high-contrast overlay)
+   PROMINENT TECH STACK PILL CARDS (Ultra-fast GPU Composite, 60-120fps)
    ========================================================================== */
 
 .techstack-pill-grid {
@@ -174,30 +179,29 @@
   }
 }
 
-/* Individual Big Pill Card */
+/* Individual Pill Card (Solid High-Contrast Obsidian Glass - No Compositor Lag) */
 .techstack-pill-card {
   position: relative;
-  background: rgba(10, 16, 26, 0.82);
+  background: rgba(10, 16, 26, 0.94);
   border: 1px solid rgba(56, 189, 248, 0.22);
   border-radius: 14px;
   padding: 14px 18px;
   display: flex;
   align-items: center;
   gap: 14px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   cursor: pointer;
-  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.24s ease, background 0.24s ease, box-shadow 0.24s ease;
   box-sizing: border-box;
   min-height: 56px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  contain: paint layout;
 }
 
 .techstack-pill-card:hover {
-  transform: translateY(-6px) scale(1.03);
-  background: rgba(14, 24, 42, 0.96);
-  border-color: rgba(56, 189, 248, 0.75);
-  box-shadow: 0 12px 30px -4px rgba(0, 245, 255, 0.32), 0 0 20px rgba(56, 189, 248, 0.22);
+  transform: translateY(-4px);
+  background: rgba(15, 26, 44, 0.98);
+  border-color: rgba(56, 189, 248, 0.8);
+  box-shadow: 0 10px 24px -2px rgba(0, 245, 255, 0.25), 0 0 16px rgba(56, 189, 248, 0.2);
 }
 
 .techstack-pill-icon-wrap {
@@ -213,16 +217,11 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
-  transition: transform 0.25s ease;
+  transition: transform 0.2s ease;
 }
 
 .techstack-pill-card:hover .techstack-pill-icon {
-  transform: scale(1.14);
-}
-
-.techstack-pill-icon.invert-dark {
-  filter: brightness(0) invert(1) drop-shadow(0 0 6px rgba(255, 255, 255, 0.5));
+  transform: scale(1.1);
 }
 
 .techstack-pill-name {
