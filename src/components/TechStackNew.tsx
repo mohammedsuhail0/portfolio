@@ -1,120 +1,207 @@
+import React, { useState } from "react";
+import CosmicSwarmCanvas from "./ui/CosmicSwarmCanvas";
 import "./styles/TechStackNew.css";
 
 interface TechItem {
+  id: string;
   name: string;
+  category: "ai" | "fullstack" | "cloud";
   icon: string;
-  url: string;
+  role: string;
+  invertOnDark?: boolean;
 }
 
-// All tech stack items with their icons and official URLs
-// Perfect inverted pyramid: 12 -> 10 -> 8 -> 6 -> 4 -> 2
-const techStack: TechItem[][] = [
-  // Row 1 - 12 items (largest)
-  [
-    { name: "Python", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg", url: "https://python.org" },
-    { name: "JavaScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg", url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
-    { name: "TypeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg", url: "https://typescriptlang.org" },
-    { name: "C", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg", url: "https://en.cppreference.com/w/c" },
-    { name: "C++", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg", url: "https://isocpp.org" },
-    { name: "Kotlin", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-original.svg", url: "https://kotlinlang.org" },
-    { name: "HTML", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg", url: "https://developer.mozilla.org/en-US/docs/Web/HTML" },
-    { name: "CSS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg", url: "https://developer.mozilla.org/en-US/docs/Web/CSS" },
-    { name: "Bash", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-original.svg", url: "https://www.gnu.org/software/bash/" },
-    { name: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg", url: "https://react.dev" },
-    { name: "Next.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg", url: "https://nextjs.org" },
-    { name: "Bootstrap", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg", url: "https://getbootstrap.com" },
-  ],
-  // Row 2 - 10 items
-  [
-    { name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg", url: "https://nodejs.org" },
-    { name: "Django", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg", url: "https://djangoproject.com" },
-    { name: "Flask", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg", url: "https://flask.palletsprojects.com" },
-    { name: "FastAPI", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg", url: "https://fastapi.tiangolo.com" },
-    { name: "TensorFlow", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg", url: "https://tensorflow.org" },
-    { name: "PyTorch", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg", url: "https://pytorch.org" },
-    { name: "Scikit-learn", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scikitlearn/scikitlearn-original.svg", url: "https://scikit-learn.org" },
-    { name: "OpenCV", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/opencv/opencv-original.svg", url: "https://opencv.org" },
-    { name: "NumPy", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg", url: "https://numpy.org" },
-    { name: "Tailwind", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg", url: "https://tailwindcss.com" },
-  ],
-  // Row 3 - 8 items
-  [
-    { name: "Pandas", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg", url: "https://pandas.pydata.org" },
-    { name: "MySQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg", url: "https://mysql.com" },
-    { name: "PostgreSQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg", url: "https://postgresql.org" },
-    { name: "MongoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg", url: "https://mongodb.com" },
-    { name: "Firebase", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg", url: "https://firebase.google.com" },
-    { name: "Redis", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg", url: "https://redis.io" },
-    { name: "Docker", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg", url: "https://docker.com" },
-    { name: "Azure", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg", url: "https://azure.microsoft.com" },
-  ],
-  // Row 4 - 6 items
-  [
-    { name: "Git", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg", url: "https://git-scm.com" },
-    { name: "GitHub", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg", url: "https://github.com" },
-    { name: "Linux", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg", url: "https://linux.org" },
-    { name: "AWS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg", url: "https://aws.amazon.com" },
-    { name: "VS Code", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg", url: "https://code.visualstudio.com" },
-    { name: "Vercel", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vercel/vercel-original.svg", url: "https://vercel.com" },
-  ],
-  // Row 5 - 4 items
-  [
-    { name: "Jupyter", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jupyter/jupyter-original.svg", url: "https://jupyter.org" },
-    { name: "Figma", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg", url: "https://figma.com" },
-    { name: "Postman", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg", url: "https://postman.com" },
-    { name: "Photoshop", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-original.svg", url: "https://adobe.com/products/photoshop" },
-  ],
-  // Row 6 - 2 items (tip of pyramid)
-  [
-    { name: "Hugging Face", icon: "https://huggingface.co/front/assets/huggingface_logo-noborder.svg", url: "https://huggingface.co" },
-    { name: "MS Office", icon: "https://img.icons8.com/color/48/microsoft-office-2019.png", url: "https://www.microsoft.com/microsoft-365" },
-  ],
+const TECH_ITEMS: TechItem[] = [
+  {
+    id: "pytorch",
+    name: "PyTorch",
+    category: "ai",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg",
+    role: "Tensors & Neural Networks",
+  },
+  {
+    id: "nextjs",
+    name: "Next.js 15",
+    category: "fullstack",
+    icon: "/images/nextBL.webp",
+    role: "Production App Architecture",
+  },
+  {
+    id: "redis",
+    name: "Redis",
+    category: "cloud",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg",
+    role: "Low-Latency In-Memory Cache",
+  },
+  {
+    id: "nodejs",
+    name: "Node.js",
+    category: "fullstack",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+    role: "High-Throughput Services",
+  },
+  {
+    id: "threejs",
+    name: "WebGL / Three.js",
+    category: "fullstack",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg",
+    role: "Real-time 3D & Shaders",
+    invertOnDark: true,
+  },
+  {
+    id: "docker",
+    name: "Docker",
+    category: "cloud",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
+    role: "Containerized Deployments",
+  },
+  {
+    id: "python",
+    name: "Python",
+    category: "ai",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
+    role: "Core AI & Data Engineering",
+  },
+  {
+    id: "typescript",
+    name: "TypeScript",
+    category: "fullstack",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+    role: "Strict End-to-End Type Safety",
+  },
+  {
+    id: "fastapi",
+    name: "FastAPI",
+    category: "fullstack",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg",
+    role: "Asynchronous Microservices",
+  },
+  {
+    id: "react",
+    name: "React 19",
+    category: "fullstack",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+    role: "Concurrent Client Systems",
+  },
+  {
+    id: "postgresql",
+    name: "PostgreSQL",
+    category: "cloud",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg",
+    role: "Relational & Vector Data",
+  },
+  {
+    id: "huggingface",
+    name: "Hugging Face",
+    category: "ai",
+    icon: "https://huggingface.co/front/assets/huggingface_logo-noborder.svg",
+    role: "Transformers & LLM Pipelines",
+  },
+  {
+    id: "tensorflow",
+    name: "TensorFlow",
+    category: "ai",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg",
+    role: "Deep Learning & Vision",
+  },
+  {
+    id: "aws",
+    name: "AWS Cloud",
+    category: "cloud",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg",
+    role: "Cloud Infrastructure & Edge",
+  },
+  {
+    id: "tailwind",
+    name: "Tailwind CSS",
+    category: "fullstack",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
+    role: "Adaptive Fluid Tokens",
+  },
+  {
+    id: "linux",
+    name: "Linux Kernel",
+    category: "cloud",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg",
+    role: "UNIX Shell & Server OS",
+  },
 ];
 
-const TechStackNew = () => {
-  return (
-    <div className="techstack-new">
-      {/* Video Background */}
-      <div className="techstack-video-container">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="techstack-video"
-        >
-          <source src="/video/video.webm" type="video/webm" />
-        </video>
-        {/* Dark Overlay */}
-        <div className="techstack-overlay"></div>
-      </div>
+const CATEGORIES = [
+  { id: "all", label: "All Systems" },
+  { id: "ai", label: "AI & Intelligence" },
+  { id: "fullstack", label: "Full-Stack Architecture" },
+  { id: "cloud", label: "Data & Infrastructure" },
+] as const;
 
-      {/* Content */}
-      <div className="techstack-content">
-        <h2>Tech Stack</h2>
-        
-        <div className="techstack-pyramid">
-          {techStack.map((row, rowIndex) => (
-            <div key={rowIndex} className="techstack-row">
-              {row.map((tech, techIndex) => (
-                <a
-                  key={techIndex}
-                  href={tech.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="techstack-item"
-                  title={tech.name}
-                  data-cursor="disable"
-                >
-                  <img src={tech.icon} alt={tech.name} loading="lazy" decoding="async" />
-                  <span>{tech.name}</span>
-                </a>
-              ))}
+export const TechStackNew: React.FC = () => {
+  const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [hoveredTech, setHoveredTech] = useState<string | null>(null);
+
+  const filteredItems = activeCategory === "all"
+    ? TECH_ITEMS
+    : TECH_ITEMS.filter((t) => t.category === activeCategory);
+
+  return (
+    <section className="techstack-cosmic-section" id="techstack">
+      {/* Interactive Flowing Cosmic Swarm Canvas (matches the user's reference) */}
+      <CosmicSwarmCanvas className="techstack-bg-canvas" />
+
+      {/* Subtle top & bottom section gradient blends */}
+      <div className="techstack-vignette-top" />
+      <div className="techstack-vignette-bottom" />
+
+      {/* Foreground Content */}
+      <div className="techstack-container">
+        {/* Header matching reference */}
+        <div className="techstack-header-row">
+          <div className="techstack-title-group">
+            <span className="techstack-kicker">ENGINEERING ARSENAL</span>
+            <h2 className="techstack-main-title">SYSTEMS & CORE FRAMEWORKS</h2>
+          </div>
+
+          {/* Category Filter Pills */}
+          <div className="techstack-categories">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat.id}
+                className={`techstack-cat-btn ${activeCategory === cat.id ? "active" : ""}`}
+                onClick={() => setActiveCategory(cat.id)}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Clean Tech Badges Grid */}
+        <div className="techstack-grid">
+          {filteredItems.map((tech) => (
+            <div
+              key={tech.id}
+              className={`techstack-badge-card ${hoveredTech === tech.id ? "is-hovered" : ""}`}
+              onMouseEnter={() => setHoveredTech(tech.id)}
+              onMouseLeave={() => setHoveredTech(null)}
+            >
+              <div className="techstack-badge-inner">
+                <div className="techstack-badge-icon-wrap">
+                  <img
+                    src={tech.icon}
+                    alt={tech.name}
+                    className={`techstack-badge-icon ${tech.invertOnDark ? "invert-dark" : ""}`}
+                    loading="lazy"
+                  />
+                </div>
+                <div className="techstack-badge-info">
+                  <span className="techstack-badge-name">{tech.name}</span>
+                  <span className="techstack-badge-role">{tech.role}</span>
+                </div>
+              </div>
             </div>
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
