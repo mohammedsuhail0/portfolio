@@ -205,13 +205,13 @@ export const CosmicSwarmCanvas: React.FC<CosmicSwarmCanvasProps> = ({ className 
     }
 
     // =========================================================================
-    // THE BIG CELESTIAL ALPHA FISH (Appears after ~2.2s, glides majestically)
+    // THE BIG CELESTIAL ALPHA FISH (Appears after ~3s, majestic 18s cruise)
     // =========================================================================
     const BIG_FISH_SEG_COUNT = 14;
     const bigFish: BigCelestialFish = {
-      spawnTime: 2.2, // Appears after ~2.2 seconds of viewing the section
-      t: -0.14,
-      speed: 0.00032, // Majestic, dignified gliding speed
+      spawnTime: 3.0, // Appears 3s after entering section
+      t: -0.08,
+      speed: 0.00092, // Stately, majestic cruise across screen (~18s total)
       length: BIG_FISH_SEG_COUNT,
       size: 7.2,      // Grand 7.2px head radius (over 3.5x normal size)
       segments: Array.from({ length: BIG_FISH_SEG_COUNT }, () => ({ x: -200, y: -200 })),
