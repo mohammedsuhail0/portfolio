@@ -144,12 +144,12 @@ export const MobileContainer = () => {
                 Hire Me
               </button>
               <a
-                href="/Mohammed_Suhail_Resume.pdf"
+                href="/Mohammed_Suhail_CV.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mobile-hero-btn secondary"
               >
-                Download Resume
+                Download CV
               </a>
             </div>
           </div>
@@ -312,13 +312,13 @@ export const MobileContainer = () => {
             </div>
 
             <a
-              href="/Mohammed_Suhail_Resume.pdf"
+              href="/Mohammed_Suhail_CV.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="resume-download-btn"
             >
               <FiDownload />
-              <span>Download Resume (PDF)</span>
+              <span>Download CV (PDF)</span>
             </a>
           </div>
 

@@ -31,11 +31,12 @@ const SocialIcons = () => {
       </div>
       <a
         className="resume-button"
-        href="/Mohammed_Suhail_Resume.pdf"
+        href="/Mohammed_Suhail_CV.pdf"
         target="_blank"
         rel="noopener noreferrer"
+        title="Curriculum Vitae (PDF)"
       >
-        <HoverLinks text="RESUME" />
+        <HoverLinks text="CV" />
         <span>
           <TbNotes />
         </span>

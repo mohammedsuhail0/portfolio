@@ -44,9 +44,9 @@ const Navbar = () => {
     links.forEach((elem) => {
       let element = elem as HTMLAnchorElement;
       element.addEventListener("click", (e) => {
-        e.preventDefault();
         let section = element.getAttribute("data-href");
         if (section) {
+          e.preventDefault();
           const target = document.querySelector(section) as HTMLElement;
           if (target) {
             if (lenis) {
@@ -100,6 +100,18 @@ const Navbar = () => {
           <li>
             <a data-href="#contact" href="#contact">
               <HoverLinks text="CONTACT" />
+            </a>
+          </li>
+          <li>
+            <a
+              href="/Mohammed_Suhail_CV.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="navbar-cv-btn"
+              data-cursor="disable"
+              title="Open Curriculum Vitae (PDF)"
+            >
+              <HoverLinks text="CV" />
             </a>
           </li>
           <li className="theme-toggle-li">

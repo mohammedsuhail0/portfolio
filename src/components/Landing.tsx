@@ -62,6 +62,17 @@ const Landing = () => {
               >
                 Hire Me
               </button>
+              <a
+                href="/Mohammed_Suhail_CV.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hero-btn-pill hero-btn-cv"
+                data-cursor="disable"
+                title="Curriculum Vitae (PDF)"
+              >
+                <span>View CV</span>
+                <span className="hero-btn-arrow">↗</span>
+              </a>
             </div>
           </div>
 

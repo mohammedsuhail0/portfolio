@@ -140,3 +140,39 @@
 [data-theme="light"] .navbar-connect {
   color: #475569;
 }
+
+.navbar-cv-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  background: rgba(56, 189, 248, 0.08);
+  color: #38bdf8 !important;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.navbar-cv-btn:hover {
+  background: rgba(56, 189, 248, 0.22);
+  border-color: #38bdf8;
+  color: #ffffff !important;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.45);
+  transform: translateY(-1px);
+}
+
+[data-theme="light"] .navbar-cv-btn {
+  background: rgba(14, 165, 233, 0.1);
+  border-color: rgba(14, 165, 233, 0.5);
+  color: #0284c7 !important;
+}
+
+[data-theme="light"] .navbar-cv-btn:hover {
+  background: rgba(14, 165, 233, 0.2);
+  color: #0369a1 !important;
+}

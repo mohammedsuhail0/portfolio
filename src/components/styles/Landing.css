@@ -240,6 +240,26 @@
   box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
 }
 
+.hero-btn-cv {
+  background: rgba(15, 23, 42, 0.65);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.hero-btn-cv:hover {
+  transform: translateY(-2px);
+  background: rgba(56, 189, 248, 0.16);
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 0 22px rgba(56, 189, 248, 0.45);
+}
+
+.hero-btn-cv:hover .hero-btn-arrow {
+  transform: translate(2px, -2px);
+}
+
 /* Bottom Left Metric Badges */
 .hero-badges-row {
   display: flex;
