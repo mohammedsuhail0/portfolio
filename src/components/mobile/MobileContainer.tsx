@@ -144,6 +144,14 @@ export const MobileContainer = () => {
                 Hire Me
               </button>
               <a
+                href="/Mohammed_Suhail_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mobile-hero-btn secondary"
+              >
+                Resume
+              </a>
+              <a
                 href="/Mohammed_Suhail_CV.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -311,15 +319,26 @@ export const MobileContainer = () => {
               </a>
             </div>
 
-            <a
-              href="/Mohammed_Suhail_CV.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="resume-download-btn"
-            >
-              <FiDownload />
-              <span>Download CV (PDF)</span>
-            </a>
+            <div className="mobile-resume-group" style={{ display: "flex", flexDirection: "column", gap: "10px", width: "100%" }}>
+              <a
+                href="/Mohammed_Suhail_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="resume-download-btn"
+              >
+                <FiDownload />
+                <span>Download Resume (PDF)</span>
+              </a>
+              <a
+                href="/Mohammed_Suhail_CV.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="resume-download-btn cv-btn"
+              >
+                <FiDownload />
+                <span>Download CV (PDF)</span>
+              </a>
+            </div>
           </div>
 
           <div className="mobile-footer-signoff">

@@ -44,14 +44,21 @@
   filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.6));
 }
 
-.resume-button {
+.resume-group {
   position: absolute;
   z-index: 999;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 20px;
   bottom: 30px;
   right: 0;
+  pointer-events: auto;
+}
+
+.resume-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   width: auto;
   text-wrap: nowrap;
   letter-spacing: 3px;
@@ -76,13 +83,35 @@
   align-items: center;
 }
 
+.resume-button.cv-button {
+  color: #38bdf8;
+}
+
+.resume-button.cv-button:hover {
+  color: #ffffff;
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6));
+}
+
 @media only screen and (max-width: 768px) {
   .social-icons {
-    bottom: 20px;
-    gap: 12px;
+    display: none;
   }
-  .resume-button {
-    bottom: 20px;
-    font-size: 14px;
+  .resume-group {
+    display: none;
   }
+}
+
+/* Light Theme Overrides */
+[data-theme="light"] .social-icons a,
+[data-theme="light"] .resume-button {
+  color: #334155;
+}
+
+[data-theme="light"] .social-icons a:hover,
+[data-theme="light"] .resume-button:hover {
+  color: var(--accentColor) !important;
+}
+
+[data-theme="light"] .resume-button.cv-button {
+  color: #0284c7;
 }

@@ -104,6 +104,18 @@ const Navbar = () => {
           </li>
           <li>
             <a
+              href="/Mohammed_Suhail_Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="navbar-resume-link"
+              data-cursor="disable"
+              title="Open Resume (PDF)"
+            >
+              <HoverLinks text="RESUME" />
+            </a>
+          </li>
+          <li>
+            <a
               href="/Mohammed_Suhail_CV.pdf"
               target="_blank"
               rel="noopener noreferrer"
